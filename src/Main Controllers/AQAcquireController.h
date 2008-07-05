@@ -27,16 +27,22 @@
 // NSObject (NSNibAwakening)
 - (void)awakeFromNib;
 
+// NSObject (NSMenuValidation)
+- (BOOL)validateMenuItem:(NSMenuItem *)menuItem;
+
 // Start games
 - (void)connectToServer:(NSString *)hostOrIPAddress port:(int)port withLocalDisplayName:(NSString *)localDisplayName sender:(id)sender;
 - (void)connectedToServer;
 - (void)cancelConnectingToServer;
+- (void)leaveGame:(id)sender;
+- (void)disconnectFromServer:(id)sender;
 - (void)connection:(AQConnectionController *)connection willDisconnectWithError:(NSError *)err;
 - (void)startNewLocalGameWithPlayersNamed:(NSArray *)playerNames;
 
 // Passthrus
 - (void)incomingLobbyMessage:(NSString *)lobbyMessage;
 - (void)outgoingLobbyMessage:(NSString *)lobbyMessage;
+- (void)updateGameListFor:(id)anObject;
 
 // Allow objects in loaded nibs to say hi
 - (void)registerWelcomeWindowController:(AQWelcomeWindowController *)welcomeWindowController;

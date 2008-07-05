@@ -13,6 +13,8 @@
 - (id)init;
 - (void)dealloc;
 
+- (void)endGame:(id)sender;
+
 // Allow objects in loaded nibs to say hi
 - (void)registerGameWindowController:(AQGameWindowController *)gameWindowController;
 @end

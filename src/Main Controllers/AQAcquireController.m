@@ -5,6 +5,8 @@
 #import "AQAcquireController.h"
 
 @interface AQAcquireController (Private)
+- (void)_setMenuItemTargetsAndActions;
+
 // Nib loaders
 - (void)_loadWelcomeWindow;
 - (void)_loadLobbyWindow;
@@ -52,8 +54,22 @@
 // NSObject (NSNibAwakening)
 - (void)awakeFromNib;
 {
+	[self _setMenuItemTargetsAndActions];
 	[self _loadWelcomeWindow];
 	[_welcomeWindowController bringWelcomeWindowToFront];
+}
+
+
+// NSObject (NSMenuValidation)
+- (BOOL)validateMenuItem:(NSMenuItem *)menuItem;
+{
+	if ([[menuItem title] isEqualToString:@"Disconnect From Server"])
+		return ([_connectionArrayController serverConnection] != nil);
+	
+	if ([[menuItem title] isEqualToString:@"Leave Game"] || [[menuItem title] isEqualToString:@"End Game"])
+		return ([_gameArrayController activeGame] != nil);
+	
+	return NO;
 }
 
 
@@ -67,6 +83,7 @@
 - (void)connectedToServer;
 {
 	[self _loadLobbyWindow];
+	[_welcomeWindowController closeWelcomeWindow];
 	[_welcomeWindowController release];
 	_welcomeWindowController = nil;
 	[_lobbyWindowController bringLobbyWindowToFront];
@@ -75,6 +92,31 @@
 - (void)cancelConnectingToServer;
 {
 	[_connectionArrayController closeConnection:[_connectionArrayController serverConnection]];
+}
+
+- (void)leaveGame:(id)sender;
+{
+	[[_connectionArrayController serverConnection] leaveGame:self];
+	[[_gameArrayController activeGame] endGame:self];
+	
+	if (_lobbyWindowController == nil)
+		[self _loadLobbyWindow];
+	
+	[_lobbyWindowController bringLobbyWindowToFront];
+}
+
+- (void)disconnectFromServer:(id)sender;
+{
+	[[_connectionArrayController serverConnection] disconnectFromServer:self];
+	if (_gameArrayController != nil)
+		[[_gameArrayController activeGame] endGame:self];
+	
+	[_lobbyWindowController closeLobbyWindow];
+	
+	if (_welcomeWindowController == nil)
+		[self _loadWelcomeWindow];
+	
+	[_welcomeWindowController bringWelcomeWindowToFront];
 }
 
 - (void)connection:(AQConnectionController *)connection willDisconnectWithError:(NSError *)err;
@@ -98,6 +140,11 @@
 - (void)outgoingLobbyMessage:(NSString *)lobbyMessage;
 {
 	[[_connectionArrayController serverConnection] outgoingLobbyMessage:lobbyMessage];
+}
+
+- (void)updateGameListFor:(id)anObject;
+{
+	[[_connectionArrayController serverConnection] updateGameListFor:anObject];
 }
 
 
@@ -124,6 +171,16 @@
 @end
 
 @implementation AQAcquireController (Private)
+- (void)_setMenuItemTargetsAndActions;
+{
+	NSLog(@"%s %@", _cmd, [NSApp mainMenu]);
+	[[[[[NSApp mainMenu] itemWithTitle:@"Server"] submenu] itemWithTitle:@"Disconnect From Server"] setTarget:self];
+	[[[[[NSApp mainMenu] itemWithTitle:@"Server"] submenu] itemWithTitle:@"Disconnect From Server"] setAction:@selector(disconnectFromServer:)];
+	[[[[[NSApp mainMenu] itemWithTitle:@"Game"] submenu] itemWithTitle:@"Leave Game"] setTarget:self];
+	[[[[[NSApp mainMenu] itemWithTitle:@"Game"] submenu] itemWithTitle:@"Leave Game"] setAction:@selector(leaveGame:)];
+}
+
+
 // Nib loaders
 - (void)_loadWelcomeWindow;
 {

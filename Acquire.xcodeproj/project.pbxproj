@@ -13,7 +13,6 @@
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		F224F2890DEBC16F0004978C /* WelcomeWindow.nib in Resources */ = {isa = PBXBuildFile; fileRef = F224F2870DEBC16F0004978C /* WelcomeWindow.nib */; };
 		F24990240DED297F004F3509 /* AsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = F24990230DED297F004F3509 /* AsyncSocket.m */; };
-		F24990430DED2B2F004F3509 /* AQConnectionController.m in Sources */ = {isa = PBXBuildFile; fileRef = F24990420DED2B2F004F3509 /* AQConnectionController.m */; };
 		F2892B8C0DF0E02E00387EAB /* AQGame.m in Sources */ = {isa = PBXBuildFile; fileRef = F2892B8B0DF0E02E00387EAB /* AQGame.m */; };
 		F2892B980DF0E0A000387EAB /* LobbyWindow.nib in Resources */ = {isa = PBXBuildFile; fileRef = F2892B960DF0E0A000387EAB /* LobbyWindow.nib */; };
 		F28B09760E1460BD00D100DF /* AQNetacquireDirective.m in Sources */ = {isa = PBXBuildFile; fileRef = F28B09750E1460BD00D100DF /* AQNetacquireDirective.m */; };
@@ -29,6 +28,7 @@
 		F2ABA5AD0DEE72F300F58E4B /* AQWelcomeWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = F2ABA5AC0DEE72F300F58E4B /* AQWelcomeWindowController.m */; };
 		F2ABA5B30DEE76F700F58E4B /* AQGameWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = F2ABA5B20DEE76F700F58E4B /* AQGameWindowController.m */; };
 		F2ABA5C10DEE7B9200F58E4B /* AQLobbyWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = F2ABA5C00DEE7B9200F58E4B /* AQLobbyWindowController.m */; };
+		F2EB62A60E1EF87E00FE5E45 /* AQConnectionController.m in Sources */ = {isa = PBXBuildFile; fileRef = F2EB62A50E1EF87E00FE5E45 /* AQConnectionController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -45,8 +45,6 @@
 		F224F2880DEBC16F0004978C /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/WelcomeWindow.nib; sourceTree = "<group>"; };
 		F24990220DED297F004F3509 /* AsyncSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AsyncSocket.h; sourceTree = "<group>"; };
 		F24990230DED297F004F3509 /* AsyncSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AsyncSocket.m; sourceTree = "<group>"; };
-		F24990410DED2B2F004F3509 /* AQConnectionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AQConnectionController.h; sourceTree = "<group>"; };
-		F24990420DED2B2F004F3509 /* AQConnectionController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AQConnectionController.m; sourceTree = "<group>"; };
 		F2892B8A0DF0E02E00387EAB /* AQGame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AQGame.h; sourceTree = "<group>"; };
 		F2892B8B0DF0E02E00387EAB /* AQGame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AQGame.m; sourceTree = "<group>"; };
 		F2892B970DF0E0A000387EAB /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/LobbyWindow.nib; sourceTree = "<group>"; };
@@ -74,6 +72,8 @@
 		F2ABA5B20DEE76F700F58E4B /* AQGameWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AQGameWindowController.m; sourceTree = "<group>"; };
 		F2ABA5BF0DEE7B9200F58E4B /* AQLobbyWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AQLobbyWindowController.h; sourceTree = "<group>"; };
 		F2ABA5C00DEE7B9200F58E4B /* AQLobbyWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AQLobbyWindowController.m; sourceTree = "<group>"; };
+		F2EB62A40E1EF87E00FE5E45 /* AQConnectionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AQConnectionController.h; sourceTree = "<group>"; };
+		F2EB62A50E1EF87E00FE5E45 /* AQConnectionController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AQConnectionController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -92,7 +92,6 @@
 			isa = PBXGroup;
 			children = (
 				F224F28E0DEBC2320004978C /* Main Controllers */,
-				F24990400DED2B2F004F3509 /* Secondary Controllers */,
 				F2ABA5AA0DEE72F300F58E4B /* Window Controllers */,
 				F2ABA5910DEE718A00F58E4B /* Game Classes */,
 				F28B09730E1460BD00D100DF /* Network Classes */,
@@ -194,19 +193,11 @@
 			path = "src/Other Sources/AsyncSocket";
 			sourceTree = "<group>";
 		};
-		F24990400DED2B2F004F3509 /* Secondary Controllers */ = {
-			isa = PBXGroup;
-			children = (
-				F24990410DED2B2F004F3509 /* AQConnectionController.h */,
-				F24990420DED2B2F004F3509 /* AQConnectionController.m */,
-			);
-			name = "Secondary Controllers";
-			path = "src/Secondary Controllers";
-			sourceTree = "<group>";
-		};
 		F28B09730E1460BD00D100DF /* Network Classes */ = {
 			isa = PBXGroup;
 			children = (
+				F2EB62A40E1EF87E00FE5E45 /* AQConnectionController.h */,
+				F2EB62A50E1EF87E00FE5E45 /* AQConnectionController.m */,
 				F28B09740E1460BD00D100DF /* AQNetacquireDirective.h */,
 				F28B09750E1460BD00D100DF /* AQNetacquireDirective.m */,
 			);
@@ -310,7 +301,6 @@
 				F29A825C0DEAA6500060432A /* AQConnectionArrayController.m in Sources */,
 				F29A825D0DEAA6500060432A /* AQGameArrayController.m in Sources */,
 				F24990240DED297F004F3509 /* AsyncSocket.m in Sources */,
-				F24990430DED2B2F004F3509 /* AQConnectionController.m in Sources */,
 				F2ABA59A0DEE718A00F58E4B /* AQBoard.m in Sources */,
 				F2ABA59B0DEE718A00F58E4B /* AQHotel.m in Sources */,
 				F2ABA59C0DEE718A00F58E4B /* AQPlayer.m in Sources */,
@@ -320,6 +310,7 @@
 				F2ABA5C10DEE7B9200F58E4B /* AQLobbyWindowController.m in Sources */,
 				F2892B8C0DF0E02E00387EAB /* AQGame.m in Sources */,
 				F28B09760E1460BD00D100DF /* AQNetacquireDirective.m in Sources */,
+				F2EB62A60E1EF87E00FE5E45 /* AQConnectionController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

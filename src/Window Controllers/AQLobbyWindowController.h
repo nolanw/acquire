@@ -11,9 +11,12 @@
 	
 	// Game list
 	IBOutlet NSMatrix	*_gameListMatrix;
+	
+	NSTimer	*_gameListUpdateTimer;
 }
 
 - (id)init;
+- (void)dealloc;
 
 // NSObject (NSNibAwakening)
 - (void)awakeFromNib;
@@ -28,4 +31,6 @@
 - (IBAction)joinGame:(id)sender;
 
 - (void)incomingLobbyMessage:(NSString *)chatMessage;
+- (void)requestGameListUpdate:(NSTimer *)theTimer;
+- (void)updatedGameList:(NSArray *)gameList;
 @end

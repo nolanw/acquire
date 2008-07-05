@@ -16,6 +16,15 @@
 	return self;
 }
 
+- (void)dealloc;
+{
+	[_gameListUpdateTimer invalidate];
+	[_gameListUpdateTimer release];
+	_gameListUpdateTimer = nil;
+	
+	[super dealloc];
+}
+
 
 // NSObject (NSNibAwakening)
 - (void)awakeFromNib;
@@ -30,6 +39,8 @@
 	[_gameListDrawer setPreferredEdge:NSMaxXEdge];
 	[self _populateGameListDrawerWithGames:nil];
 	[_gameListDrawer open];
+	
+	_gameListUpdateTimer = [[NSTimer scheduledTimerWithTimeInterval:4.0 target:self selector:@selector(requestGameListUpdate:) userInfo:nil repeats:YES] retain];
 }
 
 
@@ -86,6 +97,16 @@
     }
 
     [[_lobbyChatScrollView documentView] scrollPoint:newScrollOrigin];
+}
+
+- (void)requestGameListUpdate:(NSTimer *)theTimer;
+{
+	[_acquireController updateGameListFor:self];
+}
+
+- (void)updatedGameList:(NSArray *)gameList;
+{
+	[self _populateGameListDrawerWithGames:gameList];
 }
 @end
 

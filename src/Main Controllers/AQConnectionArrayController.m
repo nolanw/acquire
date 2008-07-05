@@ -57,6 +57,9 @@
 // Called by individual connection controllers to update status
 - (void)connectionClosed:(AQConnectionController *)sender;
 {
+	if (sender == _serverConnection)
+		_serverConnection = nil;
+	
 	[_connectionArray removeObject:sender];
 }
 @end

@@ -11,7 +11,21 @@
 		return nil;
 	
 	_gameArray = [[NSMutableArray arrayWithCapacity:1] retain];
+	_activeGame = nil;
 
 	return self;
+}
+
+- (void)dealloc;
+{
+	[_gameArray release];
+	_gameArray = nil;
+}
+
+
+// Accessors/setters/etc.
+- (AQGame *)activeGame;
+{
+	return _activeGame;
 }
 @end
