@@ -44,6 +44,14 @@
 }
 
 
+- (void)saveDefaults:(id)sender;
+{
+	[[NSUserDefaults standardUserDefaults] setObject:[_hostOrIPAddressTextField stringValue] forKey:@"LastHostOrIPAddress"];
+	[[NSUserDefaults standardUserDefaults] setObject:[_portTextField stringValue] forKey:@"LastPort"];
+	[[NSUserDefaults standardUserDefaults] setObject:[_displayNameTextField stringValue] forKey:@"LastDisplayName"];
+}
+
+
 // NSObject (NSNibAwakening)
 - (void)awakeFromNib;
 {
@@ -51,6 +59,20 @@
 	[_localNumberOfPlayersStepper setTarget:self];
 	[_localNumberOfPlayersStepper setAction:@selector(localNumberOfPlayersStepperHasChanged:)];
 	[self _updateLocalPlayerNamesForm];
+	
+	NSString *lastHostOrIPAddress = [[NSUserDefaults standardUserDefaults] objectForKey:@"LastHostOrIPAddress"];
+	if (lastHostOrIPAddress != nil)
+		[_hostOrIPAddressTextField setStringValue:lastHostOrIPAddress];
+	
+	NSString *lastPort = [[NSUserDefaults standardUserDefaults] objectForKey:@"LastPort"];
+	if (lastPort != nil)
+		[_portTextField setStringValue:lastPort];
+	
+	NSString *lastDisplayName = [[NSUserDefaults standardUserDefaults] objectForKey:@"LastDisplayName"];
+	if (lastDisplayName != nil)
+		[_displayNameTextField setStringValue:lastDisplayName];
+	
+	
 	[_hostOrIPAddressTextField selectText:self];
 }
 

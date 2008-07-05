@@ -63,6 +63,9 @@
 // NSObject (NSMenuValidation)
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem;
 {
+	if ([[menuItem title] isEqualToString:@"Show Lobby Window"])
+		return ([_connectionArrayController serverConnection] != nil);
+	
 	if ([[menuItem title] isEqualToString:@"Disconnect From Server"])
 		return ([_connectionArrayController serverConnection] != nil);
 	
@@ -83,6 +86,7 @@
 - (void)connectedToServer;
 {
 	[self _loadLobbyWindow];
+	[_welcomeWindowController saveDefaults:self];
 	[_welcomeWindowController closeWelcomeWindow];
 	[_welcomeWindowController release];
 	_welcomeWindowController = nil;
@@ -147,6 +151,11 @@
 	[[_connectionArrayController serverConnection] updateGameListFor:anObject];
 }
 
+- (void)showLobbyWindow:(id)sender;
+{
+	[_lobbyWindowController bringLobbyWindowToFront];
+}
+
 
 // Allow objects in loaded nibs to say hi
 - (void)registerWelcomeWindowController:(AQWelcomeWindowController *)welcomeWindowController;
@@ -174,6 +183,8 @@
 - (void)_setMenuItemTargetsAndActions;
 {
 	NSLog(@"%s %@", _cmd, [NSApp mainMenu]);
+	[[[[[NSApp mainMenu] itemWithTitle:@"Server"] submenu] itemWithTitle:@"Show Lobby Window"] setTarget:self];
+	[[[[[NSApp mainMenu] itemWithTitle:@"Server"] submenu] itemWithTitle:@"Show Lobby Window"] setAction:@selector(showLobbyWindow:)];
 	[[[[[NSApp mainMenu] itemWithTitle:@"Server"] submenu] itemWithTitle:@"Disconnect From Server"] setTarget:self];
 	[[[[[NSApp mainMenu] itemWithTitle:@"Server"] submenu] itemWithTitle:@"Disconnect From Server"] setAction:@selector(disconnectFromServer:)];
 	[[[[[NSApp mainMenu] itemWithTitle:@"Game"] submenu] itemWithTitle:@"Leave Game"] setTarget:self];

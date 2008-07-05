@@ -21,6 +21,7 @@
 	[_gameListUpdateTimer invalidate];
 	[_gameListUpdateTimer release];
 	_gameListUpdateTimer = nil;
+	[_lobbyWindow release];
 	
 	[super dealloc];
 }
