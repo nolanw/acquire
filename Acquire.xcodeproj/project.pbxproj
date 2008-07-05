@@ -1,0 +1,452 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 44;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */ = {isa = PBXBuildFile; fileRef = 29B97318FDCFA39411CA2CEA /* MainMenu.nib */; };
+		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
+		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
+		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+		F224F2890DEBC16F0004978C /* WelcomeWindow.nib in Resources */ = {isa = PBXBuildFile; fileRef = F224F2870DEBC16F0004978C /* WelcomeWindow.nib */; };
+		F24990240DED297F004F3509 /* AsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = F24990230DED297F004F3509 /* AsyncSocket.m */; };
+		F24990430DED2B2F004F3509 /* AQConnectionController.m in Sources */ = {isa = PBXBuildFile; fileRef = F24990420DED2B2F004F3509 /* AQConnectionController.m */; };
+		F2892B8C0DF0E02E00387EAB /* AQGame.m in Sources */ = {isa = PBXBuildFile; fileRef = F2892B8B0DF0E02E00387EAB /* AQGame.m */; };
+		F2892B980DF0E0A000387EAB /* LobbyWindow.nib in Resources */ = {isa = PBXBuildFile; fileRef = F2892B960DF0E0A000387EAB /* LobbyWindow.nib */; };
+		F28B09760E1460BD00D100DF /* AQNetacquireDirective.m in Sources */ = {isa = PBXBuildFile; fileRef = F28B09750E1460BD00D100DF /* AQNetacquireDirective.m */; };
+		F28B09A00E14762900D100DF /* Acquire.icns in Resources */ = {isa = PBXBuildFile; fileRef = F28B099F0E14762900D100DF /* Acquire.icns */; };
+		F29A825B0DEAA6500060432A /* AQAcquireController.m in Sources */ = {isa = PBXBuildFile; fileRef = F29A82560DEAA6500060432A /* AQAcquireController.m */; };
+		F29A825C0DEAA6500060432A /* AQConnectionArrayController.m in Sources */ = {isa = PBXBuildFile; fileRef = F29A82580DEAA6500060432A /* AQConnectionArrayController.m */; };
+		F29A825D0DEAA6500060432A /* AQGameArrayController.m in Sources */ = {isa = PBXBuildFile; fileRef = F29A825A0DEAA6500060432A /* AQGameArrayController.m */; };
+		F2ABA59A0DEE718A00F58E4B /* AQBoard.m in Sources */ = {isa = PBXBuildFile; fileRef = F2ABA5930DEE718A00F58E4B /* AQBoard.m */; };
+		F2ABA59B0DEE718A00F58E4B /* AQHotel.m in Sources */ = {isa = PBXBuildFile; fileRef = F2ABA5950DEE718A00F58E4B /* AQHotel.m */; };
+		F2ABA59C0DEE718A00F58E4B /* AQPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = F2ABA5970DEE718A00F58E4B /* AQPlayer.m */; };
+		F2ABA59D0DEE718A00F58E4B /* AQTile.m in Sources */ = {isa = PBXBuildFile; fileRef = F2ABA5990DEE718A00F58E4B /* AQTile.m */; };
+		F2ABA5A90DEE728C00F58E4B /* GameWindow.nib in Resources */ = {isa = PBXBuildFile; fileRef = F2ABA5A70DEE728C00F58E4B /* GameWindow.nib */; };
+		F2ABA5AD0DEE72F300F58E4B /* AQWelcomeWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = F2ABA5AC0DEE72F300F58E4B /* AQWelcomeWindowController.m */; };
+		F2ABA5B30DEE76F700F58E4B /* AQGameWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = F2ABA5B20DEE76F700F58E4B /* AQGameWindowController.m */; };
+		F2ABA5C10DEE7B9200F58E4B /* AQLobbyWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = F2ABA5C00DEE7B9200F58E4B /* AQLobbyWindowController.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
+		13E42FB307B3F0F600E4EEF1 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
+		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = src/main.m; sourceTree = "<group>"; };
+		29B97319FDCFA39411CA2CEA /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/MainMenu.nib; sourceTree = "<group>"; };
+		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
+		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
+		32CA4F630368D1EE00C91783 /* Acquire_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Acquire_Prefix.pch; path = "src/Other Sources/Acquire_Prefix.pch"; sourceTree = "<group>"; };
+		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8D1107320486CEB800E47090 /* Acquire.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Acquire.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F224F2880DEBC16F0004978C /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/WelcomeWindow.nib; sourceTree = "<group>"; };
+		F24990220DED297F004F3509 /* AsyncSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AsyncSocket.h; sourceTree = "<group>"; };
+		F24990230DED297F004F3509 /* AsyncSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AsyncSocket.m; sourceTree = "<group>"; };
+		F24990410DED2B2F004F3509 /* AQConnectionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AQConnectionController.h; sourceTree = "<group>"; };
+		F24990420DED2B2F004F3509 /* AQConnectionController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AQConnectionController.m; sourceTree = "<group>"; };
+		F2892B8A0DF0E02E00387EAB /* AQGame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AQGame.h; sourceTree = "<group>"; };
+		F2892B8B0DF0E02E00387EAB /* AQGame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AQGame.m; sourceTree = "<group>"; };
+		F2892B970DF0E0A000387EAB /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/LobbyWindow.nib; sourceTree = "<group>"; };
+		F28B09740E1460BD00D100DF /* AQNetacquireDirective.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AQNetacquireDirective.h; sourceTree = "<group>"; };
+		F28B09750E1460BD00D100DF /* AQNetacquireDirective.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AQNetacquireDirective.m; sourceTree = "<group>"; };
+		F28B099F0E14762900D100DF /* Acquire.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Acquire.icns; sourceTree = "<group>"; };
+		F29A82550DEAA6500060432A /* AQAcquireController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AQAcquireController.h; path = "src/Main Controllers/AQAcquireController.h"; sourceTree = "<group>"; };
+		F29A82560DEAA6500060432A /* AQAcquireController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AQAcquireController.m; path = "src/Main Controllers/AQAcquireController.m"; sourceTree = "<group>"; };
+		F29A82570DEAA6500060432A /* AQConnectionArrayController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AQConnectionArrayController.h; path = "src/Main Controllers/AQConnectionArrayController.h"; sourceTree = "<group>"; };
+		F29A82580DEAA6500060432A /* AQConnectionArrayController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AQConnectionArrayController.m; path = "src/Main Controllers/AQConnectionArrayController.m"; sourceTree = "<group>"; };
+		F29A82590DEAA6500060432A /* AQGameArrayController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AQGameArrayController.h; path = "src/Main Controllers/AQGameArrayController.h"; sourceTree = "<group>"; };
+		F29A825A0DEAA6500060432A /* AQGameArrayController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AQGameArrayController.m; path = "src/Main Controllers/AQGameArrayController.m"; sourceTree = "<group>"; };
+		F2ABA5920DEE718A00F58E4B /* AQBoard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AQBoard.h; sourceTree = "<group>"; };
+		F2ABA5930DEE718A00F58E4B /* AQBoard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AQBoard.m; sourceTree = "<group>"; };
+		F2ABA5940DEE718A00F58E4B /* AQHotel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AQHotel.h; sourceTree = "<group>"; };
+		F2ABA5950DEE718A00F58E4B /* AQHotel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AQHotel.m; sourceTree = "<group>"; };
+		F2ABA5960DEE718A00F58E4B /* AQPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AQPlayer.h; sourceTree = "<group>"; };
+		F2ABA5970DEE718A00F58E4B /* AQPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AQPlayer.m; sourceTree = "<group>"; };
+		F2ABA5980DEE718A00F58E4B /* AQTile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AQTile.h; sourceTree = "<group>"; };
+		F2ABA5990DEE718A00F58E4B /* AQTile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AQTile.m; sourceTree = "<group>"; };
+		F2ABA5A80DEE728C00F58E4B /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/GameWindow.nib; sourceTree = "<group>"; };
+		F2ABA5AB0DEE72F300F58E4B /* AQWelcomeWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AQWelcomeWindowController.h; sourceTree = "<group>"; };
+		F2ABA5AC0DEE72F300F58E4B /* AQWelcomeWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AQWelcomeWindowController.m; sourceTree = "<group>"; };
+		F2ABA5B10DEE76F700F58E4B /* AQGameWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AQGameWindowController.h; sourceTree = "<group>"; };
+		F2ABA5B20DEE76F700F58E4B /* AQGameWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AQGameWindowController.m; sourceTree = "<group>"; };
+		F2ABA5BF0DEE7B9200F58E4B /* AQLobbyWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AQLobbyWindowController.h; sourceTree = "<group>"; };
+		F2ABA5C00DEE7B9200F58E4B /* AQLobbyWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AQLobbyWindowController.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		8D11072E0486CEB800E47090 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		080E96DDFE201D6D7F000001 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				F224F28E0DEBC2320004978C /* Main Controllers */,
+				F24990400DED2B2F004F3509 /* Secondary Controllers */,
+				F2ABA5AA0DEE72F300F58E4B /* Window Controllers */,
+				F2ABA5910DEE718A00F58E4B /* Game Classes */,
+				F28B09730E1460BD00D100DF /* Network Classes */,
+			);
+			name = Classes;
+			sourceTree = "<group>";
+		};
+		1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
+			);
+			name = "Linked Frameworks";
+			sourceTree = "<group>";
+		};
+		1058C7A2FEA54F0111CA2CBB /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				29B97324FDCFA39411CA2CEA /* AppKit.framework */,
+				13E42FB307B3F0F600E4EEF1 /* CoreData.framework */,
+				29B97325FDCFA39411CA2CEA /* Foundation.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		19C28FACFE9D520D11CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8D1107320486CEB800E47090 /* Acquire.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		29B97314FDCFA39411CA2CEA /* Acquire */ = {
+			isa = PBXGroup;
+			children = (
+				080E96DDFE201D6D7F000001 /* Classes */,
+				29B97315FDCFA39411CA2CEA /* Other Sources */,
+				29B97317FDCFA39411CA2CEA /* Resources */,
+				29B97323FDCFA39411CA2CEA /* Frameworks */,
+				19C28FACFE9D520D11CA2CBB /* Products */,
+			);
+			name = Acquire;
+			sourceTree = "<group>";
+		};
+		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
+			isa = PBXGroup;
+			children = (
+				F24990210DED297F004F3509 /* AsyncSocket */,
+				32CA4F630368D1EE00C91783 /* Acquire_Prefix.pch */,
+				29B97316FDCFA39411CA2CEA /* main.m */,
+			);
+			name = "Other Sources";
+			sourceTree = "<group>";
+		};
+		29B97317FDCFA39411CA2CEA /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				F28B099F0E14762900D100DF /* Acquire.icns */,
+				8D1107310486CEB800E47090 /* Info.plist */,
+				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
+				F2ABA5A70DEE728C00F58E4B /* GameWindow.nib */,
+				F2892B960DF0E0A000387EAB /* LobbyWindow.nib */,
+				29B97318FDCFA39411CA2CEA /* MainMenu.nib */,
+				F224F2870DEBC16F0004978C /* WelcomeWindow.nib */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */,
+				1058C7A2FEA54F0111CA2CBB /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		F224F28E0DEBC2320004978C /* Main Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				F29A82550DEAA6500060432A /* AQAcquireController.h */,
+				F29A82560DEAA6500060432A /* AQAcquireController.m */,
+				F29A82570DEAA6500060432A /* AQConnectionArrayController.h */,
+				F29A82580DEAA6500060432A /* AQConnectionArrayController.m */,
+				F29A82590DEAA6500060432A /* AQGameArrayController.h */,
+				F29A825A0DEAA6500060432A /* AQGameArrayController.m */,
+			);
+			name = "Main Controllers";
+			sourceTree = "<group>";
+		};
+		F24990210DED297F004F3509 /* AsyncSocket */ = {
+			isa = PBXGroup;
+			children = (
+				F24990220DED297F004F3509 /* AsyncSocket.h */,
+				F24990230DED297F004F3509 /* AsyncSocket.m */,
+			);
+			name = AsyncSocket;
+			path = "src/Other Sources/AsyncSocket";
+			sourceTree = "<group>";
+		};
+		F24990400DED2B2F004F3509 /* Secondary Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				F24990410DED2B2F004F3509 /* AQConnectionController.h */,
+				F24990420DED2B2F004F3509 /* AQConnectionController.m */,
+			);
+			name = "Secondary Controllers";
+			path = "src/Secondary Controllers";
+			sourceTree = "<group>";
+		};
+		F28B09730E1460BD00D100DF /* Network Classes */ = {
+			isa = PBXGroup;
+			children = (
+				F28B09740E1460BD00D100DF /* AQNetacquireDirective.h */,
+				F28B09750E1460BD00D100DF /* AQNetacquireDirective.m */,
+			);
+			name = "Network Classes";
+			path = "src/Network Classes";
+			sourceTree = "<group>";
+		};
+		F2ABA5910DEE718A00F58E4B /* Game Classes */ = {
+			isa = PBXGroup;
+			children = (
+				F2892B8A0DF0E02E00387EAB /* AQGame.h */,
+				F2892B8B0DF0E02E00387EAB /* AQGame.m */,
+				F2ABA5920DEE718A00F58E4B /* AQBoard.h */,
+				F2ABA5930DEE718A00F58E4B /* AQBoard.m */,
+				F2ABA5940DEE718A00F58E4B /* AQHotel.h */,
+				F2ABA5950DEE718A00F58E4B /* AQHotel.m */,
+				F2ABA5960DEE718A00F58E4B /* AQPlayer.h */,
+				F2ABA5970DEE718A00F58E4B /* AQPlayer.m */,
+				F2ABA5980DEE718A00F58E4B /* AQTile.h */,
+				F2ABA5990DEE718A00F58E4B /* AQTile.m */,
+			);
+			name = "Game Classes";
+			path = "src/Game Classes";
+			sourceTree = "<group>";
+		};
+		F2ABA5AA0DEE72F300F58E4B /* Window Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				F2ABA5B10DEE76F700F58E4B /* AQGameWindowController.h */,
+				F2ABA5B20DEE76F700F58E4B /* AQGameWindowController.m */,
+				F2ABA5BF0DEE7B9200F58E4B /* AQLobbyWindowController.h */,
+				F2ABA5C00DEE7B9200F58E4B /* AQLobbyWindowController.m */,
+				F2ABA5AB0DEE72F300F58E4B /* AQWelcomeWindowController.h */,
+				F2ABA5AC0DEE72F300F58E4B /* AQWelcomeWindowController.m */,
+			);
+			name = "Window Controllers";
+			path = "src/Window Controllers";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		8D1107260486CEB800E47090 /* Acquire */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "Acquire" */;
+			buildPhases = (
+				8D1107290486CEB800E47090 /* Resources */,
+				8D11072C0486CEB800E47090 /* Sources */,
+				8D11072E0486CEB800E47090 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Acquire;
+			productInstallPath = "$(HOME)/Applications";
+			productName = Acquire;
+			productReference = 8D1107320486CEB800E47090 /* Acquire.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		29B97313FDCFA39411CA2CEA /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Acquire" */;
+			compatibilityVersion = "Xcode 3.0";
+			hasScannedForEncodings = 1;
+			mainGroup = 29B97314FDCFA39411CA2CEA /* Acquire */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				8D1107260486CEB800E47090 /* Acquire */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		8D1107290486CEB800E47090 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D11072A0486CEB800E47090 /* MainMenu.nib in Resources */,
+				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
+				F224F2890DEBC16F0004978C /* WelcomeWindow.nib in Resources */,
+				F2ABA5A90DEE728C00F58E4B /* GameWindow.nib in Resources */,
+				F2892B980DF0E0A000387EAB /* LobbyWindow.nib in Resources */,
+				F28B09A00E14762900D100DF /* Acquire.icns in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8D11072C0486CEB800E47090 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8D11072D0486CEB800E47090 /* main.m in Sources */,
+				F29A825B0DEAA6500060432A /* AQAcquireController.m in Sources */,
+				F29A825C0DEAA6500060432A /* AQConnectionArrayController.m in Sources */,
+				F29A825D0DEAA6500060432A /* AQGameArrayController.m in Sources */,
+				F24990240DED297F004F3509 /* AsyncSocket.m in Sources */,
+				F24990430DED2B2F004F3509 /* AQConnectionController.m in Sources */,
+				F2ABA59A0DEE718A00F58E4B /* AQBoard.m in Sources */,
+				F2ABA59B0DEE718A00F58E4B /* AQHotel.m in Sources */,
+				F2ABA59C0DEE718A00F58E4B /* AQPlayer.m in Sources */,
+				F2ABA59D0DEE718A00F58E4B /* AQTile.m in Sources */,
+				F2ABA5AD0DEE72F300F58E4B /* AQWelcomeWindowController.m in Sources */,
+				F2ABA5B30DEE76F700F58E4B /* AQGameWindowController.m in Sources */,
+				F2ABA5C10DEE7B9200F58E4B /* AQLobbyWindowController.m in Sources */,
+				F2892B8C0DF0E02E00387EAB /* AQGame.m in Sources */,
+				F28B09760E1460BD00D100DF /* AQNetacquireDirective.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		089C165CFE840E0CC02AAC07 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				089C165DFE840E0CC02AAC07 /* English */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		29B97318FDCFA39411CA2CEA /* MainMenu.nib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				29B97319FDCFA39411CA2CEA /* English */,
+			);
+			name = MainMenu.nib;
+			sourceTree = "<group>";
+		};
+		F224F2870DEBC16F0004978C /* WelcomeWindow.nib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F224F2880DEBC16F0004978C /* English */,
+			);
+			name = WelcomeWindow.nib;
+			sourceTree = "<group>";
+		};
+		F2892B960DF0E0A000387EAB /* LobbyWindow.nib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F2892B970DF0E0A000387EAB /* English */,
+			);
+			name = LobbyWindow.nib;
+			sourceTree = "<group>";
+		};
+		F2ABA5A70DEE728C00F58E4B /* GameWindow.nib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F2ABA5A80DEE728C00F58E4B /* English */,
+			);
+			name = GameWindow.nib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		C01FCF4B08A954540054247B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "src/Other Sources/Acquire_Prefix.pch";
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = "$(HOME)/Applications";
+				PRODUCT_NAME = Acquire;
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = YES;
+			};
+			name = Debug;
+		};
+		C01FCF4C08A954540054247B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = Acquire_Prefix.pch;
+				INFOPLIST_FILE = Info.plist;
+				INSTALL_PATH = "$(HOME)/Applications";
+				PRODUCT_NAME = Acquire;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+		C01FCF4F08A954540054247B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				PREBINDING = NO;
+				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.5.sdk";
+			};
+			name = Debug;
+		};
+		C01FCF5008A954540054247B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = (
+					ppc,
+					i386,
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				PREBINDING = NO;
+				SDKROOT = "$(DEVELOPER_SDK_DIR)/MacOSX10.5.sdk";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "Acquire" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C01FCF4B08A954540054247B /* Debug */,
+				C01FCF4C08A954540054247B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Acquire" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C01FCF4F08A954540054247B /* Debug */,
+				C01FCF5008A954540054247B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 29B97313FDCFA39411CA2CEA /* Project object */;
+}

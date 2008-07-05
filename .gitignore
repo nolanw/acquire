@@ -1,0 +1,10 @@
+# annoying Finder stuff
+.DS_Store
+
+# ignore build files/compiler output/junk/Xcode crap
+build
+*.swp
+*~.nib
+*.pbxuser
+*.perspective
+*.perspectivev3
