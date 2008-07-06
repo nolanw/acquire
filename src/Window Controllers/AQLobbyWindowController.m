@@ -77,18 +77,26 @@
 
 - (IBAction)joinGame:(id)sender;
 {
-	
+	[_gameListMatrix setEnabled:NO];
+	[(AQAcquireController *)_acquireController joinGame:[sender tag]];
+}
+
+- (void)leftGame:(id)sender;
+{
+	[_gameListMatrix setEnabled:YES];
 }
 
 
 - (void)incomingLobbyMessage:(NSString *)lobbyMessage;
 {
-	NSAttributedString *attributedLobbyMessage = [[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@\n", lobbyMessage]] autorelease];
+	if ([[_lobbyChatTextView textStorage] length] > 0)
+		[[_lobbyChatTextView textStorage] appendAttributedString:[[[NSAttributedString alloc] initWithString:@"\n"] autorelease]];
+
+	NSAttributedString *attributedLobbyMessage = [[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@", lobbyMessage]] autorelease];
 	[[_lobbyChatTextView textStorage] appendAttributedString:attributedLobbyMessage];
 	
 	// Scroll to bottom found in Cocoa docs
 	// http://developer.apple.com/documentation/Cocoa/Conceptual/NSScrollViewGuide/Articles/Scrolling.html
-	
 	NSPoint newScrollOrigin;
 
     if ([[_lobbyChatScrollView documentView] isFlipped]) {
@@ -112,23 +120,39 @@
 @end
 
 @implementation AQLobbyWindowController (Private)
+- (void)_gameListMatrixSetEnabled:(BOOL)flag;
+{
+	int i;
+	for (i = 1; i < [_gameListMatrix numberOfRows]; ++i)
+		[[_gameListMatrix cellAtRow:i column:0] setEnabled:flag];
+}
+
 - (void)_populateGameListDrawerWithGames:(NSArray *)games;
 {
+	NSTextFieldCell *gameListTitle = [[[NSTextFieldCell alloc] init] autorelease];
+	if ([games count] == 0)
+		[gameListTitle setStringValue:@"No games"];
+	else
+		[gameListTitle setStringValue:@"Game List:"];
+	[gameListTitle setEnabled:NO];
 	NSButtonCell *prototype = [[[NSButtonCell alloc] init] autorelease];
-	[prototype setButtonType:NSRadioButton];
+	[prototype setTarget:self];
+	[prototype setAction:@selector(joinGame:)];
 	
 	[_gameListMatrix setPrototype:prototype];
 	[_gameListMatrix setAllowsEmptySelection:NO];
 	[_gameListMatrix setIntercellSpacing:NSMakeSize(4.0f, 2.0f)];
-	[_gameListMatrix setCellSize:NSMakeSize(122.0f, 18.0f)];
+	[_gameListMatrix setCellSize:NSMakeSize(100.0f, 18.0f)];
 	[_gameListMatrix setMode:NSRadioModeMatrix];
 	
-	[_gameListMatrix renewRows:4 columns:1];
+	[_gameListMatrix renewRows:([games count] + 1) columns:1];
 	
-	[[_gameListMatrix cellAtRow:0 column:0] setTitle:@"Game #1"];
-	[[_gameListMatrix cellAtRow:1 column:0] setTitle:@"Game #2"];
-	[[_gameListMatrix cellAtRow:2 column:0] setTitle:@"Game #3"];
-	[[_gameListMatrix cellAtRow:3 column:0] setTitle:@"Game #4"];
+	[_gameListMatrix putCell:gameListTitle atRow:0 column:0];
+	int i;
+	for (i = 0; i < [games count]; ++i) {
+		[[_gameListMatrix cellAtRow:(i + 1) column:0] setTitle:[NSString stringWithFormat:@"Game #%@", [games objectAtIndex:i]]];
+		[[_gameListMatrix cellAtRow:(i + 1) column:0] setTag:[[games objectAtIndex:i] intValue]];
+	}
 	
 	[_gameListMatrix sizeToCells];
 }

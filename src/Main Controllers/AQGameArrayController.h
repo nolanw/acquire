@@ -4,6 +4,7 @@
 // Created May 26, 2008 by nwaite
 
 #import "AQGame.h"
+#import "AQGameWindowController.h"
 
 @interface AQGameArrayController : NSObject
 {
@@ -15,5 +16,9 @@
 - (void)dealloc;
 
 // Accessors/setters/etc.
+- (AQGame *)startNewGame;
+- (AQGame *)startNewGameAndMakeActive;
+- (void)removeGame:(AQGame *)game;
 - (AQGame *)activeGame;
+- (AQGame *)gameAtIndex:(int)index;
 @end

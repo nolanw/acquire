@@ -29,6 +29,7 @@
 - (IBAction)sendLobbyMessage:(id)sender;
 - (IBAction)createNewGame:(id)sender;
 - (IBAction)joinGame:(id)sender;
+- (void)leftGame:(id)sender;
 
 - (void)incomingLobbyMessage:(NSString *)chatMessage;
 - (void)requestGameListUpdate:(NSTimer *)theTimer;

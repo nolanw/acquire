@@ -34,6 +34,7 @@
 - (void)connectToServer:(NSString *)hostOrIPAddress port:(int)port withLocalDisplayName:(NSString *)localDisplayName sender:(id)sender;
 - (void)connectedToServer;
 - (void)cancelConnectingToServer;
+- (void)joinGame:(int)gameNumber;
 - (void)leaveGame:(id)sender;
 - (void)disconnectFromServer:(id)sender;
 - (void)connection:(AQConnectionController *)connection willDisconnectWithError:(NSError *)err;

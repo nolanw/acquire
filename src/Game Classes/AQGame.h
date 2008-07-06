@@ -7,10 +7,11 @@
 
 @interface AQGame : NSObject
 {
+	id						_arrayController;
 	AQGameWindowController	*_gameWindowController;
 }
 
-- (id)init;
+- (id)initWithArrayController:(id)gameController;
 - (void)dealloc;
 
 - (void)endGame:(id)sender;

@@ -3,6 +3,7 @@
 // Created May 28, 2008 by nwaite
 
 #import "AQGame.h"
+#import "AQGameArrayController.h"
 
 @interface AQGame (Private)
 // Nib loaders
@@ -10,11 +11,12 @@
 @end
 
 @implementation AQGame
-- (id)init;
+- (id)initWithArrayController:(id)arrayController;
 {
 	if (![super init])
 		return nil;
 	
+	_arrayController = [arrayController retain];
 	_gameWindowController = nil;
 
 	return self;
@@ -22,7 +24,7 @@
 
 - (void)dealloc;
 {
-	// GameWindowController releases the game window it's responsible for, and there's nothing else in any nibs we open to release.
+	[_arrayController release];
 	[_gameWindowController release];
 	_gameWindowController = nil;
 	
@@ -32,6 +34,7 @@
 
 - (void)endGame:(id)sender;
 {
+	[_arrayController removeGame:self];
 }
 
 

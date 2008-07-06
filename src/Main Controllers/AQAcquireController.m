@@ -64,10 +64,10 @@
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem;
 {
 	if ([[menuItem title] isEqualToString:@"Show Lobby Window"])
-		return ([_connectionArrayController serverConnection] != nil);
+		return ([_connectionArrayController serverConnection] != nil && [[_connectionArrayController serverConnection] isConnected]);
 	
 	if ([[menuItem title] isEqualToString:@"Disconnect From Server"])
-		return ([_connectionArrayController serverConnection] != nil);
+		return ([_connectionArrayController serverConnection] != nil && [[_connectionArrayController serverConnection] isConnected]);
 	
 	if ([[menuItem title] isEqualToString:@"Leave Game"] || [[menuItem title] isEqualToString:@"End Game"])
 		return ([_gameArrayController activeGame] != nil);
@@ -91,11 +91,17 @@
 	[_welcomeWindowController release];
 	_welcomeWindowController = nil;
 	[_lobbyWindowController bringLobbyWindowToFront];
+	[self updateGameListFor:_lobbyWindowController];
 }
 
 - (void)cancelConnectingToServer;
 {
 	[_connectionArrayController closeConnection:[_connectionArrayController serverConnection]];
+}
+
+- (void)joinGame:(int)gameNumber;
+{
+	[_gameArrayController startNewGameAndMakeActive];
 }
 
 - (void)leaveGame:(id)sender;
@@ -105,7 +111,9 @@
 	
 	if (_lobbyWindowController == nil)
 		[self _loadLobbyWindow];
-	
+	else
+		[_lobbyWindowController leftGame:self];
+
 	[_lobbyWindowController bringLobbyWindowToFront];
 }
 
@@ -182,7 +190,6 @@
 @implementation AQAcquireController (Private)
 - (void)_setMenuItemTargetsAndActions;
 {
-	NSLog(@"%s %@", _cmd, [NSApp mainMenu]);
 	[[[[[NSApp mainMenu] itemWithTitle:@"Server"] submenu] itemWithTitle:@"Show Lobby Window"] setTarget:self];
 	[[[[[NSApp mainMenu] itemWithTitle:@"Server"] submenu] itemWithTitle:@"Show Lobby Window"] setAction:@selector(showLobbyWindow:)];
 	[[[[[NSApp mainMenu] itemWithTitle:@"Server"] submenu] itemWithTitle:@"Disconnect From Server"] setTarget:self];

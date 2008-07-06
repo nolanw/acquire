@@ -185,12 +185,10 @@
 		NSRange nextCommaRange = [parameterString rangeOfString:@","];
 		if (nextCommaRange.location == NSNotFound) {
 			[parameters addObject:parameterString];
-			NSLog(@"%s added %@ to parameter array", _cmd, [parameters lastObject]);
 			break;
 		}
 		
 		[parameters addObject:[parameterString substringWithRange:NSMakeRange(0, nextCommaRange.location)]];
-		NSLog(@"%s added %@ to parameter array", _cmd, [parameters lastObject]);
 		parameterString = [parameterString substringFromIndex:(nextCommaRange.location + 1)];
 	}
 	
