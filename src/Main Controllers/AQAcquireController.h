@@ -45,6 +45,7 @@
 - (void)outgoingLobbyMessage:(NSString *)lobbyMessage;
 - (void)updateGameListFor:(id)anObject;
 - (void)showLobbyWindow:(id)sender;
+- (NSString *)connectedHostOrIPAddress;
 
 // Allow objects in loaded nibs to say hi
 - (void)registerWelcomeWindowController:(AQWelcomeWindowController *)welcomeWindowController;

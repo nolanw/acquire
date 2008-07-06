@@ -110,17 +110,17 @@
 	if (verificationErrorString != nil) {
 		NSAlert *verificationErrorAlert = [[[NSAlert alloc] init] autorelease];
 		[verificationErrorAlert addButtonWithTitle:@"OK"];
-		[verificationErrorAlert setMessageText:@"Some settings need correction."];
+		[verificationErrorAlert setMessageText:NSLocalizedStringFromTable(@"Some settings need correction.", @"Acquire", @"Error shown when settings on the welcome screen are invalid.")];
 		[verificationErrorAlert setInformativeText:verificationErrorString];
 		[verificationErrorAlert setAlertStyle:NSWarningAlertStyle];
 
-		[verificationErrorAlert beginSheetModalForWindow:_welcomeWindow modalDelegate:self didEndSelector:@selector(networkErrorAlertDismissed) contextInfo:nil];
+		[verificationErrorAlert beginSheetModalForWindow:_welcomeWindow modalDelegate:self didEndSelector:@selector(networkErrorAlertDismissed:) contextInfo:nil];
 		
-		if ([verificationErrorString isEqualToString:@"Please enter a host or IP address."])
+		if ([verificationErrorString isEqualToString:NSLocalizedStringFromTable(@"Please enter a host or IP address.", @"Acquire", @"String asking user to enter a hostname or IP address.")])
 			[_hostOrIPAddressTextField selectText:self];
-		else if ([verificationErrorString isEqualToString:@"Please enter a port number in the range 1-65535."])
+		else if ([verificationErrorString isEqualToString:NSLocalizedStringFromTable(@"Please enter a port number in the range 1-65535.", @"Acquire", @"String asking user to enter a port number from 1-65535 inclusive.")])
 			[_portTextField selectText:self];
-		else if ([verificationErrorString isEqualToString:@"Please enter a display name."])
+		else if ([verificationErrorString isEqualToString:NSLocalizedStringFromTable(@"Please enter a display name.", @"Acquire", @"String asking user to enter a display name.")])
 			[_displayNameTextField selectText:self];
 		
 		return;
@@ -169,8 +169,8 @@
 	
 	NSAlert *networkErrorAlert = [[[NSAlert alloc] init] autorelease];
 	[networkErrorAlert addButtonWithTitle:@"OK"];
-	[networkErrorAlert setMessageText:@"A network error occurred."];
-	[networkErrorAlert setInformativeText:@"Acquire couldn't connect to the server. Please double-check the host or IP address and the port you entered, then try again."];
+	[networkErrorAlert setMessageText:NSLocalizedStringFromTable(@"A network error occurred.", @"Acquire", @"Alert box title saying that a network error has occurred.")];
+	[networkErrorAlert setInformativeText:NSLocalizedStringFromTable(@"Acquire couldn't connect to the server. Please double-check the host or IP address and the port you entered, then try again.", @"Acquire", @"Explain that Acquire couldn't connect to the server, and recommend checking host/IP/port info entered.")];
 	[networkErrorAlert setAlertStyle:NSWarningAlertStyle];
 
 	[networkErrorAlert beginSheetModalForWindow:_welcomeWindow modalDelegate:self didEndSelector:@selector(networkErrorAlertDismissed:) contextInfo:nil];
@@ -187,12 +187,12 @@
 		[_localPlayerNamesForm removeEntryAtIndex:rowsNeeded];
 	
 	while ([_localPlayerNamesForm numberOfRows] < rowsNeeded)
-		[_localPlayerNamesForm addEntry:@"Player"];
+		[_localPlayerNamesForm addEntry:NSLocalizedStringFromTable(@"Player", @"Acquire", @"The word 'player'.")];
 	
 	int i;
 	for (i = 0; i < rowsNeeded; ++i) {
-		[[_localPlayerNamesForm cellAtIndex:i] setTitle:[NSString stringWithFormat:@"Player %d", (i + 1)]];
-		[[_localPlayerNamesForm cellAtIndex:i] setPlaceholderString:@"Enter name"];
+		[[_localPlayerNamesForm cellAtIndex:i] setTitle:[NSString stringWithFormat:@"%@ %d", NSLocalizedStringFromTable(@"Player", @"Acquire", @"The word 'player'."), (i + 1)]];
+		[[_localPlayerNamesForm cellAtIndex:i] setPlaceholderString:NSLocalizedStringFromTable(@"Enter name", @"Acquire", @"Prompt user to enter name.")];
 	}
 }
 
@@ -200,13 +200,13 @@
 - (NSString *)_verifyNetworkGameParameters;
 {
 	if ([[_hostOrIPAddressTextField stringValue] length] == 0)
-		return @"Please enter a host or IP address.";
+		return NSLocalizedStringFromTable(@"Please enter a host or IP address.", @"Acquire", @"String asking user to enter a hostname or IP address.");
 	
 	if ([_portTextField intValue] < 1 || [_portTextField intValue] > 65535)
-		return @"Please enter a port number in the range 1-65535.";
+		return NSLocalizedStringFromTable(@"Please enter a port number in the range 1-65535.", @"Acquire", @"String asking user to enter a port number from 1-65535 inclusive.");
 	
 	if ([[_displayNameTextField stringValue] length] == 0)
-		return @"Please enter a display name.";
+		return NSLocalizedStringFromTable(@"Please enter a display name.", @"Acquire", @"String asking user to enter a display name.");
 	
 	return nil;;
 }
@@ -219,7 +219,7 @@
 	[_hostOrIPAddressTextField setEnabled:NO];
 	[_portTextField setEnabled:NO];
 	[_displayNameTextField setEnabled:NO];
-	[_connectToServerButton setTitle:@"Cancel Connection"];
+	[_connectToServerButton setTitle:NSLocalizedStringFromTable(@"Cancel Connection", @"Acquire", "Button text saying 'cancel connection'.")];
 	[_connectToServerButton setAction:@selector(cancelConnectingToServer:)];
 }
 
@@ -230,7 +230,7 @@
 	[_portTextField setEnabled:YES];
 	[_displayNameTextField setEnabled:YES];
 	[_connectToServerButton setEnabled:YES];
-	[_connectToServerButton setTitle:@"Connect to Server"];
+	[_connectToServerButton setTitle:NSLocalizedStringFromTable(@"Connect to Server", @"Acquire", @"Button text saying 'connect to server'")];
 	[_connectToServerButton setAction:@selector(connectToServer:)];
 }
 @end

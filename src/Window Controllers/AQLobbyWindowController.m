@@ -32,7 +32,7 @@
 {
 	[(AQAcquireController *)_acquireController registerLobbyWindowController:self];
 	
-	[_lobbyWindow setTitle:@"Acquire – Connected to server"];
+	[_lobbyWindow setTitle:[NSString stringWithFormat:@"Acquire – %@ – %@", NSLocalizedStringFromTable(@"Lobby", @"Acquire", @"The word 'lobby'."), [_acquireController connectedHostOrIPAddress]]];
 	
 	[_messageToLobbyTextField selectText:self];
 	[[_lobbyChatTextView textStorage] setAttributedString:[[[NSAttributedString alloc] initWithString:@""] autorelease]];
@@ -131,9 +131,9 @@
 {
 	NSTextFieldCell *gameListTitle = [[[NSTextFieldCell alloc] init] autorelease];
 	if ([games count] == 0)
-		[gameListTitle setStringValue:@"No games"];
+		[gameListTitle setStringValue:NSLocalizedStringFromTable(@"No games", @"Acquire", @"Says there are 'no games'.")];
 	else
-		[gameListTitle setStringValue:@"Game List:"];
+		[gameListTitle setStringValue:[NSString stringWithFormat:@"%@:", NSLocalizedStringFromTable(@"Game List", @"Acquire", @"The words 'game list'")]];
 	[gameListTitle setEnabled:NO];
 	NSButtonCell *prototype = [[[NSButtonCell alloc] init] autorelease];
 	[prototype setTarget:self];
@@ -150,7 +150,7 @@
 	[_gameListMatrix putCell:gameListTitle atRow:0 column:0];
 	int i;
 	for (i = 0; i < [games count]; ++i) {
-		[[_gameListMatrix cellAtRow:(i + 1) column:0] setTitle:[NSString stringWithFormat:@"Game #%@", [games objectAtIndex:i]]];
+		[[_gameListMatrix cellAtRow:(i + 1) column:0] setTitle:[NSString stringWithFormat:@"%@%@", NSLocalizedStringFromTable(@"Game #", @"Acquire", @"The words 'game number', with a symbol for the word 'number' if possible."), [games objectAtIndex:i]]];
 		[[_gameListMatrix cellAtRow:(i + 1) column:0] setTag:[[games objectAtIndex:i] intValue]];
 	}
 	

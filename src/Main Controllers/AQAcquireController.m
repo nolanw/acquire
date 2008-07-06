@@ -164,6 +164,11 @@
 	[_lobbyWindowController bringLobbyWindowToFront];
 }
 
+- (NSString *)connectedHostOrIPAddress;
+{
+	return [[_connectionArrayController serverConnection] connectedHostOrIPAddress];
+}
+
 
 // Allow objects in loaded nibs to say hi
 - (void)registerWelcomeWindowController:(AQWelcomeWindowController *)welcomeWindowController;
