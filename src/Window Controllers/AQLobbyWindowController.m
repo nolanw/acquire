@@ -38,7 +38,6 @@
 	[[_lobbyChatTextView textStorage] setAttributedString:[[[NSAttributedString alloc] initWithString:@""] autorelease]];
 	
 	[_gameListDrawer setPreferredEdge:NSMaxXEdge];
-	[self _populateGameListDrawerWithGames:nil];
 	[_gameListDrawer open];
 	
 	_gameListUpdateTimer = [[NSTimer scheduledTimerWithTimeInterval:4.0 target:self selector:@selector(requestGameListUpdate:) userInfo:nil repeats:YES] retain];
@@ -100,7 +99,7 @@
 	NSPoint newScrollOrigin;
 
     if ([[_lobbyChatScrollView documentView] isFlipped]) {
-        newScrollOrigin = NSMakePoint(0.0,NSMaxY([[_lobbyChatScrollView documentView] frame]) - NSHeight([[_lobbyChatScrollView contentView] bounds]));
+        newScrollOrigin = NSMakePoint(0.0,NSHeight([[_lobbyChatScrollView documentView] frame]) - NSHeight([[_lobbyChatScrollView contentView] bounds]));
     } else {
         newScrollOrigin=NSMakePoint(0.0,0.0);
     }
@@ -142,7 +141,7 @@
 	[_gameListMatrix setPrototype:prototype];
 	[_gameListMatrix setAllowsEmptySelection:NO];
 	[_gameListMatrix setIntercellSpacing:NSMakeSize(4.0f, 2.0f)];
-	[_gameListMatrix setCellSize:NSMakeSize(100.0f, 18.0f)];
+	[_gameListMatrix setCellSize:NSMakeSize(80.0f, 18.0f)];
 	[_gameListMatrix setMode:NSRadioModeMatrix];
 	
 	[_gameListMatrix renewRows:([games count] + 1) columns:1];

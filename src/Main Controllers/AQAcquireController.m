@@ -124,6 +124,8 @@
 		[[_gameArrayController activeGame] endGame:self];
 	
 	[_lobbyWindowController closeLobbyWindow];
+	[_lobbyWindowController release];
+	_lobbyWindowController = nil;
 	
 	if (_welcomeWindowController == nil)
 		[self _loadWelcomeWindow];
