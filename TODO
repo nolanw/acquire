@@ -1,0 +1,7 @@
+New features
+------------
+- Implement AQGame class.
+
+Bug fixes
+---------
+- Sometimes Netacquire doesn't send any handshake directives despite the connection being successful; should fail on such an occasion. (FIXED 2008-Jul-09; was caused by Netacquire not removing the player's display name fast enough, yet picking an odd way to send an error about the issue)
