@@ -46,7 +46,9 @@
 - (IBAction)startLocalGame:(id)sender;
 - (void)localNumberOfPlayersStepperHasChanged:(id)sender;
 - (void)networkErrorAlertDismissed:(id)sender;
+- (void)stopConnectingToAServer;
 
 // Button action responses
 - (void)networkGameConnectionFailed;
+- (void)displayNameAlreadyInUse;
 @end

@@ -96,7 +96,9 @@
 
 - (void)cancelConnectingToServer;
 {
+	NSLog(@"%s", _cmd);
 	[_connectionArrayController closeConnection:[_connectionArrayController serverConnection]];
+	[_welcomeWindowController stopConnectingToAServer];
 }
 
 - (void)joinGame:(int)gameNumber;
@@ -169,6 +171,11 @@
 - (NSString *)connectedHostOrIPAddress;
 {
 	return [[_connectionArrayController serverConnection] connectedHostOrIPAddress];
+}
+
+- (void)displayNameAlreadyInUse;
+{
+	[_welcomeWindowController displayNameAlreadyInUse];
 }
 
 

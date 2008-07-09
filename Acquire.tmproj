@@ -2,8 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>currentDocument</key>
-	<string>src/Main Controllers/AQAcquireController.m</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -60,48 +58,22 @@
 			<key>filename</key>
 			<string>src/main.m</string>
 		</dict>
+		<dict>
+			<key>filename</key>
+			<string>TODO</string>
+			<key>lastUsed</key>
+			<date>2008-07-09T19:40:28Z</date>
+			<key>selected</key>
+			<true/>
+		</dict>
 	</array>
 	<key>fileHierarchyDrawerWidth</key>
 	<integer>221</integer>
 	<key>metaData</key>
-	<dict>
-		<key>src/Main Controllers/AQAcquireController.m</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>1</integer>
-				<key>line</key>
-				<integer>223</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>187</integer>
-		</dict>
-		<key>src/Window Controllers/AQLobbyWindowController.m</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>1</integer>
-				<key>line</key>
-				<integer>54</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>73</integer>
-			<key>firstVisibleLine</key>
-			<integer>34</integer>
-		</dict>
-	</dict>
-	<key>openDocuments</key>
-	<array>
-		<string>src/Main Controllers/AQAcquireController.m</string>
-		<string>src/Window Controllers/AQLobbyWindowController.m</string>
-	</array>
+	<dict/>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{-1, 4}, {853, 874}}</string>
+	<string>{{0, 4}, {853, 874}}</string>
 </dict>
 </plist>

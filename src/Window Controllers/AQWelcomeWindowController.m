@@ -14,7 +14,6 @@
 
 // Connecting to server state changes
 - (void)_startConnectingToAServer;
-- (void)_stopConnectingToAServer;
 @end
 
 @implementation AQWelcomeWindowController
@@ -134,7 +133,6 @@
 - (IBAction)cancelConnectingToServer:(id)sender;
 {
 	[_acquireController cancelConnectingToServer];
-	[self _stopConnectingToAServer];
 }
 
 - (IBAction)startLocalGame:(id)sender;
@@ -158,7 +156,18 @@
 
 - (void)networkErrorAlertDismissed:(id)sender;
 {
-	[self _stopConnectingToAServer];
+	[self stopConnectingToAServer];
+}
+
+- (void)stopConnectingToAServer;
+{
+	[_networkProgressIndicator setHidden:YES];
+	[_hostOrIPAddressTextField setEnabled:YES];
+	[_portTextField setEnabled:YES];
+	[_displayNameTextField setEnabled:YES];
+	[_connectToServerButton setEnabled:YES];
+	[_connectToServerButton setTitle:NSLocalizedStringFromTable(@"Connect to Server", @"Acquire", @"Button text saying 'connect to server'")];
+	[_connectToServerButton setAction:@selector(connectToServer:)];
 }
 
 
@@ -174,6 +183,19 @@
 	[networkErrorAlert setAlertStyle:NSWarningAlertStyle];
 
 	[networkErrorAlert beginSheetModalForWindow:_welcomeWindow modalDelegate:self didEndSelector:@selector(networkErrorAlertDismissed:) contextInfo:nil];
+}
+
+- (void)displayNameAlreadyInUse;
+{
+	[_networkProgressIndicator stopAnimation:self];
+	
+	NSAlert *duplicateDisplayNameAlert = [[[NSAlert alloc] init] autorelease];
+	[duplicateDisplayNameAlert addButtonWithTitle:@"OK"];
+	[duplicateDisplayNameAlert setMessageText:NSLocalizedStringFromTable(@"Display name already in use.", @"Acquire", @"Alert box title saying that the chosen display name is already in use.")];
+	[duplicateDisplayNameAlert setInformativeText:NSLocalizedStringFromTable(@"The display name you chose is already in use on the server.\n\nIf you are reconnecting to a server you recently disconnected from, try connecting again.\n\nOtherwise, choose a different display name.\n\nNote that display names are not case sensitive.", @"Acquire", @"Explain that the user's chosen display name is already in use, and they need to pick a new case-insensitive one (or wait a minute if they just disconnected from the same server).")];
+	[duplicateDisplayNameAlert setAlertStyle:NSWarningAlertStyle];
+
+	[duplicateDisplayNameAlert beginSheetModalForWindow:_welcomeWindow modalDelegate:self didEndSelector:@selector(networkErrorAlertDismissed:) contextInfo:nil];
 }
 @end
 
@@ -221,16 +243,5 @@
 	[_displayNameTextField setEnabled:NO];
 	[_connectToServerButton setTitle:NSLocalizedStringFromTable(@"Cancel Connection", @"Acquire", "Button text saying 'cancel connection'.")];
 	[_connectToServerButton setAction:@selector(cancelConnectingToServer:)];
-}
-
-- (void)_stopConnectingToAServer;
-{
-	[_networkProgressIndicator setHidden:YES];
-	[_hostOrIPAddressTextField setEnabled:YES];
-	[_portTextField setEnabled:YES];
-	[_displayNameTextField setEnabled:YES];
-	[_connectToServerButton setEnabled:YES];
-	[_connectToServerButton setTitle:NSLocalizedStringFromTable(@"Connect to Server", @"Acquire", @"Button text saying 'connect to server'")];
-	[_connectToServerButton setAction:@selector(connectToServer:)];
 }
 @end
