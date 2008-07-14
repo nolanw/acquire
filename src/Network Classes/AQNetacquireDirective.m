@@ -37,9 +37,40 @@
 	return self;
 }
 
+- (id)initWithString:(NSString *)string;
+{
+	[self init];
+	
+	[self setProtocolData:[string dataUsingEncoding:NSASCIIStringEncoding]];
+	
+	return self;
+}
+
 + (id)directiveWithData:(NSData *)data;
 {
 	return [[[self alloc] initWithData:data] autorelease];
+}
+
++ (id)directiveWithString:(NSString *)string;
+{
+	return [[[self alloc] initWithString:string] autorelease];
+}
+
++ (id)directiveWithCode:(NSString *)code parameters:(NSString *)firstParameter, ...;
+{
+	AQNetacquireDirective *newDirective = [[self alloc] init];
+	
+	id curParameter;
+	va_list parameterList;
+	if (firstParameter) {
+		[newDirective addParameter:firstParameter];
+		va_start(parameterList, firstParameter);
+		while (curParameter = va_arg(parameterList, NSString *))
+			[newDirective addParameter:curParameter];
+		va_end(parameterList);
+	}
+	
+	return newDirective;
 }
 
 - (void)dealloc;

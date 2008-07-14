@@ -8,6 +8,7 @@
 @interface AQHotel : NSObject
 {
 	NSString		*_name;
+	NSString		*_oldName;
 	NSColor			*_color;
 	NSMutableArray 	*_tilesInHotel;
 	int				_sharesInBank;
@@ -16,6 +17,15 @@
 }
 
 - (id)initWithName:(NSString *)name tier:(int)tier color:(NSColor *)color;
+
++ (AQHotel *)sacksonHotel;
++ (AQHotel *)zetaHotel;
++ (AQHotel *)americaHotel;
++ (AQHotel *)fusionHotel;
++ (AQHotel *)hydraHotel;
++ (AQHotel *)phoenixHotel;
++ (AQHotel *)quantumHotel;
+
 - (void)dealloc;
 
 // Identifying characteristics

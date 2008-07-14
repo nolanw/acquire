@@ -13,6 +13,7 @@
 }
 
 - (id)initWithName:(NSString *)newName;
++ (AQPlayer *)playerWithName:(NSString *)playerName;
 - (void)dealloc;
 
 // Identifying characteristics

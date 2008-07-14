@@ -6,8 +6,7 @@
 #import "AQGameArrayController.h"
 
 @interface AQGame (Private)
-// Nib loaders
-- (void)_loadGameWindow;
+- (NSArray *)_initialHotelsArray;
 @end
 
 @implementation AQGame
@@ -18,6 +17,10 @@
 	
 	_arrayController = [arrayController retain];
 	_gameWindowController = nil;
+	
+	_board = [[AQBoard alloc] init];
+	_hotels = [self _initialHotelsArray];
+	_players = [NSArray array];
 
 	return self;
 }
@@ -29,6 +32,32 @@
 	_gameWindowController = nil;
 	
 	[super dealloc];
+}
+
+
+- (void)loadGameWindow;
+{
+	if (_gameWindowController != nil) {
+		NSLog(@"%s GameWindow already loaded", _cmd);
+		return;
+	}
+	
+	if (![NSBundle loadNibNamed:@"GameWindow" owner:self]) {
+		NSLog(@"%s failed to load GameWindow.nib", _cmd);
+	}
+}
+
+- (void)bringGameWindowToFront;
+{
+	[_gameWindowController bringGameWindowToFront];
+}
+
+
+- (void)addPlayerNamed:(NSString *)playerName;
+{
+	NSArray *newPlayerArray = [_players arrayByAddingObject:[AQPlayer playerWithName:playerName]];
+	[_players release];
+	_players = [newPlayerArray retain];
 }
 
 
@@ -51,16 +80,8 @@
 @end
 
 @implementation AQGame (Private)
-// Nib loaders
-- (void)_loadGameWindow;
+- (NSArray *)_initialHotelsArray;
 {
-	if (_gameWindowController != nil) {
-		NSLog(@"%s WelcomeWindow already loaded", _cmd);
-		return;
-	}
-	
-	if (![NSBundle loadNibNamed:@"GameWindow" owner:self]) {
-		NSLog(@"%s failed to load GameWindow.nib", _cmd);
-	}
+	return [NSArray arrayWithObjects:[AQHotel sacksonHotel], [AQHotel zetaHotel], [AQHotel americaHotel], [AQHotel fusionHotel], [AQHotel hydraHotel], [AQHotel phoenixHotel], [AQHotel quantumHotel], nil];
 }
 @end

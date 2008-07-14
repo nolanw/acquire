@@ -23,6 +23,11 @@
     return self;
 }
 
++ (AQPlayer *)playerWithName:(NSString *)playerName;
+{
+	return [[[self alloc] initWithName:playerName] autorelease];
+}
+
 - (void)dealloc;
 {
 	[_name release];

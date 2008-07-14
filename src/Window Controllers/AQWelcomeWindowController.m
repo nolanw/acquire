@@ -192,7 +192,7 @@
 	NSAlert *duplicateDisplayNameAlert = [[[NSAlert alloc] init] autorelease];
 	[duplicateDisplayNameAlert addButtonWithTitle:@"OK"];
 	[duplicateDisplayNameAlert setMessageText:NSLocalizedStringFromTable(@"Display name already in use.", @"Acquire", @"Alert box title saying that the chosen display name is already in use.")];
-	[duplicateDisplayNameAlert setInformativeText:NSLocalizedStringFromTable(@"The display name you chose is already in use on the server.\n\nIf you are reconnecting to a server you recently disconnected from, try connecting again.\n\nOtherwise, choose a different display name.\n\nNote that display names are not case sensitive.", @"Acquire", @"Explain that the user's chosen display name is already in use, and they need to pick a new case-insensitive one (or wait a minute if they just disconnected from the same server).")];
+	[duplicateDisplayNameAlert setInformativeText:NSLocalizedStringFromTable(@"The display name you chose is already in use on the server.\n\nIf you are reconnecting to a server you recently disconnected from, try connecting again. Otherwise, choose a different display name.\n\nNote that display names are not case sensitive.", @"Acquire", @"Explain that the user's chosen display name is already in use, and they need to pick a new case-insensitive one (or wait a minute if they just disconnected from the same server).")];
 	[duplicateDisplayNameAlert setAlertStyle:NSWarningAlertStyle];
 
 	[duplicateDisplayNameAlert beginSheetModalForWindow:_welcomeWindow modalDelegate:self didEndSelector:@selector(networkErrorAlertDismissed:) contextInfo:nil];

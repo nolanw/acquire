@@ -9,7 +9,6 @@
 @interface AQGameArrayController : NSObject
 {
 	NSMutableArray	*_gameArray;
-	AQGame			*_activeGame;
 }
 
 - (id)init;
@@ -17,7 +16,7 @@
 
 // Accessors/setters/etc.
 - (AQGame *)startNewGame;
-- (AQGame *)startNewGameAndMakeActive;
+- (void)startNewGameAndMakeActive;
 - (void)removeGame:(AQGame *)game;
 - (AQGame *)activeGame;
 - (AQGame *)gameAtIndex:(int)index;

@@ -11,7 +11,6 @@
 		return nil;
 	
 	_gameArray = [[NSMutableArray arrayWithCapacity:1] retain];
-	_activeGame = nil;
 
 	return self;
 }
@@ -32,23 +31,22 @@
 	return [_gameArray lastObject];
 }
 
-- (AQGame *)startNewGameAndMakeActive;
+- (void)startNewGameAndMakeActive;
 {
-	AQGame *newGame = [self startNewGame];
-	_activeGame = newGame;
-	return newGame;
+	[_gameArray insertObject:[[[AQGame alloc] initWithArrayController:self] autorelease] atIndex:0];
 }
 
 - (void)removeGame:(AQGame *)game;
 {
-	if (game == [self activeGame])
-		_activeGame = nil;
 	[_gameArray removeObject:game];
 }
 
 - (AQGame *)activeGame;
 {
-	return _activeGame;
+	if ([_gameArray count] == 0)
+		return nil;
+	
+	return [_gameArray objectAtIndex:0];
 }
 
 - (AQGame *)gameAtIndex:(int)index;

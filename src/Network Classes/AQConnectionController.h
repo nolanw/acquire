@@ -27,7 +27,7 @@
 - (BOOL)isConnected;
 - (NSString *)connectedHostOrIPAddress;
 
-// Boom
+- (void)joinGame:(int)gameNumber;
 - (void)leaveGame:(id)sender;
 - (void)disconnectFromServer:(id)sender;
 

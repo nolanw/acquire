@@ -35,6 +35,7 @@
 - (void)connectedToServer;
 - (void)cancelConnectingToServer;
 - (void)joinGame:(int)gameNumber;
+- (void)joiningGame;
 - (void)leaveGame:(id)sender;
 - (void)disconnectFromServer:(id)sender;
 - (void)connection:(AQConnectionController *)connection willDisconnectWithError:(NSError *)err;

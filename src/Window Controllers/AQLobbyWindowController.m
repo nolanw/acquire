@@ -76,8 +76,12 @@
 
 - (IBAction)joinGame:(id)sender;
 {
+	int desiredGameNumber = [sender tag];
+	if (sender == _gameListMatrix)
+		desiredGameNumber = [[_gameListMatrix selectedCell] tag];
+	
 	[_gameListMatrix setEnabled:NO];
-	[(AQAcquireController *)_acquireController joinGame:[sender tag]];
+	[(AQAcquireController *)_acquireController joinGame:desiredGameNumber];
 }
 
 - (void)leftGame:(id)sender;

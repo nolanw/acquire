@@ -1,7 +1,13 @@
 New features
 ------------
 - Implement AQGame class.
+- Allow for both new and old hotel names (user-configurable?)
 
-Bug fixes
+Known bugs
 ---------
+
+
+Fixed bugs
+----------
+- Joining a game doesn't work. (FIXED 2008-Jul-13; was caused by not retrieving a UI widget's tag from the correct UI widget)
 - Sometimes Netacquire doesn't send any handshake directives despite the connection being successful; should fail on such an occasion. (FIXED 2008-Jul-09; was caused by Netacquire not removing the player's display name fast enough, yet picking an odd way to send an error about the issue)

@@ -5,12 +5,13 @@
 #import "AQHotel.h"
 
 @implementation AQHotel
-- (id)initWithName: (NSString *)name tier:(int)tier color:(NSColor *)color;
+- (id)initWithName:(NSString *)name tier:(int)tier color:(NSColor *)color;
 {
 	if (![super init])
 		return nil;
 	
 	_name = [name copy];
+	_oldName = _name;
 	_color = [color retain];
 	_tilesInHotel = [[NSMutableArray alloc] init];
 	_sharesInBank = 25;
@@ -19,6 +20,54 @@
 
 	return self;
 }
+
+- (id)initWithName:(NSString *)name tier:(int)tier color:(NSColor *)color oldName:(NSString *)oldName;
+{
+	if (![super init])
+		return nil;
+	
+	[self initWithName:name tier:tier color:color];
+	_oldName = [oldName copy];
+	
+	return self;
+}
+
+
++ (AQHotel *)sacksonHotel;
+{
+	return [[[self alloc] initWithName:@"Sackson" tier:0 color:[NSColor colorWithCalibratedRed:1.0 green:0.0 blue:0.0 alpha:1.0] oldName:@"Luxor"] autorelease];
+}
+
++ (AQHotel *)zetaHotel;
+{
+	return [[[self alloc] initWithName:@"Zeta" tier:0 color:[NSColor colorWithCalibratedRed:1.0 green:0.0 blue:0.0 alpha:1.0] oldName:@"Tower"] autorelease];
+}
+
++ (AQHotel *)americaHotel;
+{
+	return [[[self alloc] initWithName:@"America" tier:0 color:[NSColor colorWithCalibratedRed:0.0 green:0.0 blue:1.0 alpha:1.0] oldName:@"America"] autorelease];
+}
+
++ (AQHotel *)fusionHotel;
+{
+	return [[[self alloc] initWithName:@"Fusion" tier:0 color:[NSColor colorWithCalibratedRed:0.0 green:1.0 blue:0.0 alpha:1.0] oldName:@"Fusion"] autorelease];
+}
+
++ (AQHotel *)hydraHotel;
+{
+	return [[[self alloc] initWithName:@"Hydra" tier:0 color:[NSColor colorWithCalibratedRed:1.0 green:0.5 blue:0.0 alpha:1.0] oldName:@"Worldwide"] autorelease];
+}
+
++ (AQHotel *)phoenixHotel;
+{
+	return [[[self alloc] initWithName:@"Phoenix" tier:0 color:[NSColor colorWithCalibratedRed:1.0 green:0.25 blue:1.0 alpha:1.0] oldName:@"Imperial"] autorelease];
+}
+
++ (AQHotel *)quantumHotel;
+{
+	return [[[self alloc] initWithName:@"Quantum" tier:0 color:[NSColor colorWithCalibratedRed:0.0 green:1.0 blue:1.0 alpha:1.0] oldName:@"Continental"] autorelease];
+}
+
 
 - (void)dealloc;
 {

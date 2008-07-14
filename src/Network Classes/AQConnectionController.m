@@ -11,17 +11,21 @@
 // Netacquire directive handling
 // Incoming directives
 - (void)_receivedDirective:(AQNetacquireDirective *)directive;
+- (NSArray *)_parseMultipleDirectives:(AQNetacquireDirective *)bunchOfDirectives;
 - (void)_receivedLMDirective:(AQNetacquireDirective *)lobbyMessageDirective;
+- (void)_receivedLMDirective:(AQNetacquireDirective *)lobbyMessageDirective isFirstPass:(BOOL)isFirstPass;
 - (void)_receivedFirstLMDirectives:(AQNetacquireDirective *)bunchOfLMDirectives;
 - (void)_receivedGameListDirective:(AQNetacquireDirective *)gameListDirective;
 - (NSArray *)_parseMultipleLMDirectives:(AQNetacquireDirective *)multipleLMDirectives;
 - (void)_receivedMDirective:(AQNetacquireDirective *)messageDirective;
 - (void)_receivedSPDirective:(AQNetacquireDirective *)startPlayerDirective;
+- (void)_receivedSSDirective:(AQNetacquireDirective *)setStateDirective;
 
 // And outgoing directives
 - (void)_sendDirectiveData:(NSData *)data;
 - (void)_sendDirectiveWithCode:(NSString *)directiveCode;
 - (void)_sendBMDirectiveWithMessage:(NSString *)message;
+- (void)_sendJGDirectiveWithGameNumber:(int)gameNumber;
 - (void)_sendPLDirectiveWithDisplayName:(NSString *)displayName versionStrings:(NSArray *)versionStrings;
 
 // And their supporting cast
@@ -98,12 +102,14 @@
 	return [_socket connectedHost];
 }
 
+- (void)joinGame:(int)gameNumber;
+{
+	[self _sendJGDirectiveWithGameNumber:gameNumber];
+}
 
-// Boom
 - (void)leaveGame:(id)sender;
 {
-//  Uncomment when we're actually joining games
-//	[self _sendDirectiveWithCode:@"LV"];
+	[self _sendDirectiveWithCode:@"LV"];
 }
 
 - (void)disconnectFromServer:(id)sender;
@@ -200,9 +206,42 @@
 		[self _receivedSPDirective:directive];
 		return;
 	}
+	
+	if ([[directive directiveCode] isEqualToString:@"SS"]) {
+		[self _receivedSSDirective:directive];
+		return;
+	}
+}
+
+- (NSArray *)_parseMultipleDirectives:(AQNetacquireDirective *)bunchOfDirectives;
+{
+	NSString *directives = [[[NSString alloc] initWithData:[bunchOfDirectives protocolData] encoding:NSASCIIStringEncoding] autorelease];
+	NSMutableArray *separatedDirectives = [NSMutableArray arrayWithCapacity:4];
+	
+	NSRange endOfFirstDirective;
+	while ([directives length] > 0) {
+		endOfFirstDirective = [directives rangeOfString:@";:"];
+		if (endOfFirstDirective.location == NSNotFound)
+			break;
+		
+		endOfFirstDirective.length = endOfFirstDirective.location + 2;
+		endOfFirstDirective.location = 0;
+		[separatedDirectives addObject:[AQNetacquireDirective directiveWithString:[directives substringWithRange:endOfFirstDirective]]];
+		if ([directives length] <= endOfFirstDirective.length + 1)
+			break;
+		
+		directives = [directives substringFromIndex:endOfFirstDirective.length];
+	}
+	
+	return separatedDirectives;
 }
 
 - (void)_receivedLMDirective:(AQNetacquireDirective *)lobbyMessageDirective;
+{
+	[self _receivedLMDirective:lobbyMessageDirective isFirstPass:YES];
+}
+
+- (void)_receivedLMDirective:(AQNetacquireDirective *)lobbyMessageDirective isFirstPass:(BOOL)isFirstPass;
 {
 	// The server's response to LG and LU directives come in chunks of LM directives.
 	NSString *messageText = [[lobbyMessageDirective parameters] objectAtIndex:0];
@@ -211,12 +250,16 @@
 		return;
 	}
 	
-	if ([messageText characterAtIndex:1] == '*') {
-		NSArray *messages = [self _parseMultipleLMDirectives:lobbyMessageDirective];
-		NSEnumerator *messageEnumerator = [messages objectEnumerator];
-		id curMessage;
-		while (curMessage = [messageEnumerator nextObject])
-			[self _incomingLobbyMessage:[curMessage substringWithRange:NSMakeRange(1, [curMessage length] - 2)]];
+	if (isFirstPass && [messageText characterAtIndex:1] == '*') {
+		NSArray *directives = [self _parseMultipleDirectives:lobbyMessageDirective];
+		NSEnumerator *directiveEnumerator = [directives objectEnumerator];
+		id curDirective;
+		while (curDirective = [directiveEnumerator nextObject]) {
+			if ([[curDirective directiveCode] isEqualToString:@"LM"])
+				[self _receivedLMDirective:curDirective isFirstPass:NO];
+			else
+				[self _receivedDirective:curDirective];
+		}
 		return;
 	}
 	
@@ -309,6 +352,14 @@
 	if ([[[[messageDirective parameters] objectAtIndex:0] substringToIndex:26] isEqualToString:@"\"E;Duplicate user Nickname"])
 		if ([_associatedObject respondsToSelector:@selector(displayNameAlreadyInUse)])
 			[_associatedObject displayNameAlreadyInUse];
+		else
+			NSLog(@"%s desired nickname already in use on server and not dealt with", _cmd);
+	else if ([[[[messageDirective parameters] objectAtIndex:0] substringToIndex:30] isEqualToString:@"\"E;Invalid game number entered"])
+		if ([_associatedObject respondsToSelector:@selector(invalidGameNumberEntered)])
+			[_associatedObject invalidGameNumberEntered];
+		else
+			NSLog(@"%s an invalid game number was entered and not dealt with", _cmd);
+		
 }
 
 - (void)_receivedSPDirective:(AQNetacquireDirective *)startPlayerDirective;
@@ -320,6 +371,17 @@
 	
 	NSRange versionInfoRange = NSMakeRange(0, [[startPlayerDirective parameters] count] - 1);
 	[self _sendPLDirectiveWithDisplayName:[(AQAcquireController *)_associatedObject localPlayersName] versionStrings:[[startPlayerDirective parameters] subarrayWithRange:versionInfoRange]];
+}
+
+- (void)_receivedSSDirective:(AQNetacquireDirective *)setStateDirective;
+{
+	if ([[setStateDirective parameters] count] != 1) {
+		return;
+	}
+	
+	if ([[[setStateDirective parameters] objectAtIndex:0] intValue] == 4)
+		if ([_associatedObject respondsToSelector:@selector(joiningGame)])
+			[_associatedObject joiningGame];
 }
 
 
@@ -343,6 +405,15 @@
 	[directive setDirectiveCode:@"BM"];
 	[directive addParameter:@"Lobby"];
 	[directive addParameter:[NSString stringWithFormat:@"\"%@\"", message]];
+	[self _sendDirectiveData:[directive protocolData]];
+}
+
+- (void)_sendJGDirectiveWithGameNumber:(int)gameNumber;
+{
+	AQNetacquireDirective *directive = [[[AQNetacquireDirective alloc] init] autorelease];
+	[directive setDirectiveCode:@"JG"];
+	[directive addParameter:[NSString stringWithFormat:@"%d", gameNumber]];
+	[directive addParameter:@"-1"];
 	[self _sendDirectiveData:[directive protocolData]];
 }
 

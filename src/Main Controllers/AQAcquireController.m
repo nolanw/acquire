@@ -103,7 +103,14 @@
 
 - (void)joinGame:(int)gameNumber;
 {
-	[_gameArrayController startNewGameAndMakeActive];
+	[[_connectionArrayController serverConnection] joinGame:gameNumber];
+}
+
+- (void)joiningGame;
+{
+	[_gameArrayController startNewGameAndMakeActive];	
+	[[_gameArrayController activeGame] loadGameWindow];
+	[[_gameArrayController activeGame] bringGameWindowToFront];
 }
 
 - (void)leaveGame:(id)sender;

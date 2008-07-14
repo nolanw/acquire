@@ -12,7 +12,10 @@
 
 - (id)init;
 - (id)initWithData:(NSData *)data;
+- (id)initWithString:(NSString *)string;
 + (id)directiveWithData:(NSData *)data;
++ (id)directiveWithString:(NSString *)string;
++ (id)directiveWithCode:(NSString *)code parameters:(NSString *)firstParameter, ...;
 - (void)dealloc;
 
 // Accessors/setters/etc.
