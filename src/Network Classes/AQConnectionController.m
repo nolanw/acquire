@@ -16,7 +16,6 @@
 - (void)_receivedLMDirective:(AQNetacquireDirective *)lobbyMessageDirective isFirstPass:(BOOL)isFirstPass;
 - (void)_receivedFirstLMDirectives:(AQNetacquireDirective *)bunchOfLMDirectives;
 - (void)_receivedGameListDirective:(AQNetacquireDirective *)gameListDirective;
-- (NSArray *)_parseMultipleLMDirectives:(AQNetacquireDirective *)multipleLMDirectives;
 - (void)_receivedMDirective:(AQNetacquireDirective *)messageDirective;
 - (void)_receivedSPDirective:(AQNetacquireDirective *)startPlayerDirective;
 - (void)_receivedSSDirective:(AQNetacquireDirective *)setStateDirective;
@@ -191,7 +190,6 @@
 			[self _receivedLMDirective:directive];
 		else {
 			[self _receivedFirstLMDirectives:directive];
-			_haveSeenFirstLMDirectives = YES;
 		}
 		
 		return;
@@ -250,6 +248,7 @@
 		return;
 	}
 	
+	// Messages starting with an asterisk are server information, so they're safe to parse for multiple directives.
 	if (isFirstPass && [messageText characterAtIndex:1] == '*') {
 		NSArray *directives = [self _parseMultipleDirectives:lobbyMessageDirective];
 		NSEnumerator *directiveEnumerator = [directives objectEnumerator];
@@ -270,26 +269,17 @@
 {
 	if ([_associatedObject respondsToSelector:@selector(connectedToServer)])
 		[_associatedObject connectedToServer];
-	
-	NSString *bunchOfLMDirectivesString = [[bunchOfLMDirectives parameters] objectAtIndex:0];
-	bunchOfLMDirectivesString = [bunchOfLMDirectivesString substringFromIndex:1];
-	NSRange firstLobbyMessageRange = [bunchOfLMDirectivesString rangeOfString:@"\""];
-	firstLobbyMessageRange.length = firstLobbyMessageRange.location - 1;
-	firstLobbyMessageRange.location = 0;
-	
-	[self _incomingLobbyMessage:[bunchOfLMDirectivesString substringWithRange:firstLobbyMessageRange]];
-	
-	NSRange secondLobbyMessageRange = [bunchOfLMDirectivesString rangeOfString:@"LM"];
-	secondLobbyMessageRange.location += 4;
-	secondLobbyMessageRange.length = [bunchOfLMDirectivesString length] - secondLobbyMessageRange.location - 1;
-	bunchOfLMDirectivesString = [bunchOfLMDirectivesString substringWithRange:secondLobbyMessageRange];
-	
-	secondLobbyMessageRange = [bunchOfLMDirectivesString rangeOfString:@"\""];
-	secondLobbyMessageRange.length = secondLobbyMessageRange.location - 1;
-	secondLobbyMessageRange.location = 0;
-	
+	NSArray *directives = [self _parseMultipleDirectives:bunchOfLMDirectives];
+	NSEnumerator *directivesEnumerator = [directives objectEnumerator];
+	id curDirective;
+	while (curDirective = [directivesEnumerator nextObject]) {
+		if ([[curDirective directiveCode] isEqualToString:@"LM"])
+			[self _receivedLMDirective:curDirective isFirstPass:NO];
+		else
+			[self _receivedDirective:curDirective];
+	}
+	_haveSeenFirstLMDirectives = YES;
 	_handshakeComplete = YES;
-	[self _incomingLobbyMessage:[bunchOfLMDirectivesString substringWithRange:secondLobbyMessageRange]];
 }
 
 - (void)_receivedGameListDirective:(AQNetacquireDirective *)gameListDirective;
@@ -324,24 +314,6 @@
 	}
 	
 	_objectRequestingGameListUpdate = nil;
-}
-
-- (NSArray *)_parseMultipleLMDirectives:(AQNetacquireDirective *)multipleLMDirectives;
-{
-	NSString *messages = [[multipleLMDirectives parameters] objectAtIndex:0];
-	NSMutableArray *separatedMessages = [NSMutableArray arrayWithCapacity:4];
-	
-	NSRange endOfFirstMessage = [messages rangeOfString:@";:LM;"];
-	while (endOfFirstMessage.location != NSNotFound) {
-		endOfFirstMessage.length = endOfFirstMessage.location;
-		endOfFirstMessage.location = 0;
-		[separatedMessages addObject:[messages substringWithRange:endOfFirstMessage]];
-		messages = [messages substringFromIndex:(endOfFirstMessage.length + 5)];
-		endOfFirstMessage = [messages rangeOfString:@";:LM;"];
-	}
-	[separatedMessages addObject:messages];
-	
-	return separatedMessages;
 }
 
 - (void)_receivedMDirective:(AQNetacquireDirective *)messageDirective;

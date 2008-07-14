@@ -63,8 +63,6 @@
 			<string>TODO</string>
 			<key>lastUsed</key>
 			<date>2008-07-14T02:35:45Z</date>
-			<key>selected</key>
-			<true/>
 		</dict>
 	</array>
 	<key>fileHierarchyDrawerWidth</key>
@@ -74,6 +72,6 @@
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{181, 4}, {853, 874}}</string>
+	<string>{{53, 4}, {853, 874}}</string>
 </dict>
 </plist>
