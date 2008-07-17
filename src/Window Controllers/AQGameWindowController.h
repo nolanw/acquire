@@ -5,8 +5,12 @@
 
 @interface AQGameWindowController : NSObject
 {
-	IBOutlet id			_game;
-	IBOutlet NSWindow	*_gameWindow;
+	IBOutlet id				_game;
+	IBOutlet NSWindow		*_gameWindow;
+	IBOutlet NSMatrix		*_boardMatrix;
+	IBOutlet NSMatrix		*_tileRackMatrix;
+	IBOutlet NSTableView	*_scoreboardTableView;
+	IBOutlet NSTabView		*_gameChatAndLogTabView;
 }
 
 - (id)init;
@@ -14,6 +18,11 @@
 
 // NSObject (NSNibAwakening)
 - (void)awakeFromNib;
+
+- (void)updateScoreboard;
+- (void)tilesChanged:(NSArray *)changedTiles;
+- (void)incomingGameMessage:(NSString *)gameMessage;
+- (IBOutlet)sendGameMessage:(id)sender;
 
 // Window visibility
 - (void)closeGameWindow;

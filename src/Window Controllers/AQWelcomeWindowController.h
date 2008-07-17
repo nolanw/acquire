@@ -28,7 +28,7 @@
 // Accessors
 - (NSString *)hostOrIPAddress;
 
-- (void)saveDefaults:(id)sender;
+- (void)saveDefaults;
 
 // NSObject (NSNibAwakening)
 - (void)awakeFromNib;

@@ -25,15 +25,34 @@
 
 
 // Accessors/setters/etc.
-- (AQGame *)startNewGame;
+- (AQGame *)startNewNetworkGame;
 {
-	[_gameArray addObject:[[[AQGame alloc] initWithArrayController:self] autorelease]];
+	[_gameArray addObject:[[AQGame alloc] initNetworkGameWithArrayController:self]];
+	
 	return [_gameArray lastObject];
 }
 
-- (void)startNewGameAndMakeActive;
+- (AQGame *)startNewLocalGame;
 {
-	[_gameArray insertObject:[[[AQGame alloc] initWithArrayController:self] autorelease] atIndex:0];
+	[_gameArray addObject:[[AQGame alloc] initLocalGameWithArrayController:self]];
+	
+	return [_gameArray lastObject];
+}
+
+- (void)startNewNetworkGameAndMakeActive;
+{
+	if ([_gameArray count] == 0)
+		[self startNewNetworkGame];
+	else
+		[_gameArray insertObject:[[AQGame alloc] initNetworkGameWithArrayController:self] atIndex:0];
+}
+
+- (void)startNewLocalGameAndMakeActive;
+{
+	if ([_gameArray count] == 0)
+		[self startNewLocalGame];
+	else
+		[_gameArray insertObject:[[AQGame alloc] initLocalGameWithArrayController:self] atIndex:0];
 }
 
 - (void)removeGame:(AQGame *)game;

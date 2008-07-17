@@ -10,12 +10,12 @@
 
 @interface AQAcquireController : NSObject
 {
-	NSString *_localPlayersName;
-
 	AQGameArrayController 		*_gameArrayController;
 	AQConnectionArrayController	*_connectionArrayController;
 	AQLobbyWindowController		*_lobbyWindowController;
 	AQWelcomeWindowController	*_welcomeWindowController;
+	
+	NSString *_localPlayersName;
 }
 
 - (id)init;
@@ -36,8 +36,8 @@
 - (void)cancelConnectingToServer;
 - (void)joinGame:(int)gameNumber;
 - (void)joiningGame;
-- (void)leaveGame:(id)sender;
-- (void)disconnectFromServer:(id)sender;
+- (void)leaveGame;
+- (void)disconnectFromServer;
 - (void)connection:(AQConnectionController *)connection willDisconnectWithError:(NSError *)err;
 - (void)startNewLocalGameWithPlayersNamed:(NSArray *)playerNames;
 
@@ -45,7 +45,7 @@
 - (void)incomingLobbyMessage:(NSString *)lobbyMessage;
 - (void)outgoingLobbyMessage:(NSString *)lobbyMessage;
 - (void)updateGameListFor:(id)anObject;
-- (void)showLobbyWindow:(id)sender;
+- (void)showLobbyWindow;
 - (NSString *)connectedHostOrIPAddress;
 
 // Allow objects in loaded nibs to say hi

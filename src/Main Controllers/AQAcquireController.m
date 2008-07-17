@@ -86,7 +86,7 @@
 - (void)connectedToServer;
 {
 	[self _loadLobbyWindow];
-	[_welcomeWindowController saveDefaults:self];
+	[_welcomeWindowController saveDefaults];
 	[_welcomeWindowController closeWelcomeWindow];
 	[_welcomeWindowController release];
 	_welcomeWindowController = nil;
@@ -103,34 +103,36 @@
 
 - (void)joinGame:(int)gameNumber;
 {
+	NSLog(@"AcquireController %s called", _cmd);
 	[[_connectionArrayController serverConnection] joinGame:gameNumber];
 }
 
 - (void)joiningGame;
 {
-	[_gameArrayController startNewGameAndMakeActive];	
+	NSLog(@"AcquireController %s called", _cmd);
+	[_gameArrayController startNewNetworkGameAndMakeActive];	
 	[[_gameArrayController activeGame] loadGameWindow];
 	[[_gameArrayController activeGame] bringGameWindowToFront];
 }
 
-- (void)leaveGame:(id)sender;
+- (void)leaveGame;
 {
-	[[_connectionArrayController serverConnection] leaveGame:self];
-	[[_gameArrayController activeGame] endGame:self];
+	[[_connectionArrayController serverConnection] leaveGame];
+	[[_gameArrayController activeGame] endGame];
 	
 	if (_lobbyWindowController == nil)
 		[self _loadLobbyWindow];
 	else
-		[_lobbyWindowController leftGame:self];
+		[_lobbyWindowController leftGame];
 
 	[_lobbyWindowController bringLobbyWindowToFront];
 }
 
-- (void)disconnectFromServer:(id)sender;
+- (void)disconnectFromServer;
 {
-	[[_connectionArrayController serverConnection] disconnectFromServer:self];
+	[[_connectionArrayController serverConnection] disconnectFromServer];
 	if (_gameArrayController != nil)
-		[[_gameArrayController activeGame] endGame:self];
+		[[_gameArrayController activeGame] endGame];
 	
 	[_lobbyWindowController closeLobbyWindow];
 	[_lobbyWindowController release];
@@ -170,7 +172,7 @@
 	[[_connectionArrayController serverConnection] updateGameListFor:anObject];
 }
 
-- (void)showLobbyWindow:(id)sender;
+- (void)showLobbyWindow;
 {
 	[_lobbyWindowController bringLobbyWindowToFront];
 }

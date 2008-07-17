@@ -16,17 +16,21 @@
 	AQBoard	*_board;
 	NSArray	*_hotels;
 	NSArray	*_players;
+	BOOL	_isNetworkGame;
 }
 
-- (id)initWithArrayController:(id)gameController;
+- (id)initNetworkGameWithArrayController:(id)gameController;
+- (id)initLocalGameWithArrayController:(id)gameController;
 - (void)dealloc;
+
+- (BOOL)isNetworkGame;
 
 - (void)loadGameWindow;
 - (void)bringGameWindowToFront;
 
 - (void)addPlayerNamed:(NSString *)playerName;
 
-- (void)endGame:(id)sender;
+- (void)endGame;
 
 // Allow objects in loaded nibs to say hi
 - (void)registerGameWindowController:(AQGameWindowController *)gameWindowController;

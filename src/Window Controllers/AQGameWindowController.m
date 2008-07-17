@@ -19,10 +19,10 @@
 - (void)dealloc;
 {
 	// Should probably have something whereby closing the game window sends a leave game directive, etc.
-	if (_gameWindow != nil) {
-		[_gameWindow close];
-		_gameWindow = nil;
-	}
+	[_gameWindow close];
+	[_gameWindow release];
+	
+	[_game endGame];
 	
 	[super dealloc];
 }
@@ -38,7 +38,6 @@
 - (void)closeGameWindow;
 {
 	[_gameWindow close];
-	_gameWindow = nil;
 }
 
 - (void)bringGameWindowToFront;

@@ -76,6 +76,7 @@
 
 - (IBAction)joinGame:(id)sender;
 {
+	NSLog(@"LobbyWindowController %s called", _cmd);
 	int desiredGameNumber = [sender tag];
 	if (sender == _gameListMatrix)
 		desiredGameNumber = [[_gameListMatrix selectedCell] tag];
@@ -84,7 +85,7 @@
 	[(AQAcquireController *)_acquireController joinGame:desiredGameNumber];
 }
 
-- (void)leftGame:(id)sender;
+- (void)leftGame;
 {
 	[_gameListMatrix setEnabled:YES];
 }

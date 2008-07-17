@@ -103,15 +103,16 @@
 
 - (void)joinGame:(int)gameNumber;
 {
+	NSLog(@"ConnectionController %s called", _cmd);
 	[self _sendJGDirectiveWithGameNumber:gameNumber];
 }
 
-- (void)leaveGame:(id)sender;
+- (void)leaveGame;
 {
 	[self _sendDirectiveWithCode:@"LV"];
 }
 
-- (void)disconnectFromServer:(id)sender;
+- (void)disconnectFromServer;
 {
 //	[self _sendDirectiveWithCode:@"CL"];
 	[self close];

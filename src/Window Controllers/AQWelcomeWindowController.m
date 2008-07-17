@@ -43,7 +43,7 @@
 }
 
 
-- (void)saveDefaults:(id)sender;
+- (void)saveDefaults;
 {
 	[[NSUserDefaults standardUserDefaults] setObject:[_hostOrIPAddressTextField stringValue] forKey:@"LastHostOrIPAddress"];
 	[[NSUserDefaults standardUserDefaults] setObject:[_portTextField stringValue] forKey:@"LastPort"];

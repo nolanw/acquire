@@ -28,8 +28,8 @@
 - (NSString *)connectedHostOrIPAddress;
 
 - (void)joinGame:(int)gameNumber;
-- (void)leaveGame:(id)sender;
-- (void)disconnectFromServer:(id)sender;
+- (void)leaveGame;
+- (void)disconnectFromServer;
 
 // Sending some outgoing mail
 - (void)outgoingLobbyMessage:(NSString *)lobbyMessage;

@@ -6,22 +6,29 @@
 #import "AQGameArrayController.h"
 
 @interface AQGame (Private)
+- (id)_initGameWithArrayController:(id)arrayController;
+
 - (NSArray *)_initialHotelsArray;
 @end
 
 @implementation AQGame
-- (id)initWithArrayController:(id)arrayController;
+- (id)initNetworkGameWithArrayController:(id)arrayController;
 {
-	if (![super init])
+	if (![self _initGameWithArrayController:arrayController])
 		return nil;
 	
-	_arrayController = [arrayController retain];
-	_gameWindowController = nil;
-	
-	_board = [[AQBoard alloc] init];
-	_hotels = [self _initialHotelsArray];
-	_players = [NSArray array];
+	_isNetworkGame = YES;
 
+	return self;
+}
+
+- (id)initLocalGameWithArrayController:(id)arrayController;
+{
+	if (![self _initGameWithArrayController:arrayController])
+		return nil;
+	
+	_isNetworkGame = NO;
+	
 	return self;
 }
 
@@ -32,6 +39,12 @@
 	_gameWindowController = nil;
 	
 	[super dealloc];
+}
+
+
+- (BOOL)isNetworkGame;
+{
+	return _isNetworkGame;
 }
 
 
@@ -61,7 +74,7 @@
 }
 
 
-- (void)endGame:(id)sender;
+- (void)endGame;
 {
 	[_arrayController removeGame:self];
 }
@@ -80,6 +93,22 @@
 @end
 
 @implementation AQGame (Private)
+- (id)_initGameWithArrayController:(id)arrayController;
+{
+	if (![super init])
+		return nil;
+	
+	_arrayController = [arrayController retain];
+	_gameWindowController = nil;
+	
+	_board = [[AQBoard alloc] init];
+	_hotels = [self _initialHotelsArray];
+	_players = [NSArray array];
+
+	return self;
+}
+
+
 - (NSArray *)_initialHotelsArray;
 {
 	return [NSArray arrayWithObjects:[AQHotel sacksonHotel], [AQHotel zetaHotel], [AQHotel americaHotel], [AQHotel fusionHotel], [AQHotel hydraHotel], [AQHotel phoenixHotel], [AQHotel quantumHotel], nil];
