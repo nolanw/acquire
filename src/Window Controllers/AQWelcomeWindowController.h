@@ -28,7 +28,8 @@
 // Accessors
 - (NSString *)hostOrIPAddress;
 
-- (void)saveDefaults;
+- (void)saveNetworkGameDefaults;
+- (void)saveLocalGameDefaults;
 
 // NSObject (NSNibAwakening)
 - (void)awakeFromNib;
@@ -51,4 +52,5 @@
 // Button action responses
 - (void)networkGameConnectionFailed;
 - (void)displayNameAlreadyInUse;
+- (void)duplicateLocalPlayerNamesEntered;
 @end

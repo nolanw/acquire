@@ -86,7 +86,7 @@
 - (void)connectedToServer;
 {
 	[self _loadLobbyWindow];
-	[_welcomeWindowController saveDefaults];
+	[_welcomeWindowController saveNetworkGameDefaults];
 	[_welcomeWindowController closeWelcomeWindow];
 	[_welcomeWindowController release];
 	_welcomeWindowController = nil;
@@ -152,7 +152,12 @@
 
 - (void)startNewLocalGameWithPlayersNamed:(NSArray *)playerNames;
 {
+	[_welcomeWindowController saveLocalGameDefaults];
+	[_welcomeWindowController closeWelcomeWindow];
+	[_welcomeWindowController release];
+	_welcomeWindowController = nil;
 	
+	[_gameArrayController startNewLocalGameAndMakeActive];
 }
 
 

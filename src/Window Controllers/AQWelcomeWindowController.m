@@ -43,11 +43,22 @@
 }
 
 
-- (void)saveDefaults;
+- (void)saveNetworkGameDefaults;
 {
 	[[NSUserDefaults standardUserDefaults] setObject:[_hostOrIPAddressTextField stringValue] forKey:@"LastHostOrIPAddress"];
 	[[NSUserDefaults standardUserDefaults] setObject:[_portTextField stringValue] forKey:@"LastPort"];
 	[[NSUserDefaults standardUserDefaults] setObject:[_displayNameTextField stringValue] forKey:@"LastDisplayName"];
+	[[NSUserDefaults standardUserDefaults] setObject:@"NO" forKey:@"MostRecentGameWasLocalGame"];
+}
+
+- (void)saveLocalGameDefaults;
+{
+	NSMutableArray *localPlayerNames = [NSMutableArray arrayWithCapacity:[_localPlayerNamesForm numberOfRows]];
+	int i;
+	for (i = 0; i < [_localPlayerNamesForm numberOfRows]; ++i)
+		[localPlayerNames addObject:[[_localPlayerNamesForm cellAtIndex:i] stringValue]];
+	[[NSUserDefaults standardUserDefaults] setObject:localPlayerNames forKey:@"LastLocalPlayerNames"];
+	[[NSUserDefaults standardUserDefaults] setObject:@"YES" forKey:@"MostRecentGameWasLocalGame"];
 }
 
 
@@ -71,8 +82,21 @@
 	if (lastDisplayName != nil)
 		[_displayNameTextField setStringValue:lastDisplayName];
 	
+	NSArray *lastLocalPlayerNames = [[NSUserDefaults standardUserDefaults] objectForKey:@"LastLocalPlayerNames"];
+	if (lastLocalPlayerNames != nil) {
+		[_localNumberOfPlayersStepper setIntValue:[lastLocalPlayerNames count]];
+		[self localNumberOfPlayersStepperHasChanged:self];
+		
+		int i;
+		for (i = 0; i < [lastLocalPlayerNames count]; ++i)
+			[[_localPlayerNamesForm cellAtIndex:i] setStringValue:[lastLocalPlayerNames objectAtIndex:i]];
+	}
 	
-	[_hostOrIPAddressTextField selectText:self];
+	BOOL mostRecentGameWasLocalGame = [[NSUserDefaults standardUserDefaults] boolForKey:@"MostRecentGameWasLocalGame"];
+	if (mostRecentGameWasLocalGame)
+		[_gameTypeTabView selectTabViewItemAtIndex:1];
+	else
+		[_hostOrIPAddressTextField selectText:self];
 }
 
 
@@ -141,6 +165,11 @@
 	NSMutableArray *playersNames = [NSMutableArray arrayWithCapacity:numberOfPlayers];
 	int i;
 	for (i = 0; i < numberOfPlayers; ++i) {
+		if ([playersNames containsObject:[[_localPlayerNamesForm cellAtIndex:i] stringValue]]) {
+			[self duplicateLocalPlayerNamesEntered];
+			return;
+		}
+		
 		[playersNames addObject:[[_localPlayerNamesForm cellAtIndex:i] stringValue]];
 	}
 	
@@ -196,6 +225,17 @@
 	[duplicateDisplayNameAlert setAlertStyle:NSWarningAlertStyle];
 
 	[duplicateDisplayNameAlert beginSheetModalForWindow:_welcomeWindow modalDelegate:self didEndSelector:@selector(networkErrorAlertDismissed:) contextInfo:nil];
+}
+
+- (void)duplicateLocalPlayerNamesEntered;
+{
+	NSAlert *duplicateLocalPlayerNamesEnteredAlert = [[[NSAlert alloc] init] autorelease];
+	[duplicateLocalPlayerNamesEnteredAlert addButtonWithTitle:@"OK"];
+	[duplicateLocalPlayerNamesEnteredAlert setMessageText:NSLocalizedStringFromTable(@"Every local player needs their own name.", @"Acquire", @"Alert box title saying that every local player needs their own name.")];
+	[duplicateLocalPlayerNamesEnteredAlert setInformativeText:NSLocalizedStringFromTable(@"Please ensure each local player has a unique name.", @"Acquire", @"Ask to ensure each local player has a unique name.")];
+	[duplicateLocalPlayerNamesEnteredAlert setAlertStyle:NSWarningAlertStyle];
+
+	[duplicateLocalPlayerNamesEnteredAlert beginSheetModalForWindow:_welcomeWindow modalDelegate:self didEndSelector:nil contextInfo:nil];
 }
 @end
 
