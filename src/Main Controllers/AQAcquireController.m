@@ -18,7 +18,7 @@
 	if (![super init])
 		return nil;
 	
-	_localPlayersName = nil;
+	_localPlayerName = nil;
 	
 	_gameArrayController = [[AQGameArrayController alloc] init];
 	_connectionArrayController = [[AQConnectionArrayController alloc] init];
@@ -45,9 +45,9 @@
 
 
 // Accessors
-- (NSString *)localPlayersName;
+- (NSString *)localPlayerName;
 {
-	return _localPlayersName;
+	return _localPlayerName;
 }
 
 
@@ -80,7 +80,7 @@
 - (void)connectToServer:(NSString *)hostOrIPAddress port:(int)port withLocalDisplayName:(NSString *)localDisplayName sender:(id)sender;
 {
 	[_connectionArrayController connectToServer:hostOrIPAddress port:port for:self];
-	_localPlayersName = [localDisplayName copy];
+	_localPlayerName = [localDisplayName copy];
 }
 
 - (void)connectedToServer;
@@ -110,7 +110,8 @@
 - (void)joiningGame;
 {
 	NSLog(@"AcquireController %s called", _cmd);
-	[_gameArrayController startNewNetworkGameAndMakeActive];	
+	[_gameArrayController startNewNetworkGameAndMakeActiveWithAssociatedConnection:[_connectionArrayController serverConnection]];
+	[[_gameArrayController activeGame] setLocalPlayerName:_localPlayerName];
 	[[_gameArrayController activeGame] loadGameWindow];
 	[[_gameArrayController activeGame] bringGameWindowToFront];
 }
@@ -158,6 +159,8 @@
 	_welcomeWindowController = nil;
 	
 	[_gameArrayController startNewLocalGameAndMakeActive];
+	[[_gameArrayController activeGame] loadGameWindow];
+	[[_gameArrayController activeGame] bringGameWindowToFront];
 }
 
 

@@ -11,6 +11,11 @@
 	IBOutlet NSMatrix		*_tileRackMatrix;
 	IBOutlet NSTableView	*_scoreboardTableView;
 	IBOutlet NSTabView		*_gameChatAndLogTabView;
+	IBOutlet NSScrollView	*_gameChatScrollView;
+	IBOutlet NSTextView		*_gameChatTextView;
+	IBOutlet NSScrollView	*_gameLogScrollView;
+	IBOutlet NSTextView		*_gameLogTextView;
+	IBOutlet NSTextField	*_messageToGameTextField;
 }
 
 - (id)init;
@@ -22,9 +27,11 @@
 - (void)updateScoreboard;
 - (void)tilesChanged:(NSArray *)changedTiles;
 - (void)incomingGameMessage:(NSString *)gameMessage;
-- (IBOutlet)sendGameMessage:(id)sender;
+- (IBAction)sendGameMessage:(id)sender;
 
 // Window visibility
 - (void)closeGameWindow;
 - (void)bringGameWindowToFront;
+- (void)setWindowTitle:(NSString *)windowTitle;
+- (void)removeGameChatTabViewItem;
 @end

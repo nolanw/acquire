@@ -15,14 +15,14 @@
 	AQLobbyWindowController		*_lobbyWindowController;
 	AQWelcomeWindowController	*_welcomeWindowController;
 	
-	NSString *_localPlayersName;
+	NSString *_localPlayerName;
 }
 
 - (id)init;
 - (void)dealloc;
 
 // Accessors
-- (NSString *)localPlayersName;
+- (NSString *)localPlayerName;
 
 // NSObject (NSNibAwakening)
 - (void)awakeFromNib;

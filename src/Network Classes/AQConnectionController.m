@@ -103,7 +103,6 @@
 
 - (void)joinGame:(int)gameNumber;
 {
-	NSLog(@"ConnectionController %s called", _cmd);
 	[self _sendJGDirectiveWithGameNumber:gameNumber];
 }
 
@@ -343,7 +342,7 @@
 	}
 	
 	NSRange versionInfoRange = NSMakeRange(0, [[startPlayerDirective parameters] count] - 1);
-	[self _sendPLDirectiveWithDisplayName:[(AQAcquireController *)_associatedObject localPlayersName] versionStrings:[[startPlayerDirective parameters] subarrayWithRange:versionInfoRange]];
+	[self _sendPLDirectiveWithDisplayName:[(AQAcquireController *)_associatedObject localPlayerName] versionStrings:[[startPlayerDirective parameters] subarrayWithRange:versionInfoRange]];
 }
 
 - (void)_receivedSSDirective:(AQNetacquireDirective *)setStateDirective;

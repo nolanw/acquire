@@ -25,9 +25,9 @@
 
 
 // Accessors/setters/etc.
-- (AQGame *)startNewNetworkGame;
+- (AQGame *)startNewNetworkGameWithAssociatedConnection:(AQConnectionController *)associatedConnection;
 {
-	[_gameArray addObject:[[AQGame alloc] initNetworkGameWithArrayController:self]];
+	[_gameArray addObject:[[AQGame alloc] initNetworkGameWithArrayController:self associatedConnection:associatedConnection]];
 	
 	return [_gameArray lastObject];
 }
@@ -39,12 +39,12 @@
 	return [_gameArray lastObject];
 }
 
-- (void)startNewNetworkGameAndMakeActive;
+- (void)startNewNetworkGameAndMakeActiveWithAssociatedConnection:(AQConnectionController *)associatedConnection;
 {
 	if ([_gameArray count] == 0)
-		[self startNewNetworkGame];
+		[self startNewNetworkGameWithAssociatedConnection:associatedConnection];
 	else
-		[_gameArray insertObject:[[AQGame alloc] initNetworkGameWithArrayController:self] atIndex:0];
+		[_gameArray insertObject:[[AQGame alloc] initNetworkGameWithArrayController:self associatedConnection:associatedConnection] atIndex:0];
 }
 
 - (void)startNewLocalGameAndMakeActive;

@@ -8,16 +8,18 @@
 @interface AQGame (Private)
 - (id)_initGameWithArrayController:(id)arrayController;
 
+- (void)_updateGameWindow;
+
 - (NSArray *)_initialHotelsArray;
 @end
 
 @implementation AQGame
-- (id)initNetworkGameWithArrayController:(id)arrayController;
+- (id)initNetworkGameWithArrayController:(id)arrayController associatedConnection:(AQConnectionController *)associatedConnection;
 {
 	if (![self _initGameWithArrayController:arrayController])
 		return nil;
 	
-	_isNetworkGame = YES;
+	_associatedConnection = [associatedConnection retain];
 
 	return self;
 }
@@ -27,7 +29,7 @@
 	if (![self _initGameWithArrayController:arrayController])
 		return nil;
 	
-	_isNetworkGame = NO;
+	_associatedConnection = nil;
 	
 	return self;
 }
@@ -35,8 +37,11 @@
 - (void)dealloc;
 {
 	[_arrayController release];
+	_arrayController = nil;
 	[_gameWindowController release];
 	_gameWindowController = nil;
+	[_associatedConnection release];
+	_associatedConnection = nil;
 	
 	[super dealloc];
 }
@@ -44,7 +49,18 @@
 
 - (BOOL)isNetworkGame;
 {
-	return _isNetworkGame;
+	return (_associatedConnection != nil);
+}
+
+- (NSString *)localPlayerName;
+{
+	return _localPlayerName;
+}
+
+- (void)setLocalPlayerName:(NSString *)localPlayerName;
+{
+	[_localPlayerName release];
+	_localPlayerName = [localPlayerName copy];
 }
 
 
@@ -73,6 +89,12 @@
 	_players = [newPlayerArray retain];
 }
 
+- (void)clearPlayers;
+{
+	[_players release];
+	_players = [NSArray array];
+}
+
 
 - (void)endGame;
 {
@@ -89,6 +111,8 @@
 	}
 
 	_gameWindowController = gameWindowController;
+	
+	[self _updateGameWindow];
 }
 @end
 
@@ -104,8 +128,18 @@
 	_board = [[AQBoard alloc] init];
 	_hotels = [self _initialHotelsArray];
 	_players = [NSArray array];
+	_localPlayerName = nil;
 
 	return self;
+}
+
+
+- (void)_updateGameWindow;
+{
+	if ([self isNetworkGame])
+		[_gameWindowController setWindowTitle:[NSString stringWithFormat:@"Acquire Game hosted at %@", [_associatedConnection connectedHostOrIPAddress]]];
+	else
+		[_gameWindowController removeGameChatTabViewItem];
 }
 
 

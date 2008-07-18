@@ -56,7 +56,7 @@
 	NSMutableArray *localPlayerNames = [NSMutableArray arrayWithCapacity:[_localPlayerNamesForm numberOfRows]];
 	int i;
 	for (i = 0; i < [_localPlayerNamesForm numberOfRows]; ++i)
-		[localPlayerNames addObject:[[_localPlayerNamesForm cellAtIndex:i] stringValue]];
+		[localPlayerNames addObject:[[[_localPlayerNamesForm cellAtIndex:i] stringValue] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
 	[[NSUserDefaults standardUserDefaults] setObject:localPlayerNames forKey:@"LastLocalPlayerNames"];
 	[[NSUserDefaults standardUserDefaults] setObject:@"YES" forKey:@"MostRecentGameWasLocalGame"];
 }
@@ -170,7 +170,7 @@
 			return;
 		}
 		
-		[playersNames addObject:[[_localPlayerNamesForm cellAtIndex:i] stringValue]];
+		[playersNames addObject:[[[_localPlayerNamesForm cellAtIndex:i] stringValue] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
 	}
 	
 	[_acquireController startNewLocalGameWithPlayersNamed:playersNames];
