@@ -24,10 +24,15 @@
 // NSObject (NSNibAwakening)
 - (void)awakeFromNib;
 
-- (void)updateScoreboard;
+- (void)reloadScoreboard;
 - (void)tilesChanged:(NSArray *)changedTiles;
 - (void)incomingGameMessage:(NSString *)gameMessage;
 - (IBAction)sendGameMessage:(id)sender;
+- (void)incomingGameLogEntry:(NSString *)gameLogEntry;
+
+// NSTableDataSource informal protocol
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView;
+- (id)tableView:(NSTableView *)aTableView objectValueForTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex;
 
 // Window visibility
 - (void)closeGameWindow;

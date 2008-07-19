@@ -28,6 +28,8 @@
 		F2ABA5AD0DEE72F300F58E4B /* AQWelcomeWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = F2ABA5AC0DEE72F300F58E4B /* AQWelcomeWindowController.m */; };
 		F2ABA5B30DEE76F700F58E4B /* AQGameWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = F2ABA5B20DEE76F700F58E4B /* AQGameWindowController.m */; };
 		F2ABA5C10DEE7B9200F58E4B /* AQLobbyWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = F2ABA5C00DEE7B9200F58E4B /* AQLobbyWindowController.m */; };
+		F2CF48C20E31B45A00A3AEFA /* CCDColoredButton.m in Sources */ = {isa = PBXBuildFile; fileRef = F2CF48BF0E31B45A00A3AEFA /* CCDColoredButton.m */; };
+		F2CF48C30E31B45A00A3AEFA /* CCDColoredButtonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F2CF48C10E31B45A00A3AEFA /* CCDColoredButtonCell.m */; };
 		F2EB62A60E1EF87E00FE5E45 /* AQConnectionController.m in Sources */ = {isa = PBXBuildFile; fileRef = F2EB62A50E1EF87E00FE5E45 /* AQConnectionController.m */; };
 /* End PBXBuildFile section */
 
@@ -72,6 +74,10 @@
 		F2ABA5B20DEE76F700F58E4B /* AQGameWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AQGameWindowController.m; sourceTree = "<group>"; };
 		F2ABA5BF0DEE7B9200F58E4B /* AQLobbyWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AQLobbyWindowController.h; sourceTree = "<group>"; };
 		F2ABA5C00DEE7B9200F58E4B /* AQLobbyWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AQLobbyWindowController.m; sourceTree = "<group>"; };
+		F2CF48BE0E31B45A00A3AEFA /* CCDColoredButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCDColoredButton.h; sourceTree = "<group>"; };
+		F2CF48BF0E31B45A00A3AEFA /* CCDColoredButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CCDColoredButton.m; sourceTree = "<group>"; };
+		F2CF48C00E31B45A00A3AEFA /* CCDColoredButtonCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCDColoredButtonCell.h; sourceTree = "<group>"; };
+		F2CF48C10E31B45A00A3AEFA /* CCDColoredButtonCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CCDColoredButtonCell.m; sourceTree = "<group>"; };
 		F2EB62A40E1EF87E00FE5E45 /* AQConnectionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AQConnectionController.h; sourceTree = "<group>"; };
 		F2EB62A50E1EF87E00FE5E45 /* AQConnectionController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AQConnectionController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -141,6 +147,7 @@
 			isa = PBXGroup;
 			children = (
 				F24990210DED297F004F3509 /* AsyncSocket */,
+				F2CF48BD0E31B45A00A3AEFA /* CCDColoredButton */,
 				32CA4F630368D1EE00C91783 /* Acquire_Prefix.pch */,
 				29B97316FDCFA39411CA2CEA /* main.m */,
 			);
@@ -237,6 +244,18 @@
 			path = "src/Window Controllers";
 			sourceTree = "<group>";
 		};
+		F2CF48BD0E31B45A00A3AEFA /* CCDColoredButton */ = {
+			isa = PBXGroup;
+			children = (
+				F2CF48BE0E31B45A00A3AEFA /* CCDColoredButton.h */,
+				F2CF48BF0E31B45A00A3AEFA /* CCDColoredButton.m */,
+				F2CF48C00E31B45A00A3AEFA /* CCDColoredButtonCell.h */,
+				F2CF48C10E31B45A00A3AEFA /* CCDColoredButtonCell.m */,
+			);
+			name = CCDColoredButton;
+			path = "src/Other Sources/CCDColoredButton";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -311,6 +330,8 @@
 				F2892B8C0DF0E02E00387EAB /* AQGame.m in Sources */,
 				F28B09760E1460BD00D100DF /* AQNetacquireDirective.m in Sources */,
 				F2EB62A60E1EF87E00FE5E45 /* AQConnectionController.m in Sources */,
+				F2CF48C20E31B45A00A3AEFA /* CCDColoredButton.m in Sources */,
+				F2CF48C30E31B45A00A3AEFA /* CCDColoredButtonCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

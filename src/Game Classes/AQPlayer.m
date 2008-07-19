@@ -122,7 +122,7 @@
 
 
 // Shares
-- (BOOL)hasSharesInHotelNamed:(NSString *)hotelName;
+- (BOOL)hasSharesOfHotelNamed:(NSString *)hotelName;
 {
     NSArray *hotelsWithShares = [_sharesByHotelName allKeys];
     if (![hotelsWithShares containsObject:hotelName])
@@ -135,9 +135,9 @@
 	}
 }
 
-- (int)numberOfSharesInHotelNamed:(NSString *)hotelName;
+- (int)numberOfSharesOfHotelNamed:(NSString *)hotelName;
 {
-    if (![self hasSharesInHotelNamed:hotelName])
+    if (![self hasSharesOfHotelNamed:hotelName])
 		return 0;
 	
 	return [(NSNumber *)[_sharesByHotelName objectForKey:hotelName] intValue];
@@ -145,7 +145,7 @@
 
 - (void)addSharesOfHotelNamed:(NSString *)hotelName numberOfShares:(int)numShares;
 {
-    if ([self hasSharesInHotelNamed:hotelName]) {
+    if ([self hasSharesOfHotelNamed:hotelName]) {
         int newNumShares = numShares + [(NSNumber *) [_sharesByHotelName objectForKey:hotelName] intValue];
         [_sharesByHotelName setObject: [NSNumber numberWithInt:newNumShares] forKey:hotelName];
     } else {
@@ -155,7 +155,7 @@
 
 - (void)subtractSharesOfHotelNamed:(NSString *)hotelName numberOfShares:(int)numShares;
 {
-	if (![self hasSharesInHotelNamed:hotelName])
+	if (![self hasSharesOfHotelNamed:hotelName])
 		return;
 	
 	int newNumShares = [(NSNumber *)[_sharesByHotelName objectForKey:hotelName] intValue] - numShares;

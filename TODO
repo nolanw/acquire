@@ -1,6 +1,7 @@
 New features
 ------------
 - Implement AQGame class.
+	- Finish implementing - startGame (i.e. figure out who goes first)
 - Allow for both new and old hotel names (user-configurable?)
 
 Known bugs

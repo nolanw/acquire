@@ -21,9 +21,12 @@ typedef enum _AQTileState {
 - (id)initWithColumn:(int)newCol row:(NSString *)newRow;
 - (void)dealloc;
 
+- (NSString *)description;
+
 // Accessors/setters
 - (int)column;
 - (NSString *)row;
+- (int)rowInt;
 - (AQTileState)state;
 - (void)setState:(AQTileState)newState;
 - (id)hotel;

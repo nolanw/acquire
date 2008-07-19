@@ -32,8 +32,8 @@
 - (int)numberOfTiles;
 
 // Shares
-- (BOOL)hasSharesInHotelNamed:(NSString *)hotelName;
-- (int)numberOfSharesInHotelNamed:(NSString *)hotelName;
+- (BOOL)hasSharesOfHotelNamed:(NSString *)hotelName;
+- (int)numberOfSharesOfHotelNamed:(NSString *)hotelName;
 - (void)addSharesOfHotelNamed:(NSString *)hotelName numberOfShares:(int)numShares;
 - (void)subtractSharesOfHotelNamed:(NSString *)hotelName numberOfShares:(int)numShares;
 - (NSEnumerator *)namesOfHotelsInWhichAShareIsOwnedEnumerator;

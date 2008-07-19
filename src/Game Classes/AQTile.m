@@ -28,6 +28,12 @@
 }
 
 
+- (NSString *)description;
+{
+	return [NSString stringWithFormat:@"%@%d", [self row], [self column]];
+}
+
+
 // Accessors/setters
 - (int)column {
 	return _col;
@@ -35,6 +41,30 @@
 
 - (NSString *)row {
 	return _row;
+}
+
+- (int)rowInt;
+{
+	if ([[self row] isEqualToString:@"A"])
+		return 0;
+	if ([[self row] isEqualToString:@"B"])
+		return 1;
+	if ([[self row] isEqualToString:@"C"])
+		return 2;
+	if ([[self row] isEqualToString:@"D"])
+		return 3;
+	if ([[self row] isEqualToString:@"E"])
+		return 4;
+	if ([[self row] isEqualToString:@"F"])
+		return 5;
+	if ([[self row] isEqualToString:@"G"])
+		return 6;
+	if ([[self row] isEqualToString:@"H"])
+		return 7;
+	if ([[self row] isEqualToString:@"I"])
+		return 8;
+	
+	return -1;
 }
 
 - (AQTileState)state {

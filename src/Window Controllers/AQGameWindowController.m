@@ -5,6 +5,10 @@
 #import "AQGameWindowController.h"
 #import "AQGame.h"
 
+@interface AQGameWindowController (Private)
+- (void)_labelBoard;
+@end
+
 @implementation AQGameWindowController
 - (id)init;
 {
@@ -18,9 +22,9 @@
 
 - (void)dealloc;
 {
-	// Should probably have something whereby closing the game window sends a leave game directive, etc.
 	[_gameWindow close];
 	[_gameWindow release];
+	_gameWindow = nil;
 	
 	[_game endGame];
 	
@@ -31,15 +35,17 @@
 - (void)awakeFromNib;
 {
 	// Tell the Game about us
-	[(AQGame *)_game registerGameWindowController:self];
 	[[_gameChatTextView textStorage] setAttributedString:[[[NSAttributedString alloc] initWithString:@""] autorelease]];
 	[[_gameLogTextView textStorage] setAttributedString:[[[NSAttributedString alloc] initWithString:@""] autorelease]];
+	[(AQGame *)_game registerGameWindowController:self];
+	[self _labelBoard];
+	[_scoreboardTableView setDataSource:self];
 }
 
 
-- (void)updateScoreboard;
+- (void)reloadScoreboard;
 {
-	
+	[_scoreboardTableView reloadData];
 }
 
 - (void)tilesChanged:(NSArray *)changedTiles;
@@ -79,6 +85,61 @@
 	[_game outgoingGameChatMessage:trimmedGameChatMessage];
 }
 
+- (void)incomingGameLogEntry:(NSString *)gameLogEntry;
+{
+	if ([[_gameLogTextView textStorage] length] > 0)
+		[[_gameLogTextView textStorage] appendAttributedString:[[[NSAttributedString alloc] initWithString:@"\n"] autorelease]];
+
+	NSAttributedString *attributedGameLogEntry = [[[NSAttributedString alloc] initWithString:gameLogEntry] autorelease];
+	[[_gameLogTextView textStorage] appendAttributedString:attributedGameLogEntry];
+	
+	// Scroll to bottom found in Cocoa docs
+	// http://developer.apple.com/documentation/Cocoa/Conceptual/NSScrollViewGuide/Articles/Scrolling.html
+	NSPoint newScrollOrigin;
+
+    if ([[_gameLogScrollView documentView] isFlipped]) {
+        newScrollOrigin = NSMakePoint(0.0, NSHeight([[_gameLogScrollView documentView] frame]) - NSHeight([[_gameLogScrollView contentView] bounds]));
+    } else {
+        newScrollOrigin=NSMakePoint(0.0, 0.0);
+    }
+
+    [[_gameLogScrollView documentView] scrollPoint:newScrollOrigin];
+}
+
+
+// NSTableDataSource informal protocol
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView;
+{
+	return [_game numberOfPlayers];
+}
+
+- (id)tableView:(NSTableView *)aTableView objectValueForTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex;
+{	
+	if (rowIndex >= [_game numberOfPlayers])
+		return @"";
+	
+	if ([[aTableColumn identifier] isEqualToString:@"playerName"])
+		return [[_game playerAtIndex:rowIndex] name];
+	else if ([[aTableColumn identifier] isEqualToString:@"sharesOfSackson"])
+		return [NSString stringWithFormat:@"%d", [[_game playerAtIndex:rowIndex] numberOfSharesOfHotelNamed:@"Sackson"]];
+	else if ([[aTableColumn identifier] isEqualToString:@"sharesOfZeta"])
+		return [NSString stringWithFormat:@"%d", [[_game playerAtIndex:rowIndex] numberOfSharesOfHotelNamed:@"Zeta"]];
+	else if ([[aTableColumn identifier] isEqualToString:@"sharesOfAmerica"])
+		return [NSString stringWithFormat:@"%d", [[_game playerAtIndex:rowIndex] numberOfSharesOfHotelNamed:@"America"]];
+	else if ([[aTableColumn identifier] isEqualToString:@"sharesOfFusion"])
+		return [NSString stringWithFormat:@"%d", [[_game playerAtIndex:rowIndex] numberOfSharesOfHotelNamed:@"Fusion"]];
+	else if ([[aTableColumn identifier] isEqualToString:@"sharesOfHydra"])
+		return [NSString stringWithFormat:@"%d", [[_game playerAtIndex:rowIndex] numberOfSharesOfHotelNamed:@"Hydra"]];
+	else if ([[aTableColumn identifier] isEqualToString:@"sharesOfPhoenix"])
+		return [NSString stringWithFormat:@"%d", [[_game playerAtIndex:rowIndex] numberOfSharesOfHotelNamed:@"Phoenix"]];
+	else if ([[aTableColumn identifier] isEqualToString:@"sharesOfQuantum"])
+		return [NSString stringWithFormat:@"%d", [[_game playerAtIndex:rowIndex] numberOfSharesOfHotelNamed:@"Quantum"]];
+	else if ([[aTableColumn identifier] isEqualToString:@"cash"])
+		return [NSString stringWithFormat:@"$%d", [[_game playerAtIndex:rowIndex] cash]];
+	
+	return @"";
+}
+
 
 // Window visibility
 - (void)closeGameWindow;
@@ -99,5 +160,16 @@
 - (void)removeGameChatTabViewItem;
 {
 	[_gameChatAndLogTabView removeTabViewItem:[_gameChatAndLogTabView tabViewItemAtIndex:0]];
+}
+@end
+
+@implementation AQGameWindowController (Private)
+- (void)_labelBoard;
+{
+	NSArray *rowNames = [NSArray arrayWithObjects:@"A", @"B", @"C", @"D", @"E", @"F", @"G", @"H", @"I", nil];
+	int x, y;
+	for (x = 0; x < [rowNames count]; ++x)
+		for (y = 0; y < 12; ++y)
+			[[_boardMatrix cellAtRow:x column:y] setTitle:[NSString stringWithFormat:@"%@%d", [rowNames objectAtIndex:x], y + 1]];
 }
 @end

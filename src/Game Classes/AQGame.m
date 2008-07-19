@@ -4,6 +4,7 @@
 
 #import "AQGame.h"
 #import "AQGameArrayController.h"
+#import "AQTile.h"
 
 @interface AQGame (Private)
 - (id)_initGameWithArrayController:(id)arrayController;
@@ -52,6 +53,11 @@
 	return (_associatedConnection != nil);
 }
 
+- (BOOL)isLocalGame;
+{
+	return (_associatedConnection == nil);
+}
+
 - (NSString *)localPlayerName;
 {
 	return _localPlayerName;
@@ -82,22 +88,55 @@
 }
 
 
+- (int)numberOfPlayers;
+{
+	return [_players count];
+}
+
+- (AQPlayer *)playerAtIndex:(int)index;
+{
+	if (index < 0 || index >= [self numberOfPlayers])
+		return nil;
+	
+	return [_players objectAtIndex:index];
+}
+
 - (void)addPlayerNamed:(NSString *)playerName;
 {
-	NSArray *newPlayerArray = [_players arrayByAddingObject:[AQPlayer playerWithName:playerName]];
-	[_players release];
-	_players = [newPlayerArray retain];
+	[_players addObject:[AQPlayer playerWithName:playerName]];
+	[_gameWindowController reloadScoreboard];
 }
 
 - (void)clearPlayers;
 {
 	[_players release];
-	_players = [NSArray array];
+	_players = [[NSMutableArray arrayWithCapacity:6] retain];
+	[_gameWindowController reloadScoreboard];
 }
 
 
+- (void)startGame;
+{
+	if ([self isLocalGame]) {
+		NSMutableArray *startingTiles = [NSMutableArray arrayWithCapacity:[self numberOfPlayers]];
+		NSEnumerator *playerEnumerator = [_players objectEnumerator];
+		id curPlayer;
+		while (curPlayer = [playerEnumerator nextObject]) {
+			[startingTiles addObject:[_board tileFromTileBag]];
+			[_gameWindowController incomingGameLogEntry:[NSString stringWithFormat:@"* %@ drew initial tile %@", [curPlayer name], [startingTiles lastObject]]];
+			[[startingTiles lastObject] setState:AQTileNotInHotel];
+		}
+		[_gameWindowController tilesChanged:startingTiles];
+		
+		// Figure out who goes first
+	}
+}
+
 - (void)endGame;
 {
+	if ([self isNetworkGame])
+		[_associatedConnection leaveGame];
+	
 	[_arrayController removeGame:self];
 }
 
@@ -127,7 +166,7 @@
 	
 	_board = [[AQBoard alloc] init];
 	_hotels = [self _initialHotelsArray];
-	_players = [NSArray array];
+	_players = [[NSMutableArray arrayWithCapacity:6] retain];
 	_localPlayerName = nil;
 
 	return self;
@@ -138,8 +177,10 @@
 {
 	if ([self isNetworkGame])
 		[_gameWindowController setWindowTitle:[NSString stringWithFormat:@"Acquire Game hosted at %@", [_associatedConnection connectedHostOrIPAddress]]];
-	else
+	else {
 		[_gameWindowController removeGameChatTabViewItem];
+		[_gameWindowController incomingGameLogEntry:[NSString stringWithFormat:@"* Welcome to Acquire!\n* Game started at %@.", [NSDate date]]];
+	}
 }
 
 
