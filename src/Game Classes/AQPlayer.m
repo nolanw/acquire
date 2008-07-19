@@ -103,16 +103,9 @@
 	[_tiles addObject:tile];
 }
 
-- (NSArray *)tilesAsStrings;
+- (NSArray *)tiles;
 {
-	NSMutableArray *ret = [NSMutableArray array];
-	NSEnumerator *tileEnum = [_tiles objectEnumerator];
-	id curTile;
-	while (curTile = [tileEnum nextObject]) {
-		[ret addObject:[curTile string]];
-	}
-	
-	return [NSArray arrayWithArray:ret];
+	return _tiles;
 }
 
 - (int)numberOfTiles;

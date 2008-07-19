@@ -26,6 +26,8 @@
 + (AQHotel *)phoenixHotel;
 + (AQHotel *)quantumHotel;
 
++ (NSColor *)tileNotInHotelColor;
+
 - (void)dealloc;
 
 // Identifying characteristics

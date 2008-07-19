@@ -20,6 +20,7 @@
 	NSMutableArray	*_players;
 	BOOL			_isNetworkGame;
 	NSString		*_localPlayerName;
+	int				_activePlayerIndex;
 }
 
 - (id)initNetworkGameWithArrayController:(id)arrayController associatedConnection:(AQConnectionController *)associatedConnection;
@@ -36,11 +37,15 @@
 
 - (int)numberOfPlayers;
 - (AQPlayer *)playerAtIndex:(int)index;
+- (int)activePlayerIndex;
 - (void)addPlayerNamed:(NSString *)playerName;
 - (void)clearPlayers;
 
 - (void)startGame;
 - (void)endGame;
+
+// Passthrus
+- (NSColor *)tileNotInHotelColor;
 
 // Allow objects in loaded nibs to say hi
 - (void)registerGameWindowController:(AQGameWindowController *)gameWindowController;

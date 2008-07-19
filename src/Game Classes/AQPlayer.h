@@ -28,7 +28,7 @@
 - (BOOL)hasTileNamed:(NSString *)tileName;
 - (void)playedTileNamed:(NSString *)tileName;
 - (void)drewTile:(AQTile *)tileName;
-- (NSArray *)tilesAsStrings;
+- (NSArray *)tiles;
 - (int)numberOfTiles;
 
 // Shares

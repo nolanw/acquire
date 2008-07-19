@@ -12,6 +12,9 @@
 - (void)_updateGameWindow;
 
 - (NSArray *)_initialHotelsArray;
+
+- (void)_determineStartingOrder;
+- (void)_drawTilesForEveryone;
 @end
 
 @implementation AQGame
@@ -101,6 +104,11 @@
 	return [_players objectAtIndex:index];
 }
 
+- (int)activePlayerIndex;
+{
+	return _activePlayerIndex;
+}
+
 - (void)addPlayerNamed:(NSString *)playerName;
 {
 	[_players addObject:[AQPlayer playerWithName:playerName]];
@@ -118,17 +126,15 @@
 - (void)startGame;
 {
 	if ([self isLocalGame]) {
-		NSMutableArray *startingTiles = [NSMutableArray arrayWithCapacity:[self numberOfPlayers]];
-		NSEnumerator *playerEnumerator = [_players objectEnumerator];
-		id curPlayer;
-		while (curPlayer = [playerEnumerator nextObject]) {
-			[startingTiles addObject:[_board tileFromTileBag]];
-			[_gameWindowController incomingGameLogEntry:[NSString stringWithFormat:@"* %@ drew initial tile %@", [curPlayer name], [startingTiles lastObject]]];
-			[[startingTiles lastObject] setState:AQTileNotInHotel];
-		}
-		[_gameWindowController tilesChanged:startingTiles];
+		[self _determineStartingOrder];
 		
-		// Figure out who goes first
+		[_gameWindowController incomingGameLogEntry:[NSString stringWithFormat:@"* It's %@'s turn.", [[_players objectAtIndex:_activePlayerIndex] name]]];
+		
+		[_gameWindowController reloadScoreboard];
+		
+		[self _drawTilesForEveryone];
+		
+		[_gameWindowController updateTileRack:[[_players objectAtIndex:_activePlayerIndex] tiles]];
 	}
 }
 
@@ -138,6 +144,13 @@
 		[_associatedConnection leaveGame];
 	
 	[_arrayController removeGame:self];
+}
+
+
+// Passthrus
+- (NSColor *)tileNotInHotelColor;
+{
+	return [AQHotel tileNotInHotelColor];
 }
 
 
@@ -187,5 +200,43 @@
 - (NSArray *)_initialHotelsArray;
 {
 	return [NSArray arrayWithObjects:[AQHotel sacksonHotel], [AQHotel zetaHotel], [AQHotel americaHotel], [AQHotel fusionHotel], [AQHotel hydraHotel], [AQHotel phoenixHotel], [AQHotel quantumHotel], nil];
+}
+
+
+- (void)_determineStartingOrder;
+{
+	NSMutableArray *startingTiles = [NSMutableArray arrayWithCapacity:[self numberOfPlayers]];
+	NSEnumerator *playerEnumerator = [_players objectEnumerator];
+	id curPlayer;
+	while (curPlayer = [playerEnumerator nextObject]) {
+		[startingTiles addObject:[_board tileFromTileBag]];
+		[_gameWindowController incomingGameLogEntry:[NSString stringWithFormat:@"* %@ drew initial tile %@", [curPlayer name], [startingTiles lastObject]]];
+		[[startingTiles lastObject] setState:AQTileNotInHotel];
+	}
+	[_gameWindowController tilesChanged:startingTiles];
+	
+	int topmostRow = 9;
+	int leftmostColumn = 12;
+	NSEnumerator *startingTilesEnumerator = [startingTiles objectEnumerator];
+	id curStartingTile;
+	while (curStartingTile = [startingTilesEnumerator nextObject]) {
+		if ([curStartingTile rowInt] < topmostRow) {
+			topmostRow = [curStartingTile rowInt];
+			leftmostColumn = [curStartingTile column];
+		} else if ([curStartingTile rowInt] == topmostRow && [curStartingTile column] < leftmostColumn)
+			leftmostColumn = [curStartingTile column];
+	}
+	
+	_activePlayerIndex = [startingTiles indexOfObject:[_board tileOnBoardAtColumn:leftmostColumn row:[_board rowStringFromInt:topmostRow]]];
+}
+
+- (void)_drawTilesForEveryone;
+{
+	NSEnumerator *playerEnumerator = [_players objectEnumerator];
+	id curPlayer;
+	int i;
+	while (curPlayer = [playerEnumerator nextObject])
+		for (i = 0; i < 6; ++i)
+			[curPlayer drewTile:[_board tileFromTileBag]];
 }
 @end

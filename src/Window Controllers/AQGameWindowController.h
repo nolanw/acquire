@@ -29,6 +29,7 @@
 - (void)incomingGameMessage:(NSString *)gameMessage;
 - (IBAction)sendGameMessage:(id)sender;
 - (void)incomingGameLogEntry:(NSString *)gameLogEntry;
+- (void)updateTileRack:(NSArray *)tiles;
 
 // NSTableDataSource informal protocol
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView;

@@ -30,7 +30,7 @@
 
 - (NSString *)description;
 {
-	return [NSString stringWithFormat:@"%@%d", [self row], [self column]];
+	return [NSString stringWithFormat:@"%d%@", [self column], [self row]];
 }
 
 

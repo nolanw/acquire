@@ -4,6 +4,8 @@
 
 #import "AQGameWindowController.h"
 #import "AQGame.h"
+#import "AQTile.h"
+#import "CCDColoredButtonCell.h"
 
 @interface AQGameWindowController (Private)
 - (void)_labelBoard;
@@ -50,7 +52,14 @@
 
 - (void)tilesChanged:(NSArray *)changedTiles;
 {
-	
+	NSEnumerator *changedTileEnumerator = [changedTiles objectEnumerator];
+	id curChangedTile;
+	while (curChangedTile = [changedTileEnumerator nextObject]) {
+		if ([curChangedTile state] == AQTileNotInHotel)
+			[(CCDColoredButtonCell *)[_boardMatrix cellAtRow:[curChangedTile rowInt] column:([curChangedTile column] - 1)] setButtonColor:[_game tileNotInHotelColor]];
+		else if ([curChangedTile state] == AQTileInHotel)
+			[(CCDColoredButtonCell *)[_boardMatrix cellAtRow:[curChangedTile rowInt] column:([curChangedTile column] - 1)] setButtonColor:[[curChangedTile hotel] color]];
+	}
 }
 
 - (void)incomingGameMessage:(NSString *)gameMessage;
@@ -106,6 +115,21 @@
     [[_gameLogScrollView documentView] scrollPoint:newScrollOrigin];
 }
 
+- (void)updateTileRack:(NSArray *)tiles;
+{
+	int i;
+	for (i = 0; i < [tiles count]; ++i) {
+		NSLog(@"%s %@", _cmd, [tiles objectAtIndex:i]);
+		[[_tileRackMatrix cellAtRow:0 column:i] setTitle:[[tiles objectAtIndex:i] description]];
+	}
+	
+	for (; i < 6; ++i) {
+		[[_tileRackMatrix cellAtRow:0 column:i] setTitle:@""];
+		[[_tileRackMatrix cellAtRow:0 column:i] setEnabled:NO];
+		[[_tileRackMatrix cellAtRow:0 column:i] setTransparent:YES];
+	}
+}
+
 
 // NSTableDataSource informal protocol
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView;
@@ -119,7 +143,10 @@
 		return @"";
 	
 	if ([[aTableColumn identifier] isEqualToString:@"playerName"])
-		return [[_game playerAtIndex:rowIndex] name];
+		if ([_game activePlayerIndex] == rowIndex)
+			return [NSString stringWithFormat:@"* %@", [[_game playerAtIndex:rowIndex] name]];
+		else
+			return [[_game playerAtIndex:rowIndex] name];
 	else if ([[aTableColumn identifier] isEqualToString:@"sharesOfSackson"])
 		return [NSString stringWithFormat:@"%d", [[_game playerAtIndex:rowIndex] numberOfSharesOfHotelNamed:@"Sackson"]];
 	else if ([[aTableColumn identifier] isEqualToString:@"sharesOfZeta"])
@@ -170,6 +197,6 @@
 	int x, y;
 	for (x = 0; x < [rowNames count]; ++x)
 		for (y = 0; y < 12; ++y)
-			[[_boardMatrix cellAtRow:x column:y] setTitle:[NSString stringWithFormat:@"%@%d", [rowNames objectAtIndex:x], y + 1]];
+			[[_boardMatrix cellAtRow:x column:y] setTitle:[NSString stringWithFormat:@"%d%@", y + 1, [rowNames objectAtIndex:x]]];
 }
 @end
