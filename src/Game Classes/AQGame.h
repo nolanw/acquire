@@ -37,15 +37,20 @@
 
 - (int)numberOfPlayers;
 - (AQPlayer *)playerAtIndex:(int)index;
+- (AQPlayer *)activePlayer;
 - (int)activePlayerIndex;
 - (void)addPlayerNamed:(NSString *)playerName;
 - (void)clearPlayers;
+
+- (void)tileClickedString:(NSString *)tileClickedString;
 
 - (void)startGame;
 - (void)endGame;
 
 // Passthrus
 - (NSColor *)tileNotInHotelColor;
+- (NSColor *)tilePlayableColor;
+- (AQTile *)tileOnBoardByString:(NSString *)tileString;
 
 // Allow objects in loaded nibs to say hi
 - (void)registerGameWindowController:(AQGameWindowController *)gameWindowController;

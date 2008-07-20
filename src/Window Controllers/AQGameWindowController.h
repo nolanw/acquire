@@ -16,6 +16,8 @@
 	IBOutlet NSScrollView	*_gameLogScrollView;
 	IBOutlet NSTextView		*_gameLogTextView;
 	IBOutlet NSTextField	*_messageToGameTextField;
+	
+	NSColor	*_tileUnplayedColor;
 }
 
 - (id)init;
@@ -26,10 +28,12 @@
 
 - (void)reloadScoreboard;
 - (void)tilesChanged:(NSArray *)changedTiles;
+- (IBAction)tileClicked:(id)sender;
 - (void)incomingGameMessage:(NSString *)gameMessage;
 - (IBAction)sendGameMessage:(id)sender;
 - (void)incomingGameLogEntry:(NSString *)gameLogEntry;
 - (void)updateTileRack:(NSArray *)tiles;
+- (void)highlightTilesOnBoard:(NSArray *)tilesToHighlight;
 
 // NSTableDataSource informal protocol
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView;

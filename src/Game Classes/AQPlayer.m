@@ -18,7 +18,7 @@
 	_name = [newName copy];
 	_cash = 6000;
 	_sharesByHotelName = [[NSMutableDictionary alloc] initWithCapacity:7];
-	_tiles = [[NSMutableArray alloc] init];
+	_tiles = [[NSMutableArray alloc] initWithObjects:[NSNull null], [NSNull null], [NSNull null], [NSNull null], [NSNull null], [NSNull null], nil];
 
     return self;
 }
@@ -72,9 +72,9 @@
 		return NO;
 	
 	NSEnumerator *tileEnum = [_tiles objectEnumerator];
-	AQTile *curTile;
-	while (curTile = (AQTile *)[tileEnum nextObject]) {
-		if ([[curTile string] isEqualToString:tileName]) {
+	id curTile;
+	while (curTile = [tileEnum nextObject]) {
+		if (curTile != [NSNull null] && [[curTile string] isEqualToString:tileName]) {
 			return YES;
 		}
 	}
@@ -83,13 +83,10 @@
 
 - (void)playedTileNamed:(NSString *)tileName;
 {
-	if (_tiles == nil)
-		return;
-	
 	int i;
 	for (i = 0; i < [_tiles count]; ++i) {
-		if ([[[_tiles objectAtIndex:i] string] isEqualToString:tileName]) {
-			[_tiles removeObjectAtIndex:i];
+		if ([_tiles objectAtIndex:i] != [NSNull null] && [[[_tiles objectAtIndex:i] string] isEqualToString:tileName]) {
+			[_tiles replaceObjectAtIndex:i withObject:[NSNull null]];
 			break;
 		}
 	}
@@ -97,10 +94,12 @@
 
 - (void)drewTile:(AQTile *)tile;
 {
-	if (_tiles == nil)
-		_tiles = [[NSMutableArray alloc] init];
+	if ([_tiles indexOfObject:[NSNull null]] == NSNotFound) {
+		NSLog(@"%s player drew a tile when they already had six", _cmd);
+		return;
+	}
 	
-	[_tiles addObject:tile];
+	[_tiles replaceObjectAtIndex:[_tiles indexOfObject:[NSNull null]] withObject:tile];
 }
 
 - (NSArray *)tiles;

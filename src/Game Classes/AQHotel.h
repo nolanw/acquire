@@ -27,6 +27,7 @@
 + (AQHotel *)quantumHotel;
 
 + (NSColor *)tileNotInHotelColor;
++ (NSColor *)tilePlayableColor;
 
 - (void)dealloc;
 

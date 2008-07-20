@@ -104,6 +104,11 @@
 	return [_players objectAtIndex:index];
 }
 
+- (AQPlayer *)activePlayer;
+{
+	return [_players objectAtIndex:_activePlayerIndex];
+}
+
 - (int)activePlayerIndex;
 {
 	return _activePlayerIndex;
@@ -123,18 +128,32 @@
 }
 
 
+- (void)tileClickedString:(NSString *)tileClickedString;
+{
+	if (![[self activePlayer] hasTileNamed:tileClickedString])
+		return;
+	
+	[[_board tileOnBoardByString:tileClickedString] setState:AQTileNotInHotel];
+	[_gameWindowController tilesChanged:[[self activePlayer] tiles]];
+	[[self activePlayer] playedTileNamed:tileClickedString];
+	[_gameWindowController updateTileRack:[[self activePlayer] tiles]];
+	[_gameWindowController incomingGameLogEntry:[NSString stringWithFormat:@"* %@ played tile %@.", [[self activePlayer] name], tileClickedString]];
+}
+
+
 - (void)startGame;
 {
 	if ([self isLocalGame]) {
 		[self _determineStartingOrder];
 		
-		[_gameWindowController incomingGameLogEntry:[NSString stringWithFormat:@"* It's %@'s turn.", [[_players objectAtIndex:_activePlayerIndex] name]]];
+		[_gameWindowController incomingGameLogEntry:[NSString stringWithFormat:@"* It's %@'s turn.", [[self activePlayer] name]]];
 		
 		[_gameWindowController reloadScoreboard];
 		
 		[self _drawTilesForEveryone];
 		
-		[_gameWindowController updateTileRack:[[_players objectAtIndex:_activePlayerIndex] tiles]];
+		[_gameWindowController updateTileRack:[[self activePlayer] tiles]];
+		[_gameWindowController highlightTilesOnBoard:[[self activePlayer] tiles]];
 	}
 }
 
@@ -151,6 +170,16 @@
 - (NSColor *)tileNotInHotelColor;
 {
 	return [AQHotel tileNotInHotelColor];
+}
+
+- (NSColor *)tilePlayableColor;
+{
+	return [AQHotel tilePlayableColor];
+}
+
+- (AQTile *)tileOnBoardByString:(NSString *)tileString;
+{
+	return [_board tileOnBoardByString:tileString];
 }
 
 
@@ -210,7 +239,7 @@
 	id curPlayer;
 	while (curPlayer = [playerEnumerator nextObject]) {
 		[startingTiles addObject:[_board tileFromTileBag]];
-		[_gameWindowController incomingGameLogEntry:[NSString stringWithFormat:@"* %@ drew initial tile %@", [curPlayer name], [startingTiles lastObject]]];
+		[_gameWindowController incomingGameLogEntry:[NSString stringWithFormat:@"* %@ drew initial tile %@.", [curPlayer name], [startingTiles lastObject]]];
 		[[startingTiles lastObject] setState:AQTileNotInHotel];
 	}
 	[_gameWindowController tilesChanged:startingTiles];

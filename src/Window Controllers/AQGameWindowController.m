@@ -42,6 +42,10 @@
 	[(AQGame *)_game registerGameWindowController:self];
 	[self _labelBoard];
 	[_scoreboardTableView setDataSource:self];
+	
+	_tileUnplayedColor = [(CCDColoredButtonCell *)[_boardMatrix cellAtRow:0 column:0] buttonColor];
+	
+	NSLog(@"%s %@", _cmd, _tileUnplayedColor);
 }
 
 
@@ -55,11 +59,21 @@
 	NSEnumerator *changedTileEnumerator = [changedTiles objectEnumerator];
 	id curChangedTile;
 	while (curChangedTile = [changedTileEnumerator nextObject]) {
+		if (curChangedTile == [NSNull null])
+			continue;
+		
 		if ([curChangedTile state] == AQTileNotInHotel)
-			[(CCDColoredButtonCell *)[_boardMatrix cellAtRow:[curChangedTile rowInt] column:([curChangedTile column] - 1)] setButtonColor:[_game tileNotInHotelColor]];
+			[[_boardMatrix cellAtRow:[curChangedTile rowInt] column:([curChangedTile column] - 1)] setButtonColor:[_game tileNotInHotelColor]];
 		else if ([curChangedTile state] == AQTileInHotel)
-			[(CCDColoredButtonCell *)[_boardMatrix cellAtRow:[curChangedTile rowInt] column:([curChangedTile column] - 1)] setButtonColor:[[curChangedTile hotel] color]];
+			[[_boardMatrix cellAtRow:[curChangedTile rowInt] column:([curChangedTile column] - 1)] setButtonColor:[[curChangedTile hotel] color]];
+		else if ([curChangedTile state] == AQTileUnplayed)
+			[[_boardMatrix cellAtRow:[curChangedTile rowInt] column:([curChangedTile column] - 1)] setButtonColor:_tileUnplayedColor];
 	}
+}
+
+- (IBAction)tileClicked:(id)sender;
+{
+	[_game tileClickedString:[[sender selectedCell] title]];
 }
 
 - (void)incomingGameMessage:(NSString *)gameMessage;
@@ -117,17 +131,28 @@
 
 - (void)updateTileRack:(NSArray *)tiles;
 {
+	id curTile;
 	int i;
 	for (i = 0; i < [tiles count]; ++i) {
-		NSLog(@"%s %@", _cmd, [tiles objectAtIndex:i]);
-		[[_tileRackMatrix cellAtRow:0 column:i] setTitle:[[tiles objectAtIndex:i] description]];
+		curTile = [tiles objectAtIndex:i];
+		if (curTile == [NSNull null]) {
+			[[_tileRackMatrix cellAtRow:0 column:i] setEnabled:NO];
+			[[_tileRackMatrix cellAtRow:0 column:i] setTransparent:YES];
+			[[_tileRackMatrix cellAtRow:0 column:i] setTitle:@""];
+		} else {
+			[[_tileRackMatrix cellAtRow:0 column:i] setEnabled:YES];
+			[[_tileRackMatrix cellAtRow:0 column:i] setTransparent:NO];
+			[[_tileRackMatrix cellAtRow:0 column:i] setTitle:[curTile description]];
+		}
 	}
-	
-	for (; i < 6; ++i) {
-		[[_tileRackMatrix cellAtRow:0 column:i] setTitle:@""];
-		[[_tileRackMatrix cellAtRow:0 column:i] setEnabled:NO];
-		[[_tileRackMatrix cellAtRow:0 column:i] setTransparent:YES];
-	}
+}
+
+- (void)highlightTilesOnBoard:(NSArray *)tilesToHighlight;
+{
+	NSEnumerator *tilesToHighlightEnumerator = [tilesToHighlight objectEnumerator];
+	id curTile;
+	while (curTile = [tilesToHighlightEnumerator nextObject])
+		[[_boardMatrix cellAtRow:[curTile rowInt] column:([curTile column] - 1)] setButtonColor:[_game tilePlayableColor]];
 }
 
 

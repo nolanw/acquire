@@ -74,6 +74,11 @@
 	return [NSColor colorWithCalibratedRed:0.5 green:0.5 blue:0.5 alpha:1.0];
 }
 
++ (NSColor *)tilePlayableColor;
+{
+	return [NSColor colorWithCalibratedRed:1.0 green:1.0 blue:0.8 alpha:1.0];
+}
+
 
 - (void)dealloc;
 {
