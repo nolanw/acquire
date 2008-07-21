@@ -28,6 +28,7 @@
 
 + (NSColor *)tileNotInHotelColor;
 + (NSColor *)tilePlayableColor;
++ (NSColor *)tileUnplayedColor;
 
 - (void)dealloc;
 

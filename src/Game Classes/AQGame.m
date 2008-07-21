@@ -1,4 +1,4 @@
-// AQGame.h
+// AQGame.m
 //
 // Created May 28, 2008 by nwaite
 
@@ -127,6 +127,22 @@
 	[_gameWindowController reloadScoreboard];
 }
 
+- (void)purchaseShares:(NSArray *)sharesPurchased ofHotelsNamed:(NSArray *)hotelNames;
+{
+	int i;
+	for (i = 0; i < [sharesPurchased count]; ++i) {
+		if ([[sharesPurchased objectAtIndex:i] intValue] == 0)
+			continue;
+		
+		[[self activePlayer] addSharesOfHotelNamed:[hotelNames objectAtIndex:i] numberOfShares:[[sharesPurchased objectAtIndex:i] intValue]];
+	}
+	
+	[_gameWindowController reloadScoreboard];
+	
+	if ([self isLocalGame])
+		[self endCurrentTurn];
+}
+
 
 - (void)tileClickedString:(NSString *)tileClickedString;
 {
@@ -140,6 +156,19 @@
 	[_gameWindowController incomingGameLogEntry:[NSString stringWithFormat:@"* %@ played tile %@.", [[self activePlayer] name], tileClickedString]];
 }
 
+
+- (void)endCurrentTurn;
+{
+	[[self activePlayer] drewTile:[_board tileFromTileBag]];
+	++_activePlayerIndex;
+	if (_activePlayerIndex >= [_players count])
+		_activePlayerIndex = 0;
+	
+	[_gameWindowController reloadScoreboard];
+	[_gameWindowController updateTileRack:[[self activePlayer] tiles]];
+	[_gameWindowController highlightTilesOnBoard:[[self activePlayer] tiles]];
+	[_gameWindowController incomingGameLogEntry:[NSString stringWithFormat:@"* It's %@'s turn.", [[self activePlayer] name]]];
+}
 
 - (void)startGame;
 {
@@ -175,6 +204,11 @@
 - (NSColor *)tilePlayableColor;
 {
 	return [AQHotel tilePlayableColor];
+}
+
+- (NSColor *)tileUnplayedColor;
+{
+	return [AQHotel tileUnplayedColor];
 }
 
 - (AQTile *)tileOnBoardByString:(NSString *)tileString;

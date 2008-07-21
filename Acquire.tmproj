@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>src/Window Controllers/AQGameWindowController.m</string>
+	<string>src/Window Controllers/AQPurchaseSharesSheetController.m</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -76,56 +76,44 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>27</integer>
+				<integer>0</integer>
 				<key>line</key>
-				<integer>39</integer>
+				<integer>45</integer>
 			</dict>
+			<key>columnSelection</key>
+			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>15</integer>
+			<integer>19</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>23</integer>
+				<key>line</key>
+				<integer>45</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>0</integer>
+				<key>line</key>
+				<integer>45</integer>
+			</dict>
 		</dict>
 		<key>src/Game Classes/AQGame.m</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>44</integer>
+				<integer>75</integer>
 				<key>line</key>
-				<integer>139</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>117</integer>
-		</dict>
-		<key>src/Game Classes/AQPlayer.h</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>30</integer>
+				<integer>168</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
-		</dict>
-		<key>src/Game Classes/AQPlayer.m</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>50</integer>
-				<key>line</key>
-				<integer>87</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>44</integer>
 		</dict>
 		<key>src/Main Controllers/AQAcquireController.m</key>
 		<dict>
@@ -146,42 +134,55 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>58</integer>
+				<integer>0</integer>
 				<key>line</key>
-				<integer>35</integer>
+				<integer>48</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>1</integer>
+			<integer>5</integer>
 		</dict>
-		<key>src/Window Controllers/AQGameWindowController.m</key>
+		<key>src/Window Controllers/AQPurchaseSharesSheetController.h</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>125</integer>
+				<integer>31</integer>
 				<key>line</key>
-				<integer>69</integer>
+				<integer>8</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
-			<integer>103</integer>
+			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>39</integer>
+			<integer>0</integer>
+		</dict>
+		<key>src/Window Controllers/AQPurchaseSharesSheetController.m</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>158</integer>
+				<key>line</key>
+				<integer>70</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>38</integer>
 		</dict>
 	</dict>
 	<key>openDocuments</key>
 	<array>
+		<string>src/Window Controllers/AQPurchaseSharesSheetController.h</string>
+		<string>src/Window Controllers/AQPurchaseSharesSheetController.m</string>
+		<string>src/Window Controllers/AQGameWindowController.h</string>
 		<string>src/Game Classes/AQGame.h</string>
 		<string>src/Game Classes/AQGame.m</string>
-		<string>src/Window Controllers/AQGameWindowController.h</string>
-		<string>src/Window Controllers/AQGameWindowController.m</string>
-		<string>src/Game Classes/AQPlayer.h</string>
-		<string>src/Game Classes/AQPlayer.m</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{1, 4}, {853, 874}}</string>
+	<string>{{307, 4}, {853, 874}}</string>
 </dict>
 </plist>

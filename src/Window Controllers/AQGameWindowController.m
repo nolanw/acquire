@@ -45,7 +45,7 @@
 	
 	_tileUnplayedColor = [(CCDColoredButtonCell *)[_boardMatrix cellAtRow:0 column:0] buttonColor];
 	
-	NSLog(@"%s %@", _cmd, _tileUnplayedColor);
+	NSLog(@"%s white=%f, alpha=%f", _cmd, [_tileUnplayedColor whiteComponent], [_tileUnplayedColor alphaComponent]);
 }
 
 
@@ -67,7 +67,7 @@
 		else if ([curChangedTile state] == AQTileInHotel)
 			[[_boardMatrix cellAtRow:[curChangedTile rowInt] column:([curChangedTile column] - 1)] setButtonColor:[[curChangedTile hotel] color]];
 		else if ([curChangedTile state] == AQTileUnplayed)
-			[[_boardMatrix cellAtRow:[curChangedTile rowInt] column:([curChangedTile column] - 1)] setButtonColor:_tileUnplayedColor];
+			[[_boardMatrix cellAtRow:[curChangedTile rowInt] column:([curChangedTile column] - 1)] setButtonColor:[_game tileUnplayedColor]];
 	}
 }
 
@@ -212,6 +212,13 @@
 - (void)removeGameChatTabViewItem;
 {
 	[_gameChatAndLogTabView removeTabViewItem:[_gameChatAndLogTabView tabViewItemAtIndex:0]];
+}
+
+
+// Passthrus
+- (void)purchaseShares:(NSArray *)sharesPurchased ofHotelsNamed:(NSArray *)hotelNames;
+{
+	[_game purchaseShares:sharesPurchased ofHotelsNamed:hotelNames];
 }
 @end
 

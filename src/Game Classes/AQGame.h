@@ -29,8 +29,6 @@
 
 - (BOOL)isNetworkGame;
 - (BOOL)isLocalGame;
-- (NSString *)localPlayerName;
-- (void)setLocalPlayerName:(NSString *)localPlayerName;
 
 - (void)loadGameWindow;
 - (void)bringGameWindowToFront;
@@ -41,15 +39,18 @@
 - (int)activePlayerIndex;
 - (void)addPlayerNamed:(NSString *)playerName;
 - (void)clearPlayers;
+- (void)purchaseShares:(NSArray *)sharesPurchased ofHotelsNamed:(NSArray *)hotelNames;
 
 - (void)tileClickedString:(NSString *)tileClickedString;
 
+- (void)endCurrentTurn;
 - (void)startGame;
 - (void)endGame;
 
 // Passthrus
 - (NSColor *)tileNotInHotelColor;
 - (NSColor *)tilePlayableColor;
+- (NSColor *)tileUnplayedColor;
 - (AQTile *)tileOnBoardByString:(NSString *)tileString;
 
 // Allow objects in loaded nibs to say hi
@@ -57,6 +58,8 @@
 @end
 
 @interface AQGame (NetworkGame)
+- (NSString *)localPlayerName;
+- (void)setLocalPlayerName:(NSString *)localPlayerName;
 - (void)boardTileAtRow:(NSString *)row column:(int)column changedStateTo:(int)newState;
 - (void)rackTileAtIndex:(int)index changedStateTo:(int)newState;
 - (void)outgoingGameChatMessage:(NSString *)chatMessage;

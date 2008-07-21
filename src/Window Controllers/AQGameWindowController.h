@@ -44,4 +44,7 @@
 - (void)bringGameWindowToFront;
 - (void)setWindowTitle:(NSString *)windowTitle;
 - (void)removeGameChatTabViewItem;
+
+// Passthrus
+- (void)purchaseShares:(NSArray *)sharesPurchased ofHotelsNamed:(NSArray *)hotelNames;
 @end
