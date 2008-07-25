@@ -99,17 +99,7 @@
 	NSAttributedString *attributedLobbyMessage = [[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@", lobbyMessage]] autorelease];
 	[[_lobbyChatTextView textStorage] appendAttributedString:attributedLobbyMessage];
 	
-	// Scroll to bottom found in Cocoa docs
-	// http://developer.apple.com/documentation/Cocoa/Conceptual/NSScrollViewGuide/Articles/Scrolling.html
-	NSPoint newScrollOrigin;
-
-    if ([[_lobbyChatScrollView documentView] isFlipped]) {
-        newScrollOrigin = NSMakePoint(0.0,NSHeight([[_lobbyChatScrollView documentView] frame]) - NSHeight([[_lobbyChatScrollView contentView] bounds]));
-    } else {
-        newScrollOrigin=NSMakePoint(0.0,0.0);
-    }
-
-    [[_lobbyChatScrollView documentView] scrollPoint:newScrollOrigin];
+	[_lobbyChatTextView scrollRangeToVisible:NSMakeRange([[_lobbyChatTextView string] length], 0)];
 }
 
 - (void)requestGameListUpdate:(NSTimer *)theTimer;

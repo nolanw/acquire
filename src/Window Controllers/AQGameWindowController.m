@@ -17,7 +17,7 @@
 	if (![super init])
 		return nil;
 	
-	
+	_purchaseSharesSheetController = [[AQPurchaseSharesSheetController alloc] initWithGameWindowController:self];
 
 	return self;
 }
@@ -44,9 +44,25 @@
 	[_scoreboardTableView setDataSource:self];
 	
 	_tileUnplayedColor = [(CCDColoredButtonCell *)[_boardMatrix cellAtRow:0 column:0] buttonColor];
-	
-	NSLog(@"%s white=%f, alpha=%f", _cmd, [_tileUnplayedColor whiteComponent], [_tileUnplayedColor alphaComponent]);
 }
+
+
+- (IBAction)showPurchaseSharesSheet:(id)sender;
+{	
+	[_purchaseSharesSheetController showPurchaseSharesSheet:_gameWindow];
+}
+
+- (void)registerPurchaseSharesSheetController:(AQPurchaseSharesSheetController *)purchaseSharesSheetController;
+{
+	if (_purchaseSharesSheetController != nil) {
+		NSLog(@"%s Purchase Shares Sheet Controller already registered.", _cmd);
+		return;
+	}
+	
+	_purchaseSharesSheetController = purchaseSharesSheetController;
+}
+
+
 
 
 - (void)reloadScoreboard;
@@ -84,17 +100,7 @@
 	NSAttributedString *attributedGameMessage = [[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@", gameMessage]] autorelease];
 	[[_gameChatTextView textStorage] appendAttributedString:attributedGameMessage];
 	
-	// Scroll to bottom found in Cocoa docs
-	// http://developer.apple.com/documentation/Cocoa/Conceptual/NSScrollViewGuide/Articles/Scrolling.html
-	NSPoint newScrollOrigin;
-
-    if ([[_gameChatScrollView documentView] isFlipped]) {
-        newScrollOrigin = NSMakePoint(0.0, NSHeight([[_gameChatScrollView documentView] frame]) - NSHeight([[_gameChatScrollView contentView] bounds]));
-    } else {
-        newScrollOrigin=NSMakePoint(0.0, 0.0);
-    }
-
-    [[_gameChatScrollView documentView] scrollPoint:newScrollOrigin];
+	[_gameChatTextView scrollRangeToVisible:NSMakeRange([[_gameChatTextView string] length], 0)];
 }
 
 - (IBAction)sendGameMessage:(id)sender;
@@ -116,17 +122,7 @@
 	NSAttributedString *attributedGameLogEntry = [[[NSAttributedString alloc] initWithString:gameLogEntry] autorelease];
 	[[_gameLogTextView textStorage] appendAttributedString:attributedGameLogEntry];
 	
-	// Scroll to bottom found in Cocoa docs
-	// http://developer.apple.com/documentation/Cocoa/Conceptual/NSScrollViewGuide/Articles/Scrolling.html
-	NSPoint newScrollOrigin;
-
-    if ([[_gameLogScrollView documentView] isFlipped]) {
-        newScrollOrigin = NSMakePoint(0.0, NSHeight([[_gameLogScrollView documentView] frame]) - NSHeight([[_gameLogScrollView contentView] bounds]));
-    } else {
-        newScrollOrigin=NSMakePoint(0.0, 0.0);
-    }
-
-    [[_gameLogScrollView documentView] scrollPoint:newScrollOrigin];
+	[_gameLogTextView scrollRangeToVisible:NSMakeRange([[_gameLogTextView string] length], 0)];
 }
 
 - (void)updateTileRack:(NSArray *)tiles;
@@ -169,7 +165,7 @@
 	
 	if ([[aTableColumn identifier] isEqualToString:@"playerName"])
 		if ([_game activePlayerIndex] == rowIndex)
-			return [NSString stringWithFormat:@"* %@", [[_game playerAtIndex:rowIndex] name]];
+			return [NSString stringWithFormat:@"• %@", [[_game playerAtIndex:rowIndex] name]];
 		else
 			return [[_game playerAtIndex:rowIndex] name];
 	else if ([[aTableColumn identifier] isEqualToString:@"sharesOfSackson"])
@@ -216,6 +212,12 @@
 
 
 // Passthrus
+- (void)showPurchaseSharesSheetWithHotels:(NSArray *)hotels availableCash:(int)availableCash;
+{
+	[_purchaseSharesSheetController resizeAndPopulateMatricesWithHotels:hotels availableCash:availableCash];
+	[_purchaseSharesSheetController showPurchaseSharesSheet:_gameWindow];
+}
+
 - (void)purchaseShares:(NSArray *)sharesPurchased ofHotelsNamed:(NSArray *)hotelNames;
 {
 	[_game purchaseShares:sharesPurchased ofHotelsNamed:hotelNames];

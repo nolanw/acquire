@@ -6,7 +6,6 @@
 	
 	// Lobby chat
 	IBOutlet NSTextView		*_lobbyChatTextView;
-	IBOutlet NSScrollView	*_lobbyChatScrollView;
 	IBOutlet NSTextField	*_messageToLobbyTextField;
 	
 	// Game list

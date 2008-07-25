@@ -3,6 +3,8 @@
 //
 // Created May 28, 2008 by nwaite
 
+#import "AQPurchaseSharesSheetController.h"
+
 @interface AQGameWindowController : NSObject
 {
 	IBOutlet id				_game;
@@ -11,11 +13,11 @@
 	IBOutlet NSMatrix		*_tileRackMatrix;
 	IBOutlet NSTableView	*_scoreboardTableView;
 	IBOutlet NSTabView		*_gameChatAndLogTabView;
-	IBOutlet NSScrollView	*_gameChatScrollView;
 	IBOutlet NSTextView		*_gameChatTextView;
-	IBOutlet NSScrollView	*_gameLogScrollView;
 	IBOutlet NSTextView		*_gameLogTextView;
 	IBOutlet NSTextField	*_messageToGameTextField;
+	
+	AQPurchaseSharesSheetController	*_purchaseSharesSheetController;
 	
 	NSColor	*_tileUnplayedColor;
 }
@@ -25,6 +27,8 @@
 
 // NSObject (NSNibAwakening)
 - (void)awakeFromNib;
+
+- (IBAction)showPurchaseSharesSheet:(id)sender;
 
 - (void)reloadScoreboard;
 - (void)tilesChanged:(NSArray *)changedTiles;
@@ -46,5 +50,6 @@
 - (void)removeGameChatTabViewItem;
 
 // Passthrus
+- (void)showPurchaseSharesSheetWithHotels:(NSArray *)hotels availableCash:(int)availableCash;
 - (void)purchaseShares:(NSArray *)sharesPurchased ofHotelsNamed:(NSArray *)hotelNames;
 @end

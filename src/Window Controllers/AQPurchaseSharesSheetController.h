@@ -10,15 +10,20 @@
 	IBOutlet NSMatrix	*_shareNumbersAndSteppersMatrix;
 	
 	id	_gameWindowController;
+	
+	NSRect	_originalHotelNamesMatrixFrame;
+    NSRect	_originalPurchaseSharesSheetFrame;
 }
 
 - (id)initWithGameWindowController:(id)gameWindowController;
 - (void)dealloc;
 
+- (void)awakeFromNib;
+
 - (IBAction)giveMeAMinute:(id)sender;
 - (IBAction)purchaseShares:(id)sender;
 - (void)didEndSheet:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
 
-- (void)resizeAndPopulateMatricesWithHotelNames:(NSArray *)hotelNames availableSharesPerHotel:(NSArray *)availableShares availableCash:(int)availableCash;
+- (void)resizeAndPopulateMatricesWithHotels:(NSArray *)hotels availableCash:(int)availableCash;
 - (void)showPurchaseSharesSheet:(NSWindow *)window;
 @end

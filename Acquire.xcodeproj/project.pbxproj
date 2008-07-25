@@ -13,6 +13,7 @@
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		F222AA640E3430660037443E /* AQPurchaseSharesSheetController.m in Sources */ = {isa = PBXBuildFile; fileRef = F222AA630E3430660037443E /* AQPurchaseSharesSheetController.m */; };
 		F224F2890DEBC16F0004978C /* WelcomeWindow.nib in Resources */ = {isa = PBXBuildFile; fileRef = F224F2870DEBC16F0004978C /* WelcomeWindow.nib */; };
+		F23A376D0E39661F00202DE2 /* PurchaseSharesSheet.nib in Resources */ = {isa = PBXBuildFile; fileRef = F23A376B0E39661F00202DE2 /* PurchaseSharesSheet.nib */; };
 		F24990240DED297F004F3509 /* AsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = F24990230DED297F004F3509 /* AsyncSocket.m */; };
 		F2892B8C0DF0E02E00387EAB /* AQGame.m in Sources */ = {isa = PBXBuildFile; fileRef = F2892B8B0DF0E02E00387EAB /* AQGame.m */; };
 		F2892B980DF0E0A000387EAB /* LobbyWindow.nib in Resources */ = {isa = PBXBuildFile; fileRef = F2892B960DF0E0A000387EAB /* LobbyWindow.nib */; };
@@ -48,6 +49,7 @@
 		F222AA620E3430660037443E /* AQPurchaseSharesSheetController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AQPurchaseSharesSheetController.h; sourceTree = "<group>"; };
 		F222AA630E3430660037443E /* AQPurchaseSharesSheetController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AQPurchaseSharesSheetController.m; sourceTree = "<group>"; };
 		F224F2880DEBC16F0004978C /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/WelcomeWindow.nib; sourceTree = "<group>"; };
+		F23A376C0E39661F00202DE2 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/PurchaseSharesSheet.nib; sourceTree = "<group>"; };
 		F24990220DED297F004F3509 /* AsyncSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AsyncSocket.h; sourceTree = "<group>"; };
 		F24990230DED297F004F3509 /* AsyncSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AsyncSocket.m; sourceTree = "<group>"; };
 		F2892B8A0DF0E02E00387EAB /* AQGame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AQGame.h; sourceTree = "<group>"; };
@@ -164,6 +166,7 @@
 				8D1107310486CEB800E47090 /* Info.plist */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
 				F2ABA5A70DEE728C00F58E4B /* GameWindow.nib */,
+				F23A376B0E39661F00202DE2 /* PurchaseSharesSheet.nib */,
 				F2892B960DF0E0A000387EAB /* LobbyWindow.nib */,
 				29B97318FDCFA39411CA2CEA /* MainMenu.nib */,
 				F224F2870DEBC16F0004978C /* WelcomeWindow.nib */,
@@ -318,6 +321,7 @@
 				F2ABA5A90DEE728C00F58E4B /* GameWindow.nib in Resources */,
 				F2892B980DF0E0A000387EAB /* LobbyWindow.nib in Resources */,
 				F28B09A00E14762900D100DF /* Acquire.icns in Resources */,
+				F23A376D0E39661F00202DE2 /* PurchaseSharesSheet.nib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -374,6 +378,14 @@
 				F224F2880DEBC16F0004978C /* English */,
 			);
 			name = WelcomeWindow.nib;
+			sourceTree = "<group>";
+		};
+		F23A376B0E39661F00202DE2 /* PurchaseSharesSheet.nib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F23A376C0E39661F00202DE2 /* English */,
+			);
+			name = PurchaseSharesSheet.nib;
 			sourceTree = "<group>";
 		};
 		F2892B960DF0E0A000387EAB /* LobbyWindow.nib */ = {

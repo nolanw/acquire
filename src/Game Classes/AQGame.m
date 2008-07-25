@@ -12,9 +12,11 @@
 - (void)_updateGameWindow;
 
 - (NSArray *)_initialHotelsArray;
+- (NSArray *)_hotelsWithPurchaseableShares;
 
 - (void)_determineStartingOrder;
 - (void)_drawTilesForEveryone;
+- (void)_showPurchaseSharesSheetWithHotels:(NSArray *)hotels;
 @end
 
 @implementation AQGame
@@ -149,11 +151,24 @@
 	if (![[self activePlayer] hasTileNamed:tileClickedString])
 		return;
 	
+	if (_tilePlayed)
+		return;
+	
 	[[_board tileOnBoardByString:tileClickedString] setState:AQTileNotInHotel];
 	[_gameWindowController tilesChanged:[[self activePlayer] tiles]];
 	[[self activePlayer] playedTileNamed:tileClickedString];
 	[_gameWindowController updateTileRack:[[self activePlayer] tiles]];
 	[_gameWindowController incomingGameLogEntry:[NSString stringWithFormat:@"* %@ played tile %@.", [[self activePlayer] name], tileClickedString]];
+	
+	_tilePlayed = YES;
+	
+	if ([self isLocalGame]) {
+		NSArray *hotelsWithPurchaseableShares = [self _hotelsWithPurchaseableShares];
+		if ([hotelsWithPurchaseableShares count] > 0)
+			[self _showPurchaseSharesSheetWithHotels:hotelsWithPurchaseableShares];
+		else
+			[self endCurrentTurn];
+	}
 }
 
 
@@ -168,6 +183,8 @@
 	[_gameWindowController updateTileRack:[[self activePlayer] tiles]];
 	[_gameWindowController highlightTilesOnBoard:[[self activePlayer] tiles]];
 	[_gameWindowController incomingGameLogEntry:[NSString stringWithFormat:@"* It's %@'s turn.", [[self activePlayer] name]]];
+	
+	_tilePlayed = NO;
 }
 
 - (void)startGame;
@@ -241,7 +258,7 @@
 	_gameWindowController = nil;
 	
 	_board = [[AQBoard alloc] init];
-	_hotels = [self _initialHotelsArray];
+	_hotels = [[self _initialHotelsArray] retain];
 	_players = [[NSMutableArray arrayWithCapacity:6] retain];
 	_localPlayerName = nil;
 
@@ -263,6 +280,27 @@
 - (NSArray *)_initialHotelsArray;
 {
 	return [NSArray arrayWithObjects:[AQHotel sacksonHotel], [AQHotel zetaHotel], [AQHotel americaHotel], [AQHotel fusionHotel], [AQHotel hydraHotel], [AQHotel phoenixHotel], [AQHotel quantumHotel], nil];
+}
+
+- (NSArray *)_hotelsWithPurchaseableShares;
+{
+	NSLog(@"%s [hotels count]=%d", _cmd, [_hotels count]);
+	NSMutableArray *hotelsWithPurchaseableShares = [NSMutableArray arrayWithCapacity:7];
+	NSLog(@"%s hey", _cmd);
+	NSEnumerator *hotelsEnumerator = [_hotels objectEnumerator];
+	id curHotel;
+	NSLog(@"%s about to start loop", _cmd);
+	while (curHotel = [hotelsEnumerator nextObject]) {
+		NSLog(@"%s loop start", _cmd);
+		if ([curHotel isOnBoard] && [curHotel sharesInBank] > 0) {
+			NSLog(@"%s if == YES", _cmd);
+			[hotelsWithPurchaseableShares addObject:curHotel];
+		}
+	}
+	
+	NSLog(@"%s about to return", _cmd);
+	
+	return hotelsWithPurchaseableShares;
 }
 
 
@@ -301,5 +339,10 @@
 	while (curPlayer = [playerEnumerator nextObject])
 		for (i = 0; i < 6; ++i)
 			[curPlayer drewTile:[_board tileFromTileBag]];
+}
+
+- (void)_showPurchaseSharesSheetWithHotels:(NSArray *)hotels;
+{
+	[_gameWindowController showPurchaseSharesSheetWithHotels:hotels availableCash:[[self activePlayer] cash]];
 }
 @end

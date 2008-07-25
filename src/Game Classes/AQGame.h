@@ -21,6 +21,7 @@
 	BOOL			_isNetworkGame;
 	NSString		*_localPlayerName;
 	int				_activePlayerIndex;
+	BOOL			_tilePlayed;
 }
 
 - (id)initNetworkGameWithArrayController:(id)arrayController associatedConnection:(AQConnectionController *)associatedConnection;

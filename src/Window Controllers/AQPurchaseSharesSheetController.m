@@ -5,10 +5,6 @@
 #import "AQPurchaseSharesSheetController.h"
 #import "AQGameWindowController.h"
 
-@interface AQPurchaseSharesSheetController (Private)
-- (void)_closeSheet;
-@end
-
 @implementation AQPurchaseSharesSheetController
 - (id)initWithGameWindowController:(id)gameWindowController;
 {
@@ -29,6 +25,13 @@
 }
 
 
+- (void)awakeFromNib;
+{
+	_originalHotelNamesMatrixFrame = [_hotelNamesMatrix frame];
+	_originalPurchaseSharesSheetFrame = [_purchaseSharesSheet contentRectForFrameRect:[_purchaseSharesSheet frame]];
+}
+
+
 - (IBAction)giveMeAMinute:(id)sender;
 {
 	[NSApp endSheet:_purchaseSharesSheet returnCode:1];
@@ -41,8 +44,10 @@
 
 - (void)didEndSheet:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
 {
-	if (returnCode == 1)
+	if (returnCode == 1) {
+		[sheet orderOut:self];
 		return;
+	}
 	
 	NSMutableArray *hotelNames = [NSMutableArray arrayWithCapacity:7];
 	NSMutableArray *sharesPurchased = [NSMutableArray arrayWithCapacity:7];
@@ -58,7 +63,7 @@
 }
 
 
-- (void)resizeAndPopulateMatricesWithHotelNames:(NSArray *)hotelNames availableSharesPerHotel:(NSArray *)availableShares availableCash:(int)availableCash;
+- (void)resizeAndPopulateMatricesWithHotels:(NSArray *)hotels availableCash:(int)availableCash;
 {
 	
 }
@@ -69,12 +74,5 @@
         [NSBundle loadNibNamed:@"PurchaseSharesSheet" owner:self];
 	
 	[NSApp beginSheet:_purchaseSharesSheet modalForWindow:window modalDelegate:self didEndSelector:@selector(didEndSheet:returnCode:contextInfo:) contextInfo:nil];
-}
-@end
-
-@implementation AQPurchaseSharesSheetController (Private)
-- (void)_closeSheet;
-{
-	[NSApp endSheet:_purchaseSharesSheet];
 }
 @end
