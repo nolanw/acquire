@@ -327,10 +327,7 @@
 		else
 			NSLog(@"%s desired nickname already in use on server and not dealt with", _cmd);
 	else if ([[[[messageDirective parameters] objectAtIndex:0] substringToIndex:30] isEqualToString:@"\"E;Invalid game number entered"])
-		if ([_associatedObject respondsToSelector:@selector(invalidGameNumberEntered)])
-			[_associatedObject invalidGameNumberEntered];
-		else
-			NSLog(@"%s an invalid game number was entered and not dealt with", _cmd);
+		NSLog(@"%s an invalid game number was entered and not dealt with", _cmd);
 		
 }
 
