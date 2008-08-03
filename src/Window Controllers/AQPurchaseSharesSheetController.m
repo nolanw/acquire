@@ -4,6 +4,7 @@
 
 #import "AQPurchaseSharesSheetController.h"
 #import "AQGameWindowController.h"
+#import "AQHotel.h"
 
 @implementation AQPurchaseSharesSheetController
 - (id)initWithGameWindowController:(id)gameWindowController;
@@ -12,6 +13,7 @@
 		return nil;
 	
 	_gameWindowController = [gameWindowController retain];
+	_hotels = nil;
 	
 	return self;
 }
@@ -20,6 +22,8 @@
 {
 	[_gameWindowController release];
 	_gameWindowController = nil;
+	[_hotels release];
+	_hotels = nil;
 	
 	[super dealloc];
 }
@@ -53,7 +57,7 @@
 	NSMutableArray *sharesPurchased = [NSMutableArray arrayWithCapacity:7];
 	int i;
 	for (i = 0; i < [_hotelNamesMatrix numberOfRows]; ++i) {
-		[hotelNames addObject:[[_hotelNamesMatrix cellAtRow:i column:0] title]];
+		[hotelNames addObject:[[_hotels objectAtIndex:i] name]];
 		[sharesPurchased addObject:[NSNumber numberWithInt:[[_shareNumbersAndSteppersMatrix cellAtRow:i column:0] intValue]]];
 	}
 	
@@ -62,10 +66,113 @@
 	[sheet orderOut:self];
 }
 
+- (void)stepperChanged:(id)sender;
+{
+	int row = [[_shareNumbersAndSteppersMatrix selectedCell] tag];
+	int newValue = [[_shareNumbersAndSteppersMatrix selectedCell] intValue];
+	int oldValue = [[_shareNumbersAndSteppersMatrix cellAtRow:row column:0] intValue];
+	
+	if (newValue > oldValue) {
+		if (_sharesBeingPurchased == 3) {
+			[[_shareNumbersAndSteppersMatrix selectedCell] setIntValue:oldValue];
+			return;
+		}
+		
+		if (([[_hotels objectAtIndex:row] sharePrice] + _cashSpent) > _availableCash) {
+			[[_shareNumbersAndSteppersMatrix selectedCell] setIntValue:oldValue];
+			return;
+		}
+		
+		++_sharesBeingPurchased;
+		_cashSpent += [[_hotels objectAtIndex:row] sharePrice];
+		[[_shareNumbersAndSteppersMatrix cellAtRow:row column:0] setIntValue:newValue];
+		return;
+	}
+	
+	--_sharesBeingPurchased;
+	_cashSpent -= [[_hotels objectAtIndex:row] sharePrice];
+	[[_shareNumbersAndSteppersMatrix cellAtRow:row column:0] setIntValue:newValue];
+}
+
 
 - (void)resizeAndPopulateMatricesWithHotels:(NSArray *)hotels availableCash:(int)availableCash;
 {
+	[_hotels release];
+	_hotels = [[NSArray arrayWithArray:hotels] retain];
+	NSTextFieldCell *prototype = [[[NSTextFieldCell alloc] init] autorelease];
 	
+	[_hotelNamesMatrix setPrototype:prototype];
+	[_hotelNamesMatrix setIntercellSpacing:NSMakeSize(4.0f, 2.0f)];
+	[_hotelNamesMatrix setCellSize:NSMakeSize(139.0f, 22.0f)];
+	[_hotelNamesMatrix setMode:NSTrackModeMatrix];
+	
+	[_hotelNamesMatrix renewRows:[hotels count] columns:1];
+    
+    int i;
+	for (i = 0; i < [hotels count]; ++i) {
+		[[_hotelNamesMatrix cellAtRow:i column:0] setStringValue:[hotels objectAtIndex:i]];
+		[[_hotelNamesMatrix cellAtRow:i column:0] setAlignment:NSRightTextAlignment];
+	}
+	
+	[_hotelNamesMatrix sizeToCells];
+	
+	[_shareNumbersAndSteppersMatrix setPrototype:prototype];
+	[_shareNumbersAndSteppersMatrix setIntercellSpacing:NSMakeSize(4.0f, 2.0f)];
+	[_shareNumbersAndSteppersMatrix setCellSize:NSMakeSize(20.0f, 22.0f)];
+	[_shareNumbersAndSteppersMatrix setMode:NSTrackModeMatrix];
+	
+	[_shareNumbersAndSteppersMatrix renewRows:[hotels count] columns:2];
+	
+
+	NSStepperCell *stepperCell;
+	
+	for (i = 0; i < [hotels count]; ++i) {
+		[[_shareNumbersAndSteppersMatrix cellAtRow:i column:0] setIntValue:0];
+		
+		stepperCell = [[[NSStepperCell alloc] init] autorelease];
+		[stepperCell setMaxValue:(float)[[hotels objectAtIndex:i] sharesInBank]];
+		[stepperCell setMinValue:0.0];
+		[stepperCell setIncrement:1.0];
+		[stepperCell setAutorepeat:NO];
+		[stepperCell setValueWraps:NO];
+		[stepperCell setTarget:self];
+		[stepperCell setAction:@selector(stepperChanged:)];
+		[stepperCell setTag:i];
+		[_shareNumbersAndSteppersMatrix putCell:stepperCell atRow:i column:1];
+	}
+
+	[_shareNumbersAndSteppersMatrix sizeToCells];
+	
+	_sharesBeingPurchased = 0;
+	_availableCash = availableCash;
+	_cashSpent = 0;
+	
+	float matrixHeightShouldBe = NSHeight([_hotelNamesMatrix frame]);
+	
+	// window resizing code adapted from code by Wil Shipley
+	// retrieved 10 Apr 2008 from http://www.wilshipley.com/blog/2006/07/pimp-my-code-part-11-this-sheet-is.html
+	NSRect sheetFrame = [_purchaseSharesSheet contentRectForFrameRect:[_purchaseSharesSheet frame]];
+
+	float heightAdjustment = NSHeight(_originalHotelNamesMatrixFrame) - NSHeight([_hotelNamesMatrix frame]);
+	sheetFrame.origin.y += heightAdjustment;
+	
+	sheetFrame.size.height = NSHeight(_originalPurchaseSharesSheetFrame) - heightAdjustment;
+	
+	[_purchaseSharesSheet setFrame:[_purchaseSharesSheet frameRectForContentRect:sheetFrame] display:[_purchaseSharesSheet isVisible] animate:[_purchaseSharesSheet isVisible]];
+	// end window resizing code
+	
+	// After resizing the sheet frame, sometimes the matrix magically shrinks. Let's fix that.
+	NSRect matrixFrame = [_hotelNamesMatrix frame];
+	if (NSHeight(matrixFrame) != matrixHeightShouldBe) {
+		matrixFrame.size.height = matrixHeightShouldBe;
+		[_hotelNamesMatrix setFrame:matrixFrame];
+	}
+	
+	matrixFrame = [_shareNumbersAndSteppersMatrix frame];
+	if (NSHeight(matrixFrame) != matrixHeightShouldBe) {
+		matrixFrame.size.height = matrixHeightShouldBe;
+		[_shareNumbersAndSteppersMatrix setFrame:matrixFrame];
+	}
 }
 
 - (void)showPurchaseSharesSheet:(NSWindow *)window;

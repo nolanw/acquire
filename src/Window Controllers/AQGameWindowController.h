@@ -3,6 +3,7 @@
 //
 // Created May 28, 2008 by nwaite
 
+#import "AQCreateNewHotelSheetController.h"
 #import "AQPurchaseSharesSheetController.h"
 
 @interface AQGameWindowController : NSObject
@@ -17,6 +18,7 @@
 	IBOutlet NSTextView		*_gameLogTextView;
 	IBOutlet NSTextField	*_messageToGameTextField;
 	
+	AQCreateNewHotelSheetController	*_createNewHotelSheetController;
 	AQPurchaseSharesSheetController	*_purchaseSharesSheetController;
 	
 	NSColor	*_tileUnplayedColor;
@@ -51,5 +53,7 @@
 
 // Passthrus
 - (void)showPurchaseSharesSheetWithHotels:(NSArray *)hotels availableCash:(int)availableCash;
+- (void)showCreateNewHotelSheetWithHotels:(NSArray *)hotels;
 - (void)purchaseShares:(NSArray *)sharesPurchased ofHotelsNamed:(NSArray *)hotelNames;
+- (void)createHotelNamed:(NSString *)hotelName;
 @end

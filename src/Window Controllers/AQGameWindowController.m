@@ -17,6 +17,7 @@
 	if (![super init])
 		return nil;
 	
+	_createNewHotelSheetController = [[AQCreateNewHotelSheetController alloc] initWithGameWindowController:self];
 	_purchaseSharesSheetController = [[AQPurchaseSharesSheetController alloc] initWithGameWindowController:self];
 
 	return self;
@@ -32,6 +33,7 @@
 	
 	[super dealloc];
 }
+
 
 // NSObject (NSNibAwakening)
 - (void)awakeFromNib;
@@ -218,9 +220,20 @@
 	[_purchaseSharesSheetController showPurchaseSharesSheet:_gameWindow];
 }
 
+- (void)showCreateNewHotelSheetWithHotels:(NSArray *)hotels;
+{
+	[_createNewHotelSheetController resizeAndPopulateMatricesWithHotels:hotels];
+	[_createNewHotelSheetController showCreateNewHotelSheet:_gameWindow];
+}
+
 - (void)purchaseShares:(NSArray *)sharesPurchased ofHotelsNamed:(NSArray *)hotelNames;
 {
 	[_game purchaseShares:sharesPurchased ofHotelsNamed:hotelNames];
+}
+
+- (void)createHotelNamed:(NSString *)hotelName;
+{
+	[_game createHotelNamed:hotelName];
 }
 @end
 

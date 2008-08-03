@@ -8,6 +8,7 @@
 #import "AQBoard.h"
 #import "AQHotel.h"
 #import "AQPlayer.h"
+#import "AQTile.h"
 
 @interface AQGame : NSObject
 {
@@ -21,7 +22,8 @@
 	BOOL			_isNetworkGame;
 	NSString		*_localPlayerName;
 	int				_activePlayerIndex;
-	BOOL			_tilePlayed;
+	BOOL			_tilePlayedThisTurn;
+	AQTile			*_tileCreatingNewHotel;
 }
 
 - (id)initNetworkGameWithArrayController:(id)arrayController associatedConnection:(AQConnectionController *)associatedConnection;
@@ -38,11 +40,14 @@
 - (AQPlayer *)playerAtIndex:(int)index;
 - (AQPlayer *)activePlayer;
 - (int)activePlayerIndex;
+- (AQPlayer *)localPlayer;
 - (void)addPlayerNamed:(NSString *)playerName;
 - (void)clearPlayers;
+- (AQHotel *)hotelNamed:(NSString *)hotelName;
 - (void)purchaseShares:(NSArray *)sharesPurchased ofHotelsNamed:(NSArray *)hotelNames;
-
+- (int)sharesAvailableOfHotelNamed:(NSString *)hotelName;
 - (void)tileClickedString:(NSString *)tileClickedString;
+- (void)createHotel:(AQHotel *)hotel;
 
 - (void)endCurrentTurn;
 - (void)startGame;

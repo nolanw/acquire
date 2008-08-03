@@ -7,7 +7,8 @@ New features
 
 Known bugs
 ---------
-
+- If Create New Hotel sheet is cancelled, it won't come back
+	- Console reports e.g.  *** -[AQHotel copyWithZone:]: unrecognized selector sent to instance 0x181c00"
 
 Fixed bugs
 ----------

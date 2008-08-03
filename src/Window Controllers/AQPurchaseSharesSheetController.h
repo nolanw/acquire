@@ -9,7 +9,11 @@
 	IBOutlet NSMatrix	*_hotelNamesMatrix;
 	IBOutlet NSMatrix	*_shareNumbersAndSteppersMatrix;
 	
-	id	_gameWindowController;
+	id		_gameWindowController;
+	int		_availableCash;
+	int		_cashSpent;
+	int		_sharesBeingPurchased;
+	NSArray	*_hotels;
 	
 	NSRect	_originalHotelNamesMatrixFrame;
     NSRect	_originalPurchaseSharesSheetFrame;
@@ -23,6 +27,7 @@
 - (IBAction)giveMeAMinute:(id)sender;
 - (IBAction)purchaseShares:(id)sender;
 - (void)didEndSheet:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
+- (void)stepperChanged:(id)sender;
 
 - (void)resizeAndPopulateMatricesWithHotels:(NSArray *)hotels availableCash:(int)availableCash;
 - (void)showPurchaseSharesSheet:(NSWindow *)window;
