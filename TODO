@@ -7,11 +7,10 @@ New features
 
 Known bugs
 ---------
-- If Create New Hotel sheet is cancelled, it won't come back
-	- Console reports e.g.  *** -[AQHotel copyWithZone:]: unrecognized selector sent to instance 0x181c00"
 
 Fixed bugs
 ----------
+- If Create New Hotel sheet is cancelled, it won't come back. (FIXED 2008-Aug-04: was trying to print instances of AQHotel instead of asking for the hotel's name, resulting in an attempted copyWithZone, which is intentionally not implemented for AQHotel)
 - Game log scrolls to one line above bottom. (FIXED 2008-Jul-24: got text view to scroll itself instead of using its scroll view)
 - Joining a game doesn't work. (FIXED 2008-Jul-13; was caused by not retrieving a UI widget's tag from the correct UI widget)
 - Sometimes Netacquire doesn't send any handshake directives despite the connection being successful; should fail on such an occasion. (FIXED 2008-Jul-09; was caused by Netacquire not removing the player's display name fast enough, yet picking an odd way to send an error about the issue)

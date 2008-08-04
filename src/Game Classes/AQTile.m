@@ -93,15 +93,9 @@
 }
 
 
-// String representation
-- (NSString *) string {
-    return [NSString stringWithFormat:@"%u%@", _col, _row];
-}
-
-
 // Equality
 - (BOOL)isEqualToTile:(AQTile *)otherTile;
 {
-	return [[self string] isEqualToString:[otherTile string]];
+	return [[self description] isEqualToString:[otherTile description]];
 }
 @end

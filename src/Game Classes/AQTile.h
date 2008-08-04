@@ -32,9 +32,6 @@ typedef enum _AQTileState {
 - (id)hotel;
 - (void)setHotel:(id)newHotel;
 
-// String representation
-- (NSString *)string;
-
 // Equality
 - (BOOL)isEqualToTile:(AQTile *)otherTile;
 @end

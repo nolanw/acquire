@@ -74,7 +74,7 @@
 	NSEnumerator *tileEnum = [_tiles objectEnumerator];
 	id curTile;
 	while (curTile = [tileEnum nextObject]) {
-		if (curTile != [NSNull null] && [[curTile string] isEqualToString:tileName]) {
+		if (curTile != [NSNull null] && [[curTile description] isEqualToString:tileName]) {
 			return YES;
 		}
 	}
@@ -85,7 +85,7 @@
 {
 	int i;
 	for (i = 0; i < [_tiles count]; ++i) {
-		if ([_tiles objectAtIndex:i] != [NSNull null] && [[[_tiles objectAtIndex:i] string] isEqualToString:tileName]) {
+		if ([_tiles objectAtIndex:i] != [NSNull null] && [[[_tiles objectAtIndex:i] description] isEqualToString:tileName]) {
 			[_tiles replaceObjectAtIndex:i withObject:[NSNull null]];
 			break;
 		}
@@ -190,7 +190,7 @@
 {
 	int i;
 	for (i = 0; i < [_tiles count]; ++i) {
-		if ([[[_tiles objectAtIndex:i] string] isEqualToString:tileName]) {
+		if ([[[_tiles objectAtIndex:i] description] isEqualToString:tileName]) {
 			return i;
 		}
 	}

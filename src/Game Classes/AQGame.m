@@ -23,6 +23,7 @@
 - (AQHotel *)_playedTileAddsToAHotel:(AQTile *)playedTile;
 - (NSArray *)_hotelsAdjacentToTile:(AQTile *)tile;
 - (NSArray *)_hotelsNotOnBoard;
+- (void)_tilePlayed:(AQTile *)tile;
 @end
 
 @implementation AQGame
@@ -88,9 +89,8 @@
 		return;
 	}
 	
-	if (![NSBundle loadNibNamed:@"GameWindow" owner:self]) {
+	if (![NSBundle loadNibNamed:@"GameWindow" owner:self])
 		NSLog(@"%s failed to load GameWindow.nib", _cmd);
-	}
 }
 
 - (void)bringGameWindowToFront;
@@ -214,18 +214,7 @@
 		[clickedTile setState:AQTileNotInHotel];
 	}
 	
-	_tilePlayedThisTurn = YES;
-	[_gameWindowController incomingGameLogEntry:[NSString stringWithFormat:@"* %@ played tile %@.", [[self activePlayer] name], tileClickedString]];
-	
-	[_gameWindowController tilesChanged:[[self activePlayer] tiles]];
-	[[self activePlayer] playedTileNamed:tileClickedString];
-	[_gameWindowController updateTileRack:[[self activePlayer] tiles]];
-	
-	NSArray *hotelsWithPurchaseableShares = [self _hotelsWithPurchaseableShares];
-	if ([hotelsWithPurchaseableShares count] > 0)
-		[self _showPurchaseSharesSheetWithHotels:hotelsWithPurchaseableShares];
-	else
-		[self endCurrentTurn];
+	[self _tilePlayed:clickedTile];
 }
 
 - (void)createHotel:(AQHotel *)hotel;
@@ -250,21 +239,8 @@
 				[tilesToAddToHotel addObject:curOrthogonalTile];
 	}
 	
-	[_gameWindowController incomingGameLogEntry:[NSString stringWithFormat:@"* %@ played tile %@.", [[self activePlayer] name], [_tileCreatingNewHotel string]]];
+	[self _tilePlayed:_tileCreatingNewHotel];
 	_tileCreatingNewHotel = nil;
-	_tilePlayedThisTurn = YES;
-	
-	[_gameWindowController tilesChanged:[hotel tiles]];
-	
-	[_gameWindowController tilesChanged:[[self activePlayer] tiles]];
-	[[self activePlayer] playedTileNamed:[_tileCreatingNewHotel string]];
-	[_gameWindowController updateTileRack:[[self activePlayer] tiles]];
-	
-	NSArray *hotelsWithPurchaseableShares = [self _hotelsWithPurchaseableShares];
-	if ([hotelsWithPurchaseableShares count] > 0)
-		[self _showPurchaseSharesSheetWithHotels:hotelsWithPurchaseableShares];
-	else
-		[self endCurrentTurn];
 }
 
 
@@ -491,5 +467,21 @@
 			[hotelsNotOnBoard addObject:curHotel];
 	
 	return hotelsNotOnBoard;
+}
+
+- (void)_tilePlayed:(AQTile *)tile;
+{
+	_tilePlayedThisTurn = YES;
+	[_gameWindowController incomingGameLogEntry:[NSString stringWithFormat:@"* %@ played tile %@.", [[self activePlayer] name], [tile description]]];
+	
+	[_gameWindowController tilesChanged:[[self activePlayer] tiles]];
+	[[self activePlayer] playedTileNamed:[tile description]];
+	[_gameWindowController updateTileRack:[[self activePlayer] tiles]];
+	
+	NSArray *hotelsWithPurchaseableShares = [self _hotelsWithPurchaseableShares];
+	if ([hotelsWithPurchaseableShares count] > 0)
+		[self _showPurchaseSharesSheetWithHotels:hotelsWithPurchaseableShares];
+	else
+		[self endCurrentTurn];
 }
 @end
