@@ -48,6 +48,11 @@
 - (int)sharesAvailableOfHotelNamed:(NSString *)hotelName;
 - (void)tileClickedString:(NSString *)tileClickedString;
 - (void)createHotel:(AQHotel *)hotel;
+- (void)hotelSurvives:(AQHotel *)hotel mergingHotels:(NSArray *)mergingHotels mergeTile:(AQTile *)mergeTile;
+- (BOOL)playedTileCreatesNewHotel:(AQTile *)playedTile;
+- (BOOL)playedTileTriggersAMerger:(AQTile *)playedTile;
+- (AQHotel *)playedTileAddsToAHotel:(AQTile *)playedTile;
+- (BOOL)tileIsUnplayable:(AQTile *)tile;
 
 - (void)endCurrentTurn;
 - (void)startGame;

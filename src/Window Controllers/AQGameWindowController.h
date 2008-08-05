@@ -17,6 +17,8 @@
 	IBOutlet NSTextView		*_gameChatTextView;
 	IBOutlet NSTextView		*_gameLogTextView;
 	IBOutlet NSTextField	*_messageToGameTextField;
+	IBOutlet NSButton		*_purchaseSharesButton;
+	IBOutlet NSButton		*_endGameButton;
 	
 	AQCreateNewHotelSheetController	*_createNewHotelSheetController;
 	AQPurchaseSharesSheetController	*_purchaseSharesSheetController;
@@ -31,6 +33,7 @@
 - (void)awakeFromNib;
 
 - (IBAction)showPurchaseSharesSheet:(id)sender;
+- (void)showPurchaseSharesButton;
 
 - (void)reloadScoreboard;
 - (void)tilesChanged:(NSArray *)changedTiles;

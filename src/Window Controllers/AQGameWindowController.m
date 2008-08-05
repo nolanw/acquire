@@ -46,12 +46,29 @@
 	[_scoreboardTableView setDataSource:self];
 	
 	_tileUnplayedColor = [(CCDColoredButtonCell *)[_boardMatrix cellAtRow:0 column:0] buttonColor];
+	
+	[_purchaseSharesButton setEnabled:NO];
+	[_purchaseSharesButton setTransparent:YES];
+	[_endGameButton setEnabled:NO];
+	[_endGameButton setTransparent:YES];
 }
 
 
 - (IBAction)showPurchaseSharesSheet:(id)sender;
 {	
 	[_purchaseSharesSheetController showPurchaseSharesSheet:_gameWindow];
+}
+
+- (void)showPurchaseSharesButton;
+{
+	[_purchaseSharesButton setEnabled:YES];
+	[_purchaseSharesButton setTransparent:NO];
+}
+
+- (void)hidePurchaseSharesButton;
+{
+	[_purchaseSharesButton setTransparent:YES];
+	[_purchaseSharesButton setEnabled:NO];
 }
 
 - (void)registerPurchaseSharesSheetController:(AQPurchaseSharesSheetController *)purchaseSharesSheetController;
@@ -171,19 +188,40 @@
 		else
 			return [[_game playerAtIndex:rowIndex] name];
 	else if ([[aTableColumn identifier] isEqualToString:@"sharesOfSackson"])
-		return [NSString stringWithFormat:@"%d", [[_game playerAtIndex:rowIndex] numberOfSharesOfHotelNamed:@"Sackson"]];
+		if ([[_game playerAtIndex:rowIndex] numberOfSharesOfHotelNamed:@"Sackson"] == 0)
+			return @"";
+		else
+			return [NSString stringWithFormat:@"%d", [[_game playerAtIndex:rowIndex] numberOfSharesOfHotelNamed:@"Sackson"]];
 	else if ([[aTableColumn identifier] isEqualToString:@"sharesOfZeta"])
-		return [NSString stringWithFormat:@"%d", [[_game playerAtIndex:rowIndex] numberOfSharesOfHotelNamed:@"Zeta"]];
+		if ([[_game playerAtIndex:rowIndex] numberOfSharesOfHotelNamed:@"Zeta"] == 0)
+			return @"";
+		else
+			return [NSString stringWithFormat:@"%d", [[_game playerAtIndex:rowIndex] numberOfSharesOfHotelNamed:@"Zeta"]];
 	else if ([[aTableColumn identifier] isEqualToString:@"sharesOfAmerica"])
-		return [NSString stringWithFormat:@"%d", [[_game playerAtIndex:rowIndex] numberOfSharesOfHotelNamed:@"America"]];
+		if ([[_game playerAtIndex:rowIndex] numberOfSharesOfHotelNamed:@"America"] == 0)
+			return @"";
+		else
+			return [NSString stringWithFormat:@"%d", [[_game playerAtIndex:rowIndex] numberOfSharesOfHotelNamed:@"America"]];
 	else if ([[aTableColumn identifier] isEqualToString:@"sharesOfFusion"])
-		return [NSString stringWithFormat:@"%d", [[_game playerAtIndex:rowIndex] numberOfSharesOfHotelNamed:@"Fusion"]];
+		if ([[_game playerAtIndex:rowIndex] numberOfSharesOfHotelNamed:@"Fusion"] == 0)
+			return @"";
+		else
+			return [NSString stringWithFormat:@"%d", [[_game playerAtIndex:rowIndex] numberOfSharesOfHotelNamed:@"Fusion"]];
 	else if ([[aTableColumn identifier] isEqualToString:@"sharesOfHydra"])
-		return [NSString stringWithFormat:@"%d", [[_game playerAtIndex:rowIndex] numberOfSharesOfHotelNamed:@"Hydra"]];
+		if ([[_game playerAtIndex:rowIndex] numberOfSharesOfHotelNamed:@"Hydra"] == 0)
+			return @"";
+		else
+			return [NSString stringWithFormat:@"%d", [[_game playerAtIndex:rowIndex] numberOfSharesOfHotelNamed:@"Hydra"]];
 	else if ([[aTableColumn identifier] isEqualToString:@"sharesOfPhoenix"])
-		return [NSString stringWithFormat:@"%d", [[_game playerAtIndex:rowIndex] numberOfSharesOfHotelNamed:@"Phoenix"]];
+		if ([[_game playerAtIndex:rowIndex] numberOfSharesOfHotelNamed:@"Phoenix"] == 0)
+			return @"";
+		else
+			return [NSString stringWithFormat:@"%d", [[_game playerAtIndex:rowIndex] numberOfSharesOfHotelNamed:@"Phoenix"]];
 	else if ([[aTableColumn identifier] isEqualToString:@"sharesOfQuantum"])
-		return [NSString stringWithFormat:@"%d", [[_game playerAtIndex:rowIndex] numberOfSharesOfHotelNamed:@"Quantum"]];
+		if ([[_game playerAtIndex:rowIndex] numberOfSharesOfHotelNamed:@"Quantum"] == 0)
+			return @"";
+		else
+			return [NSString stringWithFormat:@"%d", [[_game playerAtIndex:rowIndex] numberOfSharesOfHotelNamed:@"Quantum"]];
 	else if ([[aTableColumn identifier] isEqualToString:@"cash"])
 		return [NSString stringWithFormat:@"$%d", [[_game playerAtIndex:rowIndex] cash]];
 	
@@ -229,11 +267,12 @@
 - (void)purchaseShares:(NSArray *)sharesPurchased ofHotelsNamed:(NSArray *)hotelNames;
 {
 	[_game purchaseShares:sharesPurchased ofHotelsNamed:hotelNames];
+	[self hidePurchaseSharesButton];
 }
 
 - (void)createHotelNamed:(NSString *)hotelName;
 {
-	[_game createHotelNamed:hotelName];
+	[_game createHotel:[_game hotelNamed:hotelName]];
 }
 @end
 

@@ -85,11 +85,8 @@
 
 	[_hotel release];
 	_hotel = [newHotel retain];
-	if (newHotel != nil) {
+	if (newHotel != nil)
 		_state = AQTileInHotel;
-	} else {
-		_state = AQTileNotInHotel;
-	}
 }
 
 

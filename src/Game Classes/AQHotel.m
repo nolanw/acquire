@@ -151,9 +151,8 @@
 {
 	NSEnumerator *tileEnumerator = [tileArray objectEnumerator];
 	id curTile;
-	while (curTile = [tileEnumerator nextObject]) {
+	while (curTile = [tileEnumerator nextObject])
 		[self addTile:curTile];
-	}
 }
 
 
