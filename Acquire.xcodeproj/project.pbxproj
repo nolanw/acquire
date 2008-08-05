@@ -34,6 +34,7 @@
 		F2ABA5C10DEE7B9200F58E4B /* AQLobbyWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = F2ABA5C00DEE7B9200F58E4B /* AQLobbyWindowController.m */; };
 		F2CF48C20E31B45A00A3AEFA /* CCDColoredButton.m in Sources */ = {isa = PBXBuildFile; fileRef = F2CF48BF0E31B45A00A3AEFA /* CCDColoredButton.m */; };
 		F2CF48C30E31B45A00A3AEFA /* CCDColoredButtonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F2CF48C10E31B45A00A3AEFA /* CCDColoredButtonCell.m */; };
+		F2D44CAB0E48274D003B1E91 /* AQAllocateMergingHotelSharesSheetController.m in Sources */ = {isa = PBXBuildFile; fileRef = F2D44CAA0E48274D003B1E91 /* AQAllocateMergingHotelSharesSheetController.m */; };
 		F2EB62A60E1EF87E00FE5E45 /* AQConnectionController.m in Sources */ = {isa = PBXBuildFile; fileRef = F2EB62A50E1EF87E00FE5E45 /* AQConnectionController.m */; };
 /* End PBXBuildFile section */
 
@@ -88,6 +89,8 @@
 		F2CF48BF0E31B45A00A3AEFA /* CCDColoredButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CCDColoredButton.m; sourceTree = "<group>"; };
 		F2CF48C00E31B45A00A3AEFA /* CCDColoredButtonCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCDColoredButtonCell.h; sourceTree = "<group>"; };
 		F2CF48C10E31B45A00A3AEFA /* CCDColoredButtonCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CCDColoredButtonCell.m; sourceTree = "<group>"; };
+		F2D44CA90E48274D003B1E91 /* AQAllocateMergingHotelSharesSheetController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AQAllocateMergingHotelSharesSheetController.h; sourceTree = "<group>"; };
+		F2D44CAA0E48274D003B1E91 /* AQAllocateMergingHotelSharesSheetController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AQAllocateMergingHotelSharesSheetController.m; sourceTree = "<group>"; };
 		F2EB62A40E1EF87E00FE5E45 /* AQConnectionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AQConnectionController.h; sourceTree = "<group>"; };
 		F2EB62A50E1EF87E00FE5E45 /* AQConnectionController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AQConnectionController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -192,6 +195,8 @@
 		F222AA670E3430700037443E /* Sheet Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				F2D44CA90E48274D003B1E91 /* AQAllocateMergingHotelSharesSheetController.h */,
+				F2D44CAA0E48274D003B1E91 /* AQAllocateMergingHotelSharesSheetController.m */,
 				F20159A50E455DAE0044BFCB /* AQCreateNewHotelSheetController.h */,
 				F20159A60E455DAE0044BFCB /* AQCreateNewHotelSheetController.m */,
 				F222AA620E3430660037443E /* AQPurchaseSharesSheetController.h */,
@@ -360,6 +365,7 @@
 				F2CF48C30E31B45A00A3AEFA /* CCDColoredButtonCell.m in Sources */,
 				F222AA640E3430660037443E /* AQPurchaseSharesSheetController.m in Sources */,
 				F20159A70E455DAE0044BFCB /* AQCreateNewHotelSheetController.m in Sources */,
+				F2D44CAB0E48274D003B1E91 /* AQAllocateMergingHotelSharesSheetController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

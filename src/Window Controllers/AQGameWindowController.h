@@ -3,8 +3,11 @@
 //
 // Created May 28, 2008 by nwaite
 
+#import "AQAllocateMergingHotelSharesSheetController.h"
 #import "AQCreateNewHotelSheetController.h"
 #import "AQPurchaseSharesSheetController.h"
+#import "AQHotel.h"
+#import "AQPlayer.h"
 
 @interface AQGameWindowController : NSObject
 {
@@ -20,8 +23,9 @@
 	IBOutlet NSButton		*_purchaseSharesButton;
 	IBOutlet NSButton		*_endGameButton;
 	
-	AQCreateNewHotelSheetController	*_createNewHotelSheetController;
-	AQPurchaseSharesSheetController	*_purchaseSharesSheetController;
+	AQAllocateMergingHotelSharesSheetController	*_allocateMergingHotelSharesSheetController;
+	AQCreateNewHotelSheetController				*_createNewHotelSheetController;
+	AQPurchaseSharesSheetController				*_purchaseSharesSheetController;
 	
 	NSColor	*_tileUnplayedColor;
 }
@@ -57,6 +61,9 @@
 // Passthrus
 - (void)showPurchaseSharesSheetWithHotels:(NSArray *)hotels availableCash:(int)availableCash;
 - (void)showCreateNewHotelSheetWithHotels:(NSArray *)hotels;
+- (void)showAllocateMergingHotelSharesSheetForMergingHotel:(AQHotel *)mergingHotel survivingHotel:(AQHotel *)survivingHotel player:(AQPlayer *)player;
 - (void)purchaseShares:(NSArray *)sharesPurchased ofHotelsNamed:(NSArray *)hotelNames;
 - (void)createHotelNamed:(NSString *)hotelName;
+- (void)sellSharesOfHotel:(AQHotel *)hotel numberOfShares:(int)numberOfShares byPlayer:(AQPlayer *)player;
+- (void)tradeSharesOfHotel:(AQHotel *)fromHotel forSharesInHotel:(AQHotel *)toHotel numberOfShares:(int)numberOfShares byPlayer:(AQPlayer *)player;
 @end

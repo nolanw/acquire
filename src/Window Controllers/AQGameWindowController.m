@@ -17,6 +17,7 @@
 	if (![super init])
 		return nil;
 	
+	_allocateMergingHotelSharesSheetController = [[AQAllocateMergingHotelSharesSheetController alloc] initWithGameWindowController:self];
 	_createNewHotelSheetController = [[AQCreateNewHotelSheetController alloc] initWithGameWindowController:self];
 	_purchaseSharesSheetController = [[AQPurchaseSharesSheetController alloc] initWithGameWindowController:self];
 
@@ -264,6 +265,11 @@
 	[_createNewHotelSheetController showCreateNewHotelSheet:_gameWindow];
 }
 
+- (void)showAllocateMergingHotelSharesSheetForMergingHotel:(AQHotel *)mergingHotel survivingHotel:(AQHotel *)survivingHotel player:(AQPlayer *)player;
+{
+	[_allocateMergingHotelSharesSheetController showAllocateMergingHotelSharesSheet:_gameWindow forMergingHotel:mergingHotel survivingHotel:survivingHotel player:player];
+}
+
 - (void)purchaseShares:(NSArray *)sharesPurchased ofHotelsNamed:(NSArray *)hotelNames;
 {
 	[_game purchaseShares:sharesPurchased ofHotelsNamed:hotelNames];
@@ -273,6 +279,16 @@
 - (void)createHotelNamed:(NSString *)hotelName;
 {
 	[_game createHotel:[_game hotelNamed:hotelName]];
+}
+
+- (void)sellSharesOfHotel:(AQHotel *)hotel numberOfShares:(int)numberOfShares byPlayer:(AQPlayer *)player;
+{
+	[_game sellSharesOfHotel:hotel numberOfShares:numberOfShares byPlayer:player];
+}
+
+- (void)tradeSharesOfHotel:(AQHotel *)fromHotel forSharesInHotel:(AQHotel *)toHotel numberOfShares:(int)numberOfShares byPlayer:(AQPlayer *)player;
+{
+	[_game tradeSharesOfHotel:fromHotel forSharesInHotel:toHotel numberOfShares:numberOfShares byPlayer:player];
 }
 @end
 

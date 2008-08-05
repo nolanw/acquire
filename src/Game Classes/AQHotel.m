@@ -40,7 +40,7 @@
 
 + (AQHotel *)zetaHotel;
 {
-	return [[[self alloc] initWithName:@"Zeta" tier:0 color:[NSColor colorWithCalibratedRed:1.0 green:0.0 blue:0.0 alpha:1.0] oldName:@"Tower"] autorelease];
+	return [[[self alloc] initWithName:@"Zeta" tier:0 color:[NSColor colorWithCalibratedRed:1.0 green:0.75 blue:0.0 alpha:1.0] oldName:@"Tower"] autorelease];
 }
 
 + (AQHotel *)americaHotel;

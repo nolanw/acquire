@@ -7,6 +7,7 @@ New features
 
 Known bugs
 ---------
+- Canceling the Create New Hotel sheet seems to make the game think a tile has been played, even though it was canceled.
 
 Fixed bugs
 ----------
