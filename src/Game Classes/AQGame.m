@@ -16,7 +16,7 @@
 - (void)_determineStartingOrder;
 - (void)_drawTilesForEveryone;
 - (void)_showPurchaseSharesSheetWithHotels:(NSArray *)hotels;
-- (void)_showCreateNewHotelSheetWithHotels:(NSArray *)hotels;
+- (void)_showCreateNewHotelSheetWithHotels:(NSArray *)hotels tile:(AQTile *)tile;
 - (void)_showChooseMergerSurvivorSheetWithHotels:(NSArray *)hotels mergeTile:(AQTile *)mergeTile;
 - (void)_showAllocateMergingHotelSharesSheetForMergingHotel:(AQHotel *)mergingHotel survivingHotel:(AQHotel *)survivingHotel player:(AQPlayer *)player;
 
@@ -208,16 +208,13 @@
 	if ([self isNetworkGame])
 		return;
 	
-	NSLog(@"%s board call comes next", _cmd);
 	AQTile *clickedTile = [_board tileOnBoardByString:tileClickedString];
-	NSLog(@"%s board call happened", _cmd);
 	if ([self playedTileCreatesNewHotel:clickedTile]) {
 		NSArray *hotelsNotOnBoard = [self _hotelsNotOnBoard];
 		if ([hotelsNotOnBoard count] == 0)
 			return;
 		
-		_tileCreatingNewHotel = clickedTile;
-		[self _showCreateNewHotelSheetWithHotels:hotelsNotOnBoard];
+		[self _showCreateNewHotelSheetWithHotels:hotelsNotOnBoard tile:clickedTile];
 		
 		return;
 	} else if ([self playedTileTriggersAMerger:clickedTile]) {
@@ -240,14 +237,17 @@
 	[self _tilePlayed:clickedTile];
 }
 
-- (void)createHotel:(AQHotel *)hotel;
+- (void)createHotelNamed:(NSString *)hotelName atTile:(id)tile;
 {
-	if (_tileCreatingNewHotel == nil)
+	if (tile == nil || ![tile isKindOfClass:[AQTile class]])
 		return;
 	
+	tile = (AQTile *)tile;
+	AQHotel *hotel = [self hotelNamed:hotelName];
+	
 	NSMutableArray *tilesToAddToHotel = [NSMutableArray arrayWithCapacity:10];
-	[_tileCreatingNewHotel setState:AQTileNotInHotel];
-	[tilesToAddToHotel addObject:_tileCreatingNewHotel];
+	[tile setState:AQTileNotInHotel];
+	[tilesToAddToHotel addObject:tile];
 
 	id curTileToAdd;
 	int i;
@@ -268,8 +268,7 @@
 	[_gameWindowController tilesChanged:[hotel tiles]];
 	[[self activePlayer] addSharesOfHotelNamed:[hotel name] numberOfShares:1];
 	[_gameWindowController reloadScoreboard];
-	[self _tilePlayed:_tileCreatingNewHotel];
-	_tileCreatingNewHotel = nil;
+	[self _tilePlayed:tile];
 	
 	[_gameWindowController incomingGameLogEntry:[NSString stringWithFormat:@"* %@ was created.", [hotel name]]];
 }
@@ -449,7 +448,6 @@
 	_players = [[NSMutableArray arrayWithCapacity:6] retain];
 	_localPlayerName = nil;
 	_tilePlayedThisTurn = NO;
-	_tileCreatingNewHotel = nil;
 
 	return self;
 }
@@ -526,9 +524,9 @@
 	[_gameWindowController showPurchaseSharesSheetWithHotels:hotels availableCash:[[self activePlayer] cash]];
 }
 
-- (void)_showCreateNewHotelSheetWithHotels:(NSArray *)hotels;
+- (void)_showCreateNewHotelSheetWithHotels:(NSArray *)hotels tile:(AQTile *)tile;
 {
-	[_gameWindowController showCreateNewHotelSheetWithHotels:hotels];
+	[_gameWindowController showCreateNewHotelSheetWithHotels:hotels atTile:tile];
 }
 
 - (void)_showChooseMergerSurvivorSheetWithHotels:(NSArray *)hotels mergeTile:(AQTile *)mergeTile;

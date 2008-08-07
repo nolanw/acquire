@@ -259,9 +259,9 @@
 	[_purchaseSharesSheetController showPurchaseSharesSheet:_gameWindow];
 }
 
-- (void)showCreateNewHotelSheetWithHotels:(NSArray *)hotels;
+- (void)showCreateNewHotelSheetWithHotels:(NSArray *)hotels atTile:(id)tile;
 {
-	[_createNewHotelSheetController resizeAndPopulateMatricesWithHotels:hotels];
+	[_createNewHotelSheetController resizeAndPopulateMatricesWithHotels:hotels tile:tile];
 	[_createNewHotelSheetController showCreateNewHotelSheet:_gameWindow];
 }
 
@@ -276,9 +276,9 @@
 	[self hidePurchaseSharesButton];
 }
 
-- (void)createHotelNamed:(NSString *)hotelName;
+- (void)createHotelNamed:(NSString *)hotelName atTile:(id)tile;
 {
-	[_game createHotel:[_game hotelNamed:hotelName]];
+	[_game createHotelNamed:hotelName atTile:tile];
 }
 
 - (void)sellSharesOfHotel:(AQHotel *)hotel numberOfShares:(int)numberOfShares byPlayer:(AQPlayer *)player;

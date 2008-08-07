@@ -13,7 +13,7 @@
 		return nil;
 	
 	_gameWindowController = [gameWindowController retain];
-	_hotels = nil;
+	_tile = nil;
 	
 	return self;
 }
@@ -22,8 +22,8 @@
 {
 	[_gameWindowController release];
 	_gameWindowController = nil;
-	[_hotels release];
-	_hotels = nil;
+	[_tile release];
+	_tile = nil;
 	
 	[super dealloc];
 }
@@ -55,16 +55,16 @@
 	
 	[sheet orderOut:self];
 	
-	[(AQGameWindowController *)_gameWindowController createHotelNamed:[[_hotelNamesMatrix selectedCell] title]];
+	[(AQGameWindowController *)_gameWindowController createHotelNamed:[[_hotelNamesMatrix selectedCell] title] atTile:_tile];
 }
 
-- (void)resizeAndPopulateMatricesWithHotels:(NSArray *)hotels;
+- (void)resizeAndPopulateMatricesWithHotels:(NSArray *)hotels tile:(id)tile;
 {
+	[_tile release];
+	_tile = [tile retain];
+	
 	if (!_createNewHotelSheet)
         [NSBundle loadNibNamed:@"CreateNewHotelSheet" owner:self];
-	
-	[_hotels release];
-	_hotels = [[NSArray arrayWithArray:hotels] retain];
 	
 	NSButtonCell *prototype = [[[NSButtonCell alloc] init] autorelease];
 	[prototype setButtonType:NSRadioButton];
@@ -107,7 +107,7 @@
 - (void)showCreateNewHotelSheet:(NSWindow *)window;
 {
 	if (!_createNewHotelSheet)
-        [NSBundle loadNibNamed:@"CreateNewHotelSheet" owner:self];
+		[NSBundle loadNibNamed:@"CreateNewHotelSheet" owner:self];
 	
 	[NSApp beginSheet:_createNewHotelSheet modalForWindow:window modalDelegate:self didEndSelector:@selector(didEndSheet:returnCode:contextInfo:) contextInfo:nil];
 }

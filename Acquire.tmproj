@@ -64,7 +64,7 @@
 			<key>filename</key>
 			<string>TODO</string>
 			<key>lastUsed</key>
-			<date>2008-08-03T23:49:46Z</date>
+			<date>2008-08-05T07:16:37Z</date>
 			<key>selected</key>
 			<true/>
 		</dict>
@@ -78,38 +78,68 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>24</integer>
+				<integer>120</integer>
 				<key>line</key>
-				<integer>10</integer>
+				<integer>9</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
+		</dict>
+		<key>src/Game Classes/AQGame.m</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>31</integer>
+				<key>line</key>
+				<integer>212</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>517</integer>
 		</dict>
 		<key>src/Window Controllers/AQCreateNewHotelSheetController.m</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>51</integer>
+				<integer>1</integer>
 				<key>line</key>
-				<integer>63</integer>
+				<integer>56</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>63</integer>
+			<integer>30</integer>
+		</dict>
+		<key>src/Window Controllers/AQGameWindowController.m</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>77</integer>
+				<key>line</key>
+				<integer>290</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>244</integer>
 		</dict>
 	</dict>
 	<key>openDocuments</key>
 	<array>
 		<string>TODO</string>
+		<string>src/Game Classes/AQGame.m</string>
+		<string>src/Window Controllers/AQGameWindowController.m</string>
 		<string>src/Window Controllers/AQCreateNewHotelSheetController.m</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{235, 4}, {853, 874}}</string>
+	<string>{{1, 4}, {853, 874}}</string>
 </dict>
 </plist>

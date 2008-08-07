@@ -10,7 +10,7 @@
 	
 	id		_gameWindowController;
 	
-	NSArray	*_hotels;
+	id _tile;
 	
 	NSRect	_originalHotelNamesMatrixFrame;
     NSRect	_originalCreateNewHotelSheetFrame;
@@ -25,6 +25,6 @@
 - (IBAction)createNewHotel:(id)sender;
 - (void)didEndSheet:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
 
-- (void)resizeAndPopulateMatricesWithHotels:(NSArray *)hotels;
+- (void)resizeAndPopulateMatricesWithHotels:(NSArray *)hotels tile:(id)tile;
 - (void)showCreateNewHotelSheet:(NSWindow *)window;
 @end

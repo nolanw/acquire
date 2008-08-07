@@ -7,10 +7,11 @@ New features
 
 Known bugs
 ---------
-- Canceling the Create New Hotel sheet seems to make the game think a tile has been played, even though it was canceled.
+
 
 Fixed bugs
 ----------
+- Canceling the Create New Hotel sheet seems to make the game think a tile has been played, even though it was canceled. (FIXED 2008-Aug-07: reorganized selectors called in showing sheet)
 - If Create New Hotel sheet is cancelled, it won't come back. (FIXED 2008-Aug-04: was trying to print instances of AQHotel instead of asking for the hotel's name, resulting in an attempted copyWithZone, which is intentionally not implemented for AQHotel)
 - Game log scrolls to one line above bottom. (FIXED 2008-Jul-24: got text view to scroll itself instead of using its scroll view)
 - Joining a game doesn't work. (FIXED 2008-Jul-13; was caused by not retrieving a UI widget's tag from the correct UI widget)

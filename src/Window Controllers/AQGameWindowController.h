@@ -60,10 +60,10 @@
 
 // Passthrus
 - (void)showPurchaseSharesSheetWithHotels:(NSArray *)hotels availableCash:(int)availableCash;
-- (void)showCreateNewHotelSheetWithHotels:(NSArray *)hotels;
+- (void)showCreateNewHotelSheetWithHotels:(NSArray *)hotels atTile:(id)tile;
 - (void)showAllocateMergingHotelSharesSheetForMergingHotel:(AQHotel *)mergingHotel survivingHotel:(AQHotel *)survivingHotel player:(AQPlayer *)player;
 - (void)purchaseShares:(NSArray *)sharesPurchased ofHotelsNamed:(NSArray *)hotelNames;
-- (void)createHotelNamed:(NSString *)hotelName;
+- (void)createHotelNamed:(NSString *)hotelName atTile:(id)tile;
 - (void)sellSharesOfHotel:(AQHotel *)hotel numberOfShares:(int)numberOfShares byPlayer:(AQPlayer *)player;
 - (void)tradeSharesOfHotel:(AQHotel *)fromHotel forSharesInHotel:(AQHotel *)toHotel numberOfShares:(int)numberOfShares byPlayer:(AQPlayer *)player;
 @end

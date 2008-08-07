@@ -23,7 +23,6 @@
 	NSString		*_localPlayerName;
 	int				_activePlayerIndex;
 	BOOL			_tilePlayedThisTurn;
-	AQTile			*_tileCreatingNewHotel;
 }
 
 - (id)initNetworkGameWithArrayController:(id)arrayController associatedConnection:(AQConnectionController *)associatedConnection;
@@ -47,7 +46,7 @@
 - (void)purchaseShares:(NSArray *)sharesPurchased ofHotelsNamed:(NSArray *)hotelNames;
 - (int)sharesAvailableOfHotelNamed:(NSString *)hotelName;
 - (void)tileClickedString:(NSString *)tileClickedString;
-- (void)createHotel:(AQHotel *)hotel;
+- (void)createHotelNamed:(NSString *)hotelName atTile:(id)tile;
 - (void)hotelSurvives:(AQHotel *)hotel mergingHotels:(NSArray *)mergingHotels mergeTile:(AQTile *)mergeTile;
 - (BOOL)playedTileCreatesNewHotel:(AQTile *)playedTile;
 - (BOOL)playedTileTriggersAMerger:(AQTile *)playedTile;
