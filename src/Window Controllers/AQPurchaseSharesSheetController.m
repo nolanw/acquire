@@ -36,7 +36,7 @@
 }
 
 
-- (IBAction)giveMeAMinute:(id)sender;
+- (IBAction)letMeSeeTheBoard:(id)sender;
 {
 	[NSApp endSheet:_purchaseSharesSheet returnCode:1];
 }

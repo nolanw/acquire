@@ -143,6 +143,7 @@
 
 - (void)addTile:(AQTile *)tile;
 {
+	NSLog(@"%s added tile %@ to %@", _cmd, tile, [self name]);
 	[_tilesInHotel addObject:tile];
 	[tile setHotel:self];
 }

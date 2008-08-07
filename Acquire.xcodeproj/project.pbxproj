@@ -13,6 +13,9 @@
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		F20159A10E455D810044BFCB /* CreateNewHotelSheet.nib in Resources */ = {isa = PBXBuildFile; fileRef = F201599F0E455D810044BFCB /* CreateNewHotelSheet.nib */; };
 		F20159A70E455DAE0044BFCB /* AQCreateNewHotelSheetController.m in Sources */ = {isa = PBXBuildFile; fileRef = F20159A60E455DAE0044BFCB /* AQCreateNewHotelSheetController.m */; };
+		F219592A0E4B6885009379CA /* AQChooseMergerSurvivorSheetController.m in Sources */ = {isa = PBXBuildFile; fileRef = F21959290E4B6885009379CA /* AQChooseMergerSurvivorSheetController.m */; };
+		F219596A0E4B7407009379CA /* ChooseMergerSurvivorSheet.nib in Resources */ = {isa = PBXBuildFile; fileRef = F21959680E4B7407009379CA /* ChooseMergerSurvivorSheet.nib */; };
+		F21959700E4B7453009379CA /* AllocateMergingHotelSharesSheet.nib in Resources */ = {isa = PBXBuildFile; fileRef = F219596E0E4B7453009379CA /* AllocateMergingHotelSharesSheet.nib */; };
 		F222AA640E3430660037443E /* AQPurchaseSharesSheetController.m in Sources */ = {isa = PBXBuildFile; fileRef = F222AA630E3430660037443E /* AQPurchaseSharesSheetController.m */; };
 		F224F2890DEBC16F0004978C /* WelcomeWindow.nib in Resources */ = {isa = PBXBuildFile; fileRef = F224F2870DEBC16F0004978C /* WelcomeWindow.nib */; };
 		F23A376D0E39661F00202DE2 /* PurchaseSharesSheet.nib in Resources */ = {isa = PBXBuildFile; fileRef = F23A376B0E39661F00202DE2 /* PurchaseSharesSheet.nib */; };
@@ -52,6 +55,10 @@
 		F20159A00E455D810044BFCB /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/CreateNewHotelSheet.nib; sourceTree = "<group>"; };
 		F20159A50E455DAE0044BFCB /* AQCreateNewHotelSheetController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AQCreateNewHotelSheetController.h; sourceTree = "<group>"; };
 		F20159A60E455DAE0044BFCB /* AQCreateNewHotelSheetController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AQCreateNewHotelSheetController.m; sourceTree = "<group>"; };
+		F21959280E4B6885009379CA /* AQChooseMergerSurvivorSheetController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AQChooseMergerSurvivorSheetController.h; sourceTree = "<group>"; };
+		F21959290E4B6885009379CA /* AQChooseMergerSurvivorSheetController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AQChooseMergerSurvivorSheetController.m; sourceTree = "<group>"; };
+		F21959690E4B7407009379CA /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/ChooseMergerSurvivorSheet.nib; sourceTree = "<group>"; };
+		F219596F0E4B7453009379CA /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/AllocateMergingHotelSharesSheet.nib; sourceTree = "<group>"; };
 		F222AA620E3430660037443E /* AQPurchaseSharesSheetController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AQPurchaseSharesSheetController.h; sourceTree = "<group>"; };
 		F222AA630E3430660037443E /* AQPurchaseSharesSheetController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AQPurchaseSharesSheetController.m; sourceTree = "<group>"; };
 		F224F2880DEBC16F0004978C /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/WelcomeWindow.nib; sourceTree = "<group>"; };
@@ -174,7 +181,9 @@
 				8D1107310486CEB800E47090 /* Info.plist */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
 				F2ABA5A70DEE728C00F58E4B /* GameWindow.nib */,
+				F219596E0E4B7453009379CA /* AllocateMergingHotelSharesSheet.nib */,
 				F23A376B0E39661F00202DE2 /* PurchaseSharesSheet.nib */,
+				F21959680E4B7407009379CA /* ChooseMergerSurvivorSheet.nib */,
 				F201599F0E455D810044BFCB /* CreateNewHotelSheet.nib */,
 				F2892B960DF0E0A000387EAB /* LobbyWindow.nib */,
 				29B97318FDCFA39411CA2CEA /* MainMenu.nib */,
@@ -197,6 +206,8 @@
 			children = (
 				F2D44CA90E48274D003B1E91 /* AQAllocateMergingHotelSharesSheetController.h */,
 				F2D44CAA0E48274D003B1E91 /* AQAllocateMergingHotelSharesSheetController.m */,
+				F21959280E4B6885009379CA /* AQChooseMergerSurvivorSheetController.h */,
+				F21959290E4B6885009379CA /* AQChooseMergerSurvivorSheetController.m */,
 				F20159A50E455DAE0044BFCB /* AQCreateNewHotelSheetController.h */,
 				F20159A60E455DAE0044BFCB /* AQCreateNewHotelSheetController.m */,
 				F222AA620E3430660037443E /* AQPurchaseSharesSheetController.h */,
@@ -336,6 +347,8 @@
 				F28B09A00E14762900D100DF /* Acquire.icns in Resources */,
 				F23A376D0E39661F00202DE2 /* PurchaseSharesSheet.nib in Resources */,
 				F20159A10E455D810044BFCB /* CreateNewHotelSheet.nib in Resources */,
+				F219596A0E4B7407009379CA /* ChooseMergerSurvivorSheet.nib in Resources */,
+				F21959700E4B7453009379CA /* AllocateMergingHotelSharesSheet.nib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -366,6 +379,7 @@
 				F222AA640E3430660037443E /* AQPurchaseSharesSheetController.m in Sources */,
 				F20159A70E455DAE0044BFCB /* AQCreateNewHotelSheetController.m in Sources */,
 				F2D44CAB0E48274D003B1E91 /* AQAllocateMergingHotelSharesSheetController.m in Sources */,
+				F219592A0E4B6885009379CA /* AQChooseMergerSurvivorSheetController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -394,6 +408,22 @@
 				F20159A00E455D810044BFCB /* English */,
 			);
 			name = CreateNewHotelSheet.nib;
+			sourceTree = "<group>";
+		};
+		F21959680E4B7407009379CA /* ChooseMergerSurvivorSheet.nib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F21959690E4B7407009379CA /* English */,
+			);
+			name = ChooseMergerSurvivorSheet.nib;
+			sourceTree = "<group>";
+		};
+		F219596E0E4B7453009379CA /* AllocateMergingHotelSharesSheet.nib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F219596F0E4B7453009379CA /* English */,
+			);
+			name = AllocateMergingHotelSharesSheet.nib;
 			sourceTree = "<group>";
 		};
 		F224F2870DEBC16F0004978C /* WelcomeWindow.nib */ = {

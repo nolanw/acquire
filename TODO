@@ -1,12 +1,16 @@
 New features
 ------------
 - Implement AQGame class.
-- Allow for both new and old hotel names (user-configurable?)
-- Make scoreboard columns' backgrounds relate to their hotels
-- Provide a legend of hotels and their colors
+	- Finish math for AQAllocateMergingHotelSharesSheetController's stepperChanged selector.
+	- Implement endgame checking and congratulations and such.
+- Allow for both new and old hotel names (user-configurable?).
+- Make scoreboard columns' backgrounds relate to their hotels.
+- Provide a legend of hotels and their colors.
+- Change "Purchase Shares" button in Purchase Shares Sheet to say "End Turn" when all hotels have 0 shares selected.
 
 Known bugs
 ---------
+- Program crashes on certain instances of allocating merging hotel shares (happens when clicking sold shares stepper). (Potentially happens when merging hotels of different sizes.)
 
 
 Fixed bugs

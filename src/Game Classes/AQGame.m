@@ -2,6 +2,10 @@
 //
 // Created May 28, 2008 by nwaite
 
+#ifndef DEBUG_ALLOW_PLAYING_OF_ANY_TILE
+#define DEBUG_ALLOW_PLAYING_OF_ANY_TILE 1
+#endif
+
 #import "AQGame.h"
 #import "AQGameArrayController.h"
 
@@ -17,8 +21,8 @@
 - (void)_drawTilesForEveryone;
 - (void)_showPurchaseSharesSheetWithHotels:(NSArray *)hotels;
 - (void)_showCreateNewHotelSheetWithHotels:(NSArray *)hotels tile:(AQTile *)tile;
-- (void)_showChooseMergerSurvivorSheetWithHotels:(NSArray *)hotels mergeTile:(AQTile *)mergeTile;
-- (void)_showAllocateMergingHotelSharesSheetForMergingHotel:(AQHotel *)mergingHotel survivingHotel:(AQHotel *)survivingHotel player:(AQPlayer *)player;
+- (void)_showChooseMergerSurvivorSheetWithMergingHotels:(NSArray *)mergingHotels potentialSurvivors:(NSArray *)potentialSurvivors mergeTile:(AQTile *)mergeTile;
+- (void)_showAllocateMergingHotelSharesSheetForMergingHotel:(AQHotel *)mergingHotel survivingHotel:(AQHotel *)survivingHotel player:(AQPlayer *)player sharePrice:(int)sharePrice;
 
 - (NSArray *)_hotelsAdjacentToTile:(AQTile *)tile;
 - (NSArray *)_hotelsNotOnBoard;
@@ -199,7 +203,7 @@
 	if ([self isNetworkGame] && [self localPlayer] != [self activePlayer])
 		return;
 	
-	if (![[self activePlayer] hasTileNamed:tileClickedString])
+	if (![[self activePlayer] hasTileNamed:tileClickedString] && !DEBUG_ALLOW_PLAYING_OF_ANY_TILE)
 		return;
 	
 	if (_tilePlayedThisTurn)
@@ -207,6 +211,8 @@
 	
 	if ([self isNetworkGame])
 		return;
+	
+	NSLog(@"%s tile clicked: %@", _cmd, tileClickedString);
 	
 	AQTile *clickedTile = [_board tileOnBoardByString:tileClickedString];
 	if ([self playedTileCreatesNewHotel:clickedTile]) {
@@ -221,13 +227,13 @@
 		[self _mergerHappeningAtTile:clickedTile];
 		return;
 	} else if ([self playedTileAddsToAHotel:clickedTile]) {
-		[clickedTile setHotel:[self playedTileAddsToAHotel:clickedTile]];
+		[[self playedTileAddsToAHotel:clickedTile] addTile:clickedTile];
 		NSArray *orthogonalTiles = [_board tilesOrthogonalToTile:clickedTile];
 		NSEnumerator *orthogonalTilesEnumerator = [orthogonalTiles objectEnumerator];
 		id curOrthogonalTile;
 		while (curOrthogonalTile = [orthogonalTilesEnumerator nextObject])
 			if ([curOrthogonalTile state] == AQTileNotInHotel)
-				[curOrthogonalTile setHotel:[self playedTileAddsToAHotel:clickedTile]];
+				[[self playedTileAddsToAHotel:clickedTile] addTile:curOrthogonalTile];
 		
 		[_gameWindowController tilesChanged:orthogonalTiles];
 	} else {
@@ -274,7 +280,7 @@
 }
 
 - (void)hotelSurvives:(AQHotel *)hotel mergingHotels:(NSArray *)mergingHotels mergeTile:(AQTile *)mergeTile;
-{
+{	
 	[_gameWindowController incomingGameLogEntry:[NSString stringWithFormat:@"* %@ is the surviving hotel.", [hotel name]]];
 	
 	NSMutableArray *disappearingHotels = [NSMutableArray arrayWithArray:mergingHotels];
@@ -288,7 +294,7 @@
 		id curHotel;
 		while (curHotel = [hotelEnumerator nextObject])
 			if ([curPlayer hasSharesOfHotelNamed:[curHotel name]])
-				[self _showAllocateMergingHotelSharesSheetForMergingHotel:curHotel survivingHotel:hotel player:curPlayer];
+				[self _showAllocateMergingHotelSharesSheetForMergingHotel:curHotel survivingHotel:hotel player:curPlayer sharePrice:[hotel sharePrice]];
 	}
 	
 	for (i = 0; i < [self activePlayerIndex]; ++i) {
@@ -297,10 +303,40 @@
 		id curHotel;
 		while (curHotel = [hotelEnumerator nextObject])
 			if ([curPlayer hasSharesOfHotelNamed:[curHotel name]])
-				[self _showAllocateMergingHotelSharesSheetForMergingHotel:curHotel survivingHotel:hotel player:curPlayer];
+				[self _showAllocateMergingHotelSharesSheetForMergingHotel:curHotel survivingHotel:hotel player:curPlayer sharePrice:[hotel sharePrice]];
 	}
 	
+	NSEnumerator *hotelEnumerator = [disappearingHotels objectEnumerator];
+	id curHotel;
+	while (curHotel = [hotelEnumerator nextObject]) {
+		[hotel addTiles:[curHotel tiles]];
+		[curHotel removeTilesFromBoard];
+	}
+	[hotel addTile:mergeTile];
+	
+	[_gameWindowController tilesChanged:[hotel tiles]];
+	
+	[_gameWindowController showPurchaseSharesButton];
 	[self _tilePlayed:mergeTile];
+}
+
+- (void)sellSharesOfHotel:(AQHotel *)hotel numberOfShares:(int)numberOfShares player:(AQPlayer *)player sharePrice:(int)sharePrice;
+{
+	NSLog(@"%s called; player making %d * $%d = $%d", _cmd, numberOfShares, [hotel sharePrice], [hotel sharePrice] * numberOfShares);
+	[player subtractSharesOfHotelNamed:[hotel name] numberOfShares:numberOfShares];
+	[player addCash:(sharePrice * numberOfShares)];
+	[hotel addSharesToBank:numberOfShares];
+	
+	[_gameWindowController reloadScoreboard];
+}
+
+- (void)tradeSharesOfHotel:(AQHotel *)fromHotel forSharesInHotel:(AQHotel *)toHotel numberOfShares:(int)numberOfShares player:(AQPlayer *)player;
+{
+	[fromHotel addSharesToBank:numberOfShares];
+	[toHotel removeSharesFromBank:(numberOfShares / 2)];
+	[player addSharesOfHotelNamed:[toHotel name] numberOfShares:(numberOfShares / 2)];
+	
+	[_gameWindowController reloadScoreboard];
 }
 
 - (BOOL)playedTileCreatesNewHotel:(AQTile *)playedTile;
@@ -322,23 +358,13 @@
 - (BOOL)playedTileTriggersAMerger:(AQTile *)playedTile;
 {
 	NSArray *adjacentHotels = [self _hotelsAdjacentToTile:playedTile];
-	if ([adjacentHotels count] < 2)
-		return NO;
-	
-	int safeAdjacentHotels = 0;
-	NSEnumerator *hotelEnumerator = [adjacentHotels objectEnumerator];
-	id curHotel;
-	while (curHotel = [hotelEnumerator nextObject])
-		if ([curHotel isSafe])
-			++safeAdjacentHotels;
-	
-	return (safeAdjacentHotels < 2);
+	return ([adjacentHotels count] > 1);
 }
 
 - (AQHotel *)playedTileAddsToAHotel:(AQTile *)playedTile;
 {
 	NSArray *adjacentHotels = [self _hotelsAdjacentToTile:playedTile];
-	return ([adjacentHotels count] == 1) ? [adjacentHotels objectAtIndex:0] : nil;
+	return (([adjacentHotels count] == 1) ? [adjacentHotels objectAtIndex:0] : nil);
 }
 
 - (BOOL)tileIsUnplayable:(AQTile *)tile;
@@ -529,14 +555,14 @@
 	[_gameWindowController showCreateNewHotelSheetWithHotels:hotels atTile:tile];
 }
 
-- (void)_showChooseMergerSurvivorSheetWithHotels:(NSArray *)hotels mergeTile:(AQTile *)mergeTile;
+- (void)_showChooseMergerSurvivorSheetWithMergingHotels:(NSArray *)mergingHotels potentialSurvivors:(NSArray *)potentialSurvivors mergeTile:(AQTile *)mergeTile;
 {
-	[_gameWindowController showChooseMergerSurvivorSheetWithHotels:hotels mergeTile:mergeTile];
+	[_gameWindowController showChooseMergerSurvivorSheetWithMergingHotels:mergingHotels potentialSurvivors:potentialSurvivors mergeTile:mergeTile];
 }
 
-- (void)_showAllocateMergingHotelSharesSheetForMergingHotel:(AQHotel *)mergingHotel survivingHotel:(AQHotel *)survivingHotel player:(AQPlayer *)player;
+- (void)_showAllocateMergingHotelSharesSheetForMergingHotel:(AQHotel *)mergingHotel survivingHotel:(AQHotel *)survivingHotel player:(AQPlayer *)player sharePrice:(int)sharePrice;
 {
-	[_gameWindowController showAllocateMergingHotelSharesSheetForMergingHotel:mergingHotel survivingHotel:survivingHotel player:player];
+	[_gameWindowController showAllocateMergingHotelSharesSheetForMergingHotel:mergingHotel survivingHotel:survivingHotel player:player sharePrice:sharePrice];
 }
 
 
@@ -571,6 +597,7 @@
 	[_gameWindowController incomingGameLogEntry:[NSString stringWithFormat:@"* %@ played tile %@.", [[self activePlayer] name], [tile description]]];
 	
 	[_gameWindowController tilesChanged:[[self activePlayer] tiles]];
+	[_gameWindowController tilesChanged:[NSArray arrayWithObject:tile]];
 	[[self activePlayer] playedTileNamed:[tile description]];
 	[_gameWindowController updateTileRack:[[self activePlayer] tiles]];
 	
@@ -611,6 +638,10 @@
 	NSEnumerator *hotelsEnumerator = [hotelsInvolvedWithMerger objectEnumerator];
 	AQHotel *curHotel;
 	while (curHotel = (AQHotel *)[hotelsEnumerator nextObject]) {
+		if ([biggestHotels count] == 0) {
+			[biggestHotels addObject:curHotel];
+			continue;
+		}
 		if ([curHotel size] < [(AQHotel *)[biggestHotels objectAtIndex:0] size])
 			continue;
 		if ([curHotel size] == [(AQHotel *)[biggestHotels objectAtIndex:0] size]) {
@@ -622,9 +653,9 @@
 		[biggestHotels addObject:curHotel];	
 	}
 	
-	if ([biggestHotels count] == 1) {
+	if ([biggestHotels count] == 1)
 		[self hotelSurvives:[biggestHotels objectAtIndex:0] mergingHotels:hotelsInvolvedWithMerger mergeTile:tile];
-	} else
-		[self _showChooseMergerSurvivorSheetWithHotels:biggestHotels mergingHotels:hotelsInvolvedWithMerger mergeTile:tile];
+	else
+		[self _showChooseMergerSurvivorSheetWithMergingHotels:hotelsInvolvedWithMerger potentialSurvivors:biggestHotels mergeTile:tile];
 }
 @end

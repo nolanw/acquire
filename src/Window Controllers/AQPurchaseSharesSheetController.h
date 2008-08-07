@@ -24,7 +24,7 @@
 
 - (void)awakeFromNib;
 
-- (IBAction)giveMeAMinute:(id)sender;
+- (IBAction)letMeSeeTheBoard:(id)sender;
 - (IBAction)purchaseShares:(id)sender;
 - (void)didEndSheet:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
 - (void)stepperChanged:(id)sender;

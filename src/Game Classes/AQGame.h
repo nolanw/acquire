@@ -48,6 +48,8 @@
 - (void)tileClickedString:(NSString *)tileClickedString;
 - (void)createHotelNamed:(NSString *)hotelName atTile:(id)tile;
 - (void)hotelSurvives:(AQHotel *)hotel mergingHotels:(NSArray *)mergingHotels mergeTile:(AQTile *)mergeTile;
+- (void)sellSharesOfHotel:(AQHotel *)hotel numberOfShares:(int)numberOfShares player:(AQPlayer *)player sharePrice:(int)sharePrice;
+- (void)tradeSharesOfHotel:(AQHotel *)fromHotel forSharesInHotel:(AQHotel *)toHotel numberOfShares:(int)numberOfShares player:(AQPlayer *)player;
 - (BOOL)playedTileCreatesNewHotel:(AQTile *)playedTile;
 - (BOOL)playedTileTriggersAMerger:(AQTile *)playedTile;
 - (AQHotel *)playedTileAddsToAHotel:(AQTile *)playedTile;

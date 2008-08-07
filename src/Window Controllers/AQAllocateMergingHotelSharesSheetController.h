@@ -19,11 +19,14 @@
 	IBOutlet NSStepper		*_sharesTradedStepper;
 	IBOutlet NSTextField	*_sharesKeptInMergingHotelTextField;
 	
-	id	_gameWindowController;
-	
-	id _mergingHotel;
-	id _survivingHotel;
-	id _player;
+	id		_gameWindowController;
+	id		_mergingHotel;
+	id		_survivingHotel;
+	id		_player;
+	int		_sharePrice;
+	double	_sharesKeptInMergingHotel;
+	double	_sharesSold;
+	double	_sharesTraded;
 }
 
 - (id)initWithGameWindowController:(id)gameWindowController;
@@ -35,5 +38,5 @@
 - (void)sharesSoldStepperChanged:(id)sender;
 - (void)sharesTradedStepperChanged:(id)sender;
 
-- (void)showAllocateMergingHotelSharesSheet:(NSWindow *)window forMergingHotel:(AQHotel *)mergingHotel survivingHotel:(AQHotel *)survivingHotel player:(AQPlayer *)player;
+- (void)showAllocateMergingHotelSharesSheet:(NSWindow *)window forMergingHotel:(AQHotel *)mergingHotel survivingHotel:(AQHotel *)survivingHotel player:(AQPlayer *)player sharePrice:(int)sharePrice;
 @end
