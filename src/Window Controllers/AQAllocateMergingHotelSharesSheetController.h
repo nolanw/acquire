@@ -33,7 +33,6 @@
 - (void)dealloc;
 
 - (IBAction)allocate:(id)sender;
-- (void)didEndSheet:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
 
 - (void)sharesSoldStepperChanged:(id)sender;
 - (void)sharesTradedStepperChanged:(id)sender;

@@ -40,21 +40,19 @@
 
 - (IBAction)allocate:(id)sender;
 {
-	[NSApp endSheet:_allocateMergingHotelSharesSheet returnCode:0];
-}
-
-- (void)didEndSheet:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
-{
-	[sheet orderOut:self];
-	
 	[(AQGameWindowController *)_gameWindowController sellSharesOfHotel:_mergingHotel numberOfShares:(int)_sharesSold player:_player sharePrice:_sharePrice];
 	[(AQGameWindowController *)_gameWindowController tradeSharesOfHotel:_mergingHotel forSharesInHotel:_survivingHotel numberOfShares:(int)_sharesTraded player:_player];
+	
+	[NSApp stopModal];
 }
 
 
 - (void)sharesSoldStepperChanged:(id)sender;
 {
 	double newValue = [_sharesSoldStepper doubleValue];
+	if (newValue == _sharesSold)
+		return;
+	
 	if (newValue > _sharesSold) {
 		if (_sharesKeptInMergingHotel + _sharesTraded < 1.0) {
 			[self _updateTextFieldsAndSteppers];
@@ -87,7 +85,7 @@
 			[self _updateTextFieldsAndSteppers];
 			return;
 		}
-		_sharesTraded += 2.0;
+		_sharesTraded += 1.0;
 		if (_sharesKeptInMergingHotel >= 2.0)
 			_sharesKeptInMergingHotel -= 2.0;
 		else if (_sharesKeptInMergingHotel == 1.0) {
@@ -97,12 +95,12 @@
 		else
 			_sharesSold -= 2.0;
 	} else {
-		if (_sharesTraded < 2.0) {
+		if (_sharesTraded < 1.0) {
 			[self _updateTextFieldsAndSteppers];
 			return;
 		}
-		_sharesTraded -= 2.0;
-		_sharesSold += 2.0;
+		_sharesTraded -= 1.0;
+		_sharesKeptInMergingHotel += 2.0;
 	}
 	
 	[self _updateTextFieldsAndSteppers];
@@ -137,16 +135,28 @@
 	[_sharesSoldTextField takeIntValueFrom:_sharesSoldStepper];
 	[_sharesSoldStepper setMinValue:0.0];
 	[_sharesSoldStepper setMaxValue:_sharesKeptInMergingHotel];
+	[_sharesSoldStepper setIntValue:0];
+	[_sharesSoldStepper setIncrement:1.0];
+	[_sharesSoldStepper setAutorepeat:NO];
+	[_sharesSoldStepper setValueWraps:NO];
 	[_sharesSoldStepper setTarget:self];
 	[_sharesSoldStepper setAction:@selector(sharesSoldStepperChanged:)];
 	[_sharesTradedStepper setMinValue:0.0];
 	[_sharesTradedStepper setMaxValue:_sharesKeptInMergingHotel];
+	[_sharesTradedStepper setIntValue:0];
+	[_sharesTradedStepper setIncrement:1.0];
+	[_sharesTradedStepper setAutorepeat:NO];
+	[_sharesTradedStepper setValueWraps:NO];
 	[_sharesTradedStepper setTarget:self];
 	[_sharesTradedStepper setAction:@selector(sharesTradedStepperChanged:)];
 	
 	[self _updateTextFieldsAndSteppers];
 	
-	[NSApp beginSheet:_allocateMergingHotelSharesSheet modalForWindow:window modalDelegate:self didEndSelector:@selector(didEndSheet:returnCode:contextInfo:) contextInfo:nil];
+	[NSApp beginSheet:_allocateMergingHotelSharesSheet modalForWindow:window modalDelegate:nil didEndSelector:nil contextInfo:nil];
+	[NSApp runModalForWindow:_allocateMergingHotelSharesSheet];
+	
+	[NSApp endSheet:_allocateMergingHotelSharesSheet];
+	[_allocateMergingHotelSharesSheet orderOut:self];
 }
 @end
 

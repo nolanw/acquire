@@ -96,20 +96,17 @@
 
 - (void)cancelConnectingToServer;
 {
-	NSLog(@"%s", _cmd);
 	[_connectionArrayController closeConnection:[_connectionArrayController serverConnection]];
 	[_welcomeWindowController stopConnectingToAServer];
 }
 
 - (void)joinGame:(int)gameNumber;
 {
-	NSLog(@"AcquireController %s called", _cmd);
 	[[_connectionArrayController serverConnection] joinGame:gameNumber];
 }
 
 - (void)joiningGame;
 {
-	NSLog(@"AcquireController %s called", _cmd);
 	[_gameArrayController startNewNetworkGameAndMakeActiveWithAssociatedConnection:[_connectionArrayController serverConnection]];
 	[[_gameArrayController activeGame] setLocalPlayerName:_localPlayerName];
 	[[_gameArrayController activeGame] loadGameWindow];

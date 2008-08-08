@@ -6,6 +6,10 @@
 #import "AQGameWindowController.h"
 #import "AQHotel.h"
 
+@interface AQPurchaseSharesSheetController (Private)
+- (void)_updatePurchaseSharesButtonTitle;
+@end
+
 @implementation AQPurchaseSharesSheetController
 - (id)initWithGameWindowController:(id)gameWindowController;
 {
@@ -87,12 +91,13 @@
 		++_sharesBeingPurchased;
 		_cashSpent += [[_hotels objectAtIndex:row] sharePrice];
 		[[_shareNumbersAndSteppersMatrix cellAtRow:row column:0] setIntValue:newValue];
-		return;
+	} else {
+		--_sharesBeingPurchased;
+		_cashSpent -= [[_hotels objectAtIndex:row] sharePrice];
+		[[_shareNumbersAndSteppersMatrix cellAtRow:row column:0] setIntValue:newValue];
 	}
 	
-	--_sharesBeingPurchased;
-	_cashSpent -= [[_hotels objectAtIndex:row] sharePrice];
-	[[_shareNumbersAndSteppersMatrix cellAtRow:row column:0] setIntValue:newValue];
+	[self _updatePurchaseSharesButtonTitle];
 }
 
 
@@ -135,8 +140,9 @@
 		[[_shareNumbersAndSteppersMatrix cellAtRow:i column:0] setIntValue:0];
 		
 		stepperCell = [[[NSStepperCell alloc] init] autorelease];
-		[stepperCell setMaxValue:(float)[[hotels objectAtIndex:i] sharesInBank]];
+		[stepperCell setMaxValue:(double)[[hotels objectAtIndex:i] sharesInBank]];
 		[stepperCell setMinValue:0.0];
+		[stepperCell setIntValue:0];
 		[stepperCell setIncrement:1.0];
 		[stepperCell setAutorepeat:NO];
 		[stepperCell setValueWraps:NO];
@@ -178,6 +184,8 @@
 		matrixFrame.size.height = matrixHeightShouldBe;
 		[_shareNumbersAndSteppersMatrix setFrame:matrixFrame];
 	}
+	
+	[self _updatePurchaseSharesButtonTitle];
 }
 
 - (void)showPurchaseSharesSheet:(NSWindow *)window;
@@ -186,5 +194,20 @@
         [NSBundle loadNibNamed:@"PurchaseSharesSheet" owner:self];
 	
 	[NSApp beginSheet:_purchaseSharesSheet modalForWindow:window modalDelegate:self didEndSelector:@selector(didEndSheet:returnCode:contextInfo:) contextInfo:nil];
+}
+@end
+
+@implementation AQPurchaseSharesSheetController (Private)
+- (void)_updatePurchaseSharesButtonTitle;
+{
+	int i;
+	for (i = 0; i < [_shareNumbersAndSteppersMatrix numberOfRows]; ++i) {
+		if ([[_shareNumbersAndSteppersMatrix cellAtRow:i column:1] intValue] != 0) {
+			[_purchaseSharesButton setTitle:NSLocalizedStringFromTable(@"Purchase Shares", @"Acquire", @"A button that, when clicked, purchases shares in the amounts specified.")];
+			return;
+		}
+	}
+	
+	[_purchaseSharesButton setTitle:NSLocalizedStringFromTable(@"End Turn", @"Acquire", @"A button that, when clicked, ends the player's turn.")];
 }
 @end

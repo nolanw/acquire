@@ -76,7 +76,6 @@
 
 - (IBAction)joinGame:(id)sender;
 {
-	NSLog(@"LobbyWindowController %s called", _cmd);
 	int desiredGameNumber = [sender tag];
 	if (sender == _gameListMatrix)
 		desiredGameNumber = [[_gameListMatrix selectedCell] tag];

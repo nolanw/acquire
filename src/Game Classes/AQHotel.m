@@ -45,27 +45,27 @@
 
 + (AQHotel *)americaHotel;
 {
-	return [[[self alloc] initWithName:@"America" tier:0 color:[NSColor colorWithCalibratedRed:0.0 green:0.0 blue:1.0 alpha:1.0] oldName:@"America"] autorelease];
+	return [[[self alloc] initWithName:@"America" tier:1 color:[NSColor colorWithCalibratedRed:0.0 green:0.0 blue:1.0 alpha:1.0] oldName:@"America"] autorelease];
 }
 
 + (AQHotel *)fusionHotel;
 {
-	return [[[self alloc] initWithName:@"Fusion" tier:0 color:[NSColor colorWithCalibratedRed:0.0 green:1.0 blue:0.0 alpha:1.0] oldName:@"Fusion"] autorelease];
+	return [[[self alloc] initWithName:@"Fusion" tier:1 color:[NSColor colorWithCalibratedRed:0.0 green:1.0 blue:0.0 alpha:1.0] oldName:@"Fusion"] autorelease];
 }
 
 + (AQHotel *)hydraHotel;
 {
-	return [[[self alloc] initWithName:@"Hydra" tier:0 color:[NSColor colorWithCalibratedRed:1.0 green:0.5 blue:0.0 alpha:1.0] oldName:@"Worldwide"] autorelease];
+	return [[[self alloc] initWithName:@"Hydra" tier:1 color:[NSColor colorWithCalibratedRed:1.0 green:0.5 blue:0.0 alpha:1.0] oldName:@"Worldwide"] autorelease];
 }
 
 + (AQHotel *)phoenixHotel;
 {
-	return [[[self alloc] initWithName:@"Phoenix" tier:0 color:[NSColor colorWithCalibratedRed:1.0 green:0.25 blue:1.0 alpha:1.0] oldName:@"Imperial"] autorelease];
+	return [[[self alloc] initWithName:@"Phoenix" tier:2 color:[NSColor colorWithCalibratedRed:1.0 green:0.25 blue:1.0 alpha:1.0] oldName:@"Imperial"] autorelease];
 }
 
 + (AQHotel *)quantumHotel;
 {
-	return [[[self alloc] initWithName:@"Quantum" tier:0 color:[NSColor colorWithCalibratedRed:0.0 green:1.0 blue:1.0 alpha:1.0] oldName:@"Continental"] autorelease];
+	return [[[self alloc] initWithName:@"Quantum" tier:2 color:[NSColor colorWithCalibratedRed:0.0 green:1.0 blue:1.0 alpha:1.0] oldName:@"Continental"] autorelease];
 }
 
 
@@ -143,7 +143,6 @@
 
 - (void)addTile:(AQTile *)tile;
 {
-	NSLog(@"%s added tile %@ to %@", _cmd, tile, [self name]);
 	[_tilesInHotel addObject:tile];
 	[tile setHotel:self];
 }

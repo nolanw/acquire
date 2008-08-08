@@ -58,9 +58,6 @@
 	
 	[sheet orderOut:self];
 	
-	NSLog(@"%s %@", _cmd, [[_hotelNamesMatrix selectedCell] title]);
-	NSLog(@"%s hotel1=%@ hotel2=%@", _cmd, [[_mergingHotels objectAtIndex:0] name], [[_mergingHotels objectAtIndex:1] name]);
-	
 	AQHotel *survivingHotel = nil;
 	NSEnumerator *hotelEnumerator = [_mergingHotels objectEnumerator];
 	id curHotel;
@@ -79,9 +76,7 @@
 }
 
 - (void)resizeAndPopulateMatricesWithMergingHotels:(NSArray *)mergingHotels potentialSurvivors:(NSArray *)potentialSurvivors mergeTile:(id)mergeTile;
-{
-	NSLog(@"%s called", _cmd);
-	
+{	
 	[_mergingHotels release];
 	_mergingHotels = [[NSArray arrayWithArray:mergingHotels] retain];
 	[_mergeTile release];

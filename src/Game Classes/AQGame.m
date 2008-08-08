@@ -212,8 +212,6 @@
 	if ([self isNetworkGame])
 		return;
 	
-	NSLog(@"%s tile clicked: %@", _cmd, tileClickedString);
-	
 	AQTile *clickedTile = [_board tileOnBoardByString:tileClickedString];
 	if ([self playedTileCreatesNewHotel:clickedTile]) {
 		NSArray *hotelsNotOnBoard = [self _hotelsNotOnBoard];
@@ -294,7 +292,7 @@
 		id curHotel;
 		while (curHotel = [hotelEnumerator nextObject])
 			if ([curPlayer hasSharesOfHotelNamed:[curHotel name]])
-				[self _showAllocateMergingHotelSharesSheetForMergingHotel:curHotel survivingHotel:hotel player:curPlayer sharePrice:[hotel sharePrice]];
+				[self _showAllocateMergingHotelSharesSheetForMergingHotel:curHotel survivingHotel:hotel player:curPlayer sharePrice:[curHotel sharePrice]];
 	}
 	
 	for (i = 0; i < [self activePlayerIndex]; ++i) {
@@ -303,7 +301,7 @@
 		id curHotel;
 		while (curHotel = [hotelEnumerator nextObject])
 			if ([curPlayer hasSharesOfHotelNamed:[curHotel name]])
-				[self _showAllocateMergingHotelSharesSheetForMergingHotel:curHotel survivingHotel:hotel player:curPlayer sharePrice:[hotel sharePrice]];
+				[self _showAllocateMergingHotelSharesSheetForMergingHotel:curHotel survivingHotel:hotel player:curPlayer sharePrice:[curHotel sharePrice]];
 	}
 	
 	NSEnumerator *hotelEnumerator = [disappearingHotels objectEnumerator];
@@ -313,16 +311,21 @@
 		[curHotel removeTilesFromBoard];
 	}
 	[hotel addTile:mergeTile];
+	NSEnumerator *orthogonalMergeTilesEnumerator = [[_board tilesOrthogonalToTile:mergeTile] objectEnumerator];
+	id curTile;
+	while (curTile = [orthogonalMergeTilesEnumerator nextObject])
+		if ([curTile state] == AQTileNotInHotel)
+			[hotel addTile:curTile];
+	
 	
 	[_gameWindowController tilesChanged:[hotel tiles]];
 	
-	[_gameWindowController showPurchaseSharesButton];
 	[self _tilePlayed:mergeTile];
 }
 
 - (void)sellSharesOfHotel:(AQHotel *)hotel numberOfShares:(int)numberOfShares player:(AQPlayer *)player sharePrice:(int)sharePrice;
 {
-	NSLog(@"%s called; player making %d * $%d = $%d", _cmd, numberOfShares, [hotel sharePrice], [hotel sharePrice] * numberOfShares);
+	NSLog(@"%s numberOfShares=%d, sharePrice=%d", _cmd, numberOfShares, sharePrice);
 	[player subtractSharesOfHotelNamed:[hotel name] numberOfShares:numberOfShares];
 	[player addCash:(sharePrice * numberOfShares)];
 	[hotel addSharesToBank:numberOfShares];
@@ -634,7 +637,7 @@
 			if (![hotelsInvolvedWithMerger containsObject:[curOrthogonalTile hotel]])
 				[hotelsInvolvedWithMerger addObject:[curOrthogonalTile hotel]];
 	
-	NSMutableArray *biggestHotels = [NSMutableArray arrayWithCapacity:4];
+	NSMutableArray *biggestHotels = [[NSMutableArray arrayWithCapacity:4] retain];
 	NSEnumerator *hotelsEnumerator = [hotelsInvolvedWithMerger objectEnumerator];
 	AQHotel *curHotel;
 	while (curHotel = (AQHotel *)[hotelsEnumerator nextObject]) {
@@ -649,7 +652,7 @@
 			continue;
 		}
 		[biggestHotels release];
-		biggestHotels = [NSMutableArray arrayWithCapacity:3];
+		biggestHotels = [[NSMutableArray arrayWithCapacity:3] retain];
 		[biggestHotels addObject:curHotel];	
 	}
 	
@@ -657,5 +660,8 @@
 		[self hotelSurvives:[biggestHotels objectAtIndex:0] mergingHotels:hotelsInvolvedWithMerger mergeTile:tile];
 	else
 		[self _showChooseMergerSurvivorSheetWithMergingHotels:hotelsInvolvedWithMerger potentialSurvivors:biggestHotels mergeTile:tile];
+	
+	// I'm not entirely sure why I have to retain biggestHotels earlier, and release it here; for some reason, it tends to get autoreleased before we're done with it. Anyway, this seems to fix it. Maybe more investigation will reveal the cause. It seems to come up when no new biggestHotels array is created within the while loop (i.e. when the one created outside the loop is used).
+	[biggestHotels release];
 }
 @end
