@@ -55,6 +55,11 @@
 		[_gameArray insertObject:[[AQGame alloc] initLocalGameWithArrayController:self] atIndex:0];
 }
 
+- (BOOL)isGameInArray:(AQGame *)game;
+{
+	return [_gameArray containsObject:game];
+}
+
 - (void)removeGame:(AQGame *)game;
 {
 	[_gameArray removeObject:game];

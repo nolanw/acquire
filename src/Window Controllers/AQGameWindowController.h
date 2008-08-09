@@ -22,6 +22,7 @@
 	IBOutlet NSTextView		*_gameLogTextView;
 	IBOutlet NSTextField	*_messageToGameTextField;
 	IBOutlet NSButton		*_purchaseSharesButton;
+	IBOutlet NSButton		*_endCurrentTurnButton;
 	IBOutlet NSButton		*_endGameButton;
 	
 	AQAllocateMergingHotelSharesSheetController	*_allocateMergingHotelSharesSheetController;
@@ -40,6 +41,14 @@
 
 - (IBAction)showPurchaseSharesSheet:(id)sender;
 - (void)showPurchaseSharesButton;
+- (void)hidePurchaseSharesButton;
+- (IBAction)endCurrentTurn:(id)sender;
+- (void)showEndCurrentTurnButton;
+- (void)hideEndCurrentTurnButton;
+- (IBAction)endGame:(id)sender;
+- (void)showEndGameButton;
+- (void)hideEndGameButton;
+- (void)disableBoardAndTileRack;
 
 - (void)reloadScoreboard;
 - (void)tilesChanged:(NSArray *)changedTiles;
@@ -49,6 +58,7 @@
 - (void)incomingGameLogEntry:(NSString *)gameLogEntry;
 - (void)updateTileRack:(NSArray *)tiles;
 - (void)highlightTilesOnBoard:(NSArray *)tilesToHighlight;
+- (void)congratulateWinnersByName:(NSArray *)winners;
 
 // NSTableDataSource informal protocol
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView;
@@ -59,6 +69,9 @@
 - (void)bringGameWindowToFront;
 - (void)setWindowTitle:(NSString *)windowTitle;
 - (void)removeGameChatTabViewItem;
+
+// Window delegate
+- (void)windowWillClose:(NSNotification *)notification;
 
 // Passthrus
 - (void)showPurchaseSharesSheetWithHotels:(NSArray *)hotels availableCash:(int)availableCash;

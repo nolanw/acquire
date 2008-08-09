@@ -19,6 +19,7 @@
 - (AQGame *)startNewLocalGame;
 - (void)startNewNetworkGameAndMakeActiveWithAssociatedConnection:(AQConnectionController *)associatedConnection;
 - (void)startNewLocalGameAndMakeActive;
+- (BOOL)isGameInArray:(AQGame *)game;
 - (void)removeGame:(AQGame *)game;
 - (AQGame *)activeGame;
 - (AQGame *)gameAtIndex:(int)index;

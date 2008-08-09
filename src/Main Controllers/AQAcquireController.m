@@ -35,8 +35,6 @@
 	_gameArrayController = nil;
 	[_connectionArrayController release];
 	_connectionArrayController = nil;
-	
-	// WelcomeWindowController came from a nib. It releases the WelcomeWindow in its dealloc, and there are no other top level objects in the nib, so we're good to go for memory management.
 	[_welcomeWindowController release];
 	_welcomeWindowController = nil;
 	
@@ -56,7 +54,7 @@
 {
 	[self _setMenuItemTargetsAndActions];
 	[self _loadWelcomeWindow];
-	[_welcomeWindowController bringWelcomeWindowToFront];
+	[_welcomeWindowController bringWelcomeWindowToFront:nil];
 }
 
 
@@ -139,7 +137,7 @@
 	if (_welcomeWindowController == nil)
 		[self _loadWelcomeWindow];
 	
-	[_welcomeWindowController bringWelcomeWindowToFront];
+	[_welcomeWindowController bringWelcomeWindowToFront:nil];
 }
 
 - (void)connection:(AQConnectionController *)connection willDisconnectWithError:(NSError *)err;
@@ -152,8 +150,6 @@
 {
 	[_welcomeWindowController saveLocalGameDefaults];
 	[_welcomeWindowController closeWelcomeWindow];
-	[_welcomeWindowController release];
-	_welcomeWindowController = nil;
 	
 	[_gameArrayController startNewLocalGameAndMakeActive];
 	[[_gameArrayController activeGame] loadGameWindow];
@@ -165,6 +161,8 @@
 		[[_gameArrayController activeGame] addPlayerNamed:curPlayerName];
 	
 	[[_gameArrayController activeGame] startGame];
+	
+	[[NSNotificationCenter defaultCenter] addObserver:_welcomeWindowController selector:@selector(bringWelcomeWindowToFront:) name:@"LocalGameWindowClosed" object:nil];
 }
 
 

@@ -20,6 +20,8 @@
 	IBOutlet NSForm			*_localPlayerNamesForm;
 	IBOutlet NSTextField	*_localNumberOfPlayersTextField;
 	IBOutlet NSStepper		*_localNumberOfPlayersStepper;
+	
+	BOOL _quitOnNextWindowClose;
 }
 
 - (id)init;
@@ -39,7 +41,10 @@
 
 // Window visibility
 - (void)closeWelcomeWindow;
-- (void)bringWelcomeWindowToFront;
+- (void)bringWelcomeWindowToFront:(NSNotification *)notification;
+
+// Window delegate
+- (void)windowWillClose:(NSNotification *)notification;
 
 // UI widget actions
 - (IBAction)connectToServer:(id)sender;

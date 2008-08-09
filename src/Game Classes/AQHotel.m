@@ -133,7 +133,7 @@
 
 - (BOOL)isSafe;
 {
-	return ([self size] > 10);
+	return ([self isOnBoard] && [self size] > 10);
 }
 
 - (NSArray *)tiles;

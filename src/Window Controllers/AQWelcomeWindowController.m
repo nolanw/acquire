@@ -21,16 +21,19 @@
 {
 	if (![super init])
 		return nil;
+	
+	_quitOnNextWindowClose = YES;
 
 	return self;
 }
 
 - (void)dealloc;
 {
-	if (_welcomeWindow != nil) {
-		[_welcomeWindow close];
-		_welcomeWindow = nil;
-	}
+	[_welcomeWindow close];
+	[_welcomeWindow release];
+	_welcomeWindow = nil;
+	
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	
 	[super dealloc];
 }
@@ -116,15 +119,28 @@
 // Window visibility
 - (void)closeWelcomeWindow;
 {
+	_quitOnNextWindowClose = NO;
 	[_welcomeWindow close];
-	_welcomeWindow = nil;
 }
 
-- (void)bringWelcomeWindowToFront;
+- (void)bringWelcomeWindowToFront:(NSNotification *)notification;
 {
+	NSLog(@"%s called with notification=%@", _cmd, notification);
 	[_welcomeWindow makeKeyAndOrderFront:self];
 }
 
+
+// Window delegate
+- (void)windowWillClose:(NSNotification *)notification;
+{
+	if ([notification object] != _welcomeWindow)
+		return;
+	
+	if (_quitOnNextWindowClose)
+		[NSApp terminate:self];
+	else
+		_quitOnNextWindowClose = YES;
+}
 
 // UI widget actions
 - (IBAction)connectToServer:(id)sender;

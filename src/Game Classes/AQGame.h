@@ -58,6 +58,7 @@
 - (void)endCurrentTurn;
 - (void)startGame;
 - (void)endGame;
+- (void)removeGameFromArrayController;
 
 // Passthrus
 - (NSColor *)tileNotInHotelColor;

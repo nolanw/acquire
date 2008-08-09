@@ -49,10 +49,9 @@
 	
 	_tileUnplayedColor = [(CCDColoredButtonCell *)[_boardMatrix cellAtRow:0 column:0] buttonColor];
 	
-	[_purchaseSharesButton setEnabled:NO];
-	[_purchaseSharesButton setTransparent:YES];
-	[_endGameButton setEnabled:NO];
-	[_endGameButton setTransparent:YES];
+	[self hidePurchaseSharesButton];
+	[self hideEndCurrentTurnButton];
+	[self hideEndGameButton];
 }
 
 
@@ -72,6 +71,47 @@
 	[_purchaseSharesButton setTransparent:YES];
 	[_purchaseSharesButton setEnabled:NO];
 }
+
+- (IBAction)endCurrentTurn:(id)sender;
+{
+	[_game endCurrentTurn];
+}
+
+- (void)showEndCurrentTurnButton;
+{
+	[_endCurrentTurnButton setEnabled:YES];
+	[_endCurrentTurnButton setTransparent:NO];
+}
+
+- (void)hideEndCurrentTurnButton;
+{
+	[_endCurrentTurnButton setTransparent:YES];
+	[_endCurrentTurnButton setEnabled:NO];
+}
+
+- (IBAction)endGame:(id)sender;
+{
+	[_game endGame];
+}
+
+- (void)showEndGameButton;
+{
+	[_endGameButton setEnabled:YES];
+	[_endGameButton setTransparent:NO];
+}
+
+- (void)hideEndGameButton;
+{
+	[_endGameButton setTransparent:YES];
+	[_endGameButton setEnabled:NO];
+}
+
+- (void)disableBoardAndTileRack;
+{
+	[_boardMatrix setEnabled:NO];
+	[_tileRackMatrix setEnabled:NO];
+}
+
 
 - (void)registerPurchaseSharesSheetController:(AQPurchaseSharesSheetController *)purchaseSharesSheetController;
 {
@@ -172,6 +212,29 @@
 		[[_boardMatrix cellAtRow:[curTile rowInt] column:([curTile column] - 1)] setButtonColor:[_game tilePlayableColor]];
 }
 
+- (void)congratulateWinnersByName:(NSArray *)winners;
+{
+	NSAlert *congratulateWinnerAlert = [[[NSAlert alloc] init] autorelease];
+	[congratulateWinnerAlert addButtonWithTitle:@"Congratulations!"];
+	if ([winners count] == 1) {
+		[congratulateWinnerAlert setMessageText:NSLocalizedStringFromTable(@"We have a winner!", @"Acquire", @"An announcement that we have a winner.")];
+		[congratulateWinnerAlert setInformativeText:[NSString stringWithFormat:@"%@ %@", [[winners objectAtIndex:0] name], NSLocalizedStringFromTable(@"has won the game!", @"Acquire", @"Text saying someone has won the game")]];
+	} else {
+		[congratulateWinnerAlert setMessageText:NSLocalizedStringFromTable(@"We have a tie!", @"Acquire", @"An announcement that we have a tie.")];
+		NSMutableString *listOfWinners = [NSMutableString stringWithString:[[winners objectAtIndex:0] name]];
+		int i;
+		for (i = 1; i < ([winners count] - 1); ++i) {
+			[listOfWinners appendString:[NSString stringWithFormat:@", %@", [winners objectAtIndex:i]]];
+		}
+		[listOfWinners appendString:@" and "];
+		[listOfWinners appendString:[winners lastObject]];
+		[congratulateWinnerAlert setInformativeText:[NSString stringWithFormat:@"%@ %@", listOfWinners, NSLocalizedStringFromTable(@"have won the game!", @"Acquire", @"Text saying multiple people have won the game.")]];
+	}
+	[congratulateWinnerAlert setAlertStyle:NSInformationalAlertStyle];
+
+	[congratulateWinnerAlert beginSheetModalForWindow:_gameWindow modalDelegate:nil didEndSelector:nil contextInfo:nil];
+}
+
 
 // NSTableDataSource informal protocol
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView;
@@ -250,6 +313,20 @@
 - (void)removeGameChatTabViewItem;
 {
 	[_gameChatAndLogTabView removeTabViewItem:[_gameChatAndLogTabView tabViewItemAtIndex:0]];
+}
+
+
+// Window delegate
+- (void)windowWillClose:(NSNotification *)notification;
+{
+	if ([notification object] != _gameWindow) {
+		NSLog(@"%s wrong window", _cmd);
+		return;
+	}
+	
+	[_game removeGameFromArrayController];
+	
+	[[NSNotificationCenter defaultCenter] postNotificationName:@"LocalGameWindowClosed" object:self];
 }
 
 
