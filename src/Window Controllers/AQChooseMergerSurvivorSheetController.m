@@ -128,6 +128,8 @@
 	if (!_chooseMergerSurvivorSheet)
 		[NSBundle loadNibNamed:@"ChooseMergerSurvivorSheet" owner:self];
 	
+	[_chooseMergerSurvivorSheet makeFirstResponder:_reconsiderButton];
+	
 	[NSApp beginSheet:_chooseMergerSurvivorSheet modalForWindow:window modalDelegate:self didEndSelector:@selector(didEndSheet:returnCode:contextInfo:) contextInfo:nil];
 }
 @end

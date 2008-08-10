@@ -36,7 +36,7 @@
 }
 
 
-- (IBAction)letMeThinkAboutIt:(id)sender;
+- (IBAction)reconsider:(id)sender;
 {
 	[NSApp endSheet:_createNewHotelSheet returnCode:1];
 }
@@ -108,6 +108,8 @@
 {
 	if (!_createNewHotelSheet)
 		[NSBundle loadNibNamed:@"CreateNewHotelSheet" owner:self];
+	
+	[_createNewHotelSheet makeFirstResponder:_reconsiderButton];
 	
 	[NSApp beginSheet:_createNewHotelSheet modalForWindow:window modalDelegate:self didEndSelector:@selector(didEndSheet:returnCode:contextInfo:) contextInfo:nil];
 }

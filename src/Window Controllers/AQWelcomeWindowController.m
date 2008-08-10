@@ -98,8 +98,6 @@
 	BOOL mostRecentGameWasLocalGame = [[NSUserDefaults standardUserDefaults] boolForKey:@"MostRecentGameWasLocalGame"];
 	if (mostRecentGameWasLocalGame)
 		[_gameTypeTabView selectTabViewItemAtIndex:1];
-	else
-		[_hostOrIPAddressTextField selectText:self];
 }
 
 
@@ -115,6 +113,17 @@
 	return YES;
 }
 
+- (void)tabView:(NSTabView *)tabView willSelectTabViewItem:(NSTabViewItem *)tabViewItem;
+{
+	if (tabView != _gameTypeTabView)
+		return;
+	
+	if ([[tabViewItem label] isEqualToString:@"Online Game"])
+		[_welcomeWindow makeFirstResponder:_connectToServerButton];
+	else
+		[_welcomeWindow makeFirstResponder:_startLocalGameButton];
+}
+
 
 // Window visibility
 - (void)closeWelcomeWindow;
@@ -125,7 +134,6 @@
 
 - (void)bringWelcomeWindowToFront:(NSNotification *)notification;
 {
-	NSLog(@"%s called with notification=%@", _cmd, notification);
 	[_welcomeWindow makeKeyAndOrderFront:self];
 }
 

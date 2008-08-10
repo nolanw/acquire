@@ -95,7 +95,7 @@
 - (void)drewTile:(AQTile *)tile;
 {
 	if ([_tiles indexOfObject:[NSNull null]] == NSNotFound) {
-		NSLog(@"%s player drew a tile when they already had six", _cmd);
+		NSLog(@"%s player drew a tile when they already had six; this tile has been removed from the game", _cmd);
 		return;
 	}
 	
@@ -109,7 +109,13 @@
 
 - (int)numberOfTiles;
 {
-	return [_tiles count];
+	int numberOfTiles = 0;
+	NSEnumerator *tileEnumerator = [_tiles objectEnumerator];
+	id curTile;
+	while (curTile = [tileEnumerator nextObject])
+		if (curTile != [NSNull null])
+			++numberOfTiles;
+	return numberOfTiles;
 }
 
 

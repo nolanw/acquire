@@ -9,6 +9,7 @@
 {
 	IBOutlet NSWindow	*_chooseMergerSurvivorSheet;
 	IBOutlet NSMatrix	*_hotelNamesMatrix;
+	IBOutlet NSButton	*_reconsiderButton;
 	
 	id		_gameWindowController;
 	

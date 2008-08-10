@@ -3,7 +3,7 @@
 // Created May 28, 2008 by nwaite
 
 #ifndef DEBUG_ALLOW_PLAYING_OF_ANY_TILE
-#define DEBUG_ALLOW_PLAYING_OF_ANY_TILE 1
+#define DEBUG_ALLOW_PLAYING_OF_ANY_TILE 0
 #endif
 
 #import "AQGame.h"
@@ -28,6 +28,7 @@
 - (NSArray *)_hotelsNotOnBoard;
 - (NSArray *)_hotelsOnBoard;
 - (void)_tilePlayed:(AQTile *)tile;
+- (void)_checkTileRacksForUnplayableTiles;
 - (void)_showPurchaseSharesSheetIfNeededOrAdvanceTurn;
 - (void)_mergerHappeningAtTile:(AQTile *)tile;
 - (void)_payShareholderBonusesForHotels:(NSArray *)hotels;
@@ -198,9 +199,9 @@
 		if ([self _gameCanEnd]) {
 			[_gameWindowController showEndGameButton];
 			[_gameWindowController showEndCurrentTurnButton];
-		}
-		if (![self _gameCanEnd])
+		} else {
 			[self endCurrentTurn];
+		}
 	}
 }
 
@@ -346,7 +347,8 @@
 	[player addCash:(sharePrice * numberOfShares)];
 	[hotel addSharesToBank:numberOfShares];
 	
-	[_gameWindowController incomingGameLogEntry:[NSString stringWithFormat:@"* %@ sold %d shares of %@ for $%d", [player name], numberOfShares, [hotel name], (sharePrice * numberOfShares)]];
+	NSString *plural = (numberOfShares > 1) ? [NSString stringWithString:@"s"] : [NSString stringWithString:@""];
+	[_gameWindowController incomingGameLogEntry:[NSString stringWithFormat:@"* %@ sold %d share%@ of %@ for $%d", [player name], numberOfShares, plural, [hotel name], (sharePrice * numberOfShares)]];
 	
 	[_gameWindowController reloadScoreboard];
 }
@@ -409,8 +411,8 @@
 
 - (void)endCurrentTurn;
 {
-//	int i;
-//	for (i = [[[self activePlayer] tiles] count]; i < 6; ++i)
+	int i;
+	for (i = [[self activePlayer] numberOfTiles]; i < 6; ++i)
 		[[self activePlayer] drewTile:[_board tileFromTileBag]];
 	
 	++_activePlayerIndex;
@@ -428,6 +430,8 @@
 	
 	if ([self _gameCanEnd])
 		[_gameWindowController showEndGameButton];
+	else
+		[_gameWindowController hideEndGameButton];
 }
 
 - (void)startGame;
@@ -658,10 +662,31 @@
 	_tilePlayedThisTurn = YES;
 	[_gameWindowController incomingGameLogEntry:[NSString stringWithFormat:@"* %@ played tile %@.", [[self activePlayer] name], [tile description]]];
 	
+	[self _checkTileRacksForUnplayableTiles];
 	[_gameWindowController tilesChanged:[[self activePlayer] tiles]];
 	[_gameWindowController tilesChanged:[NSArray arrayWithObject:tile]];
 	[[self activePlayer] playedTileNamed:[tile description]];
 	[_gameWindowController updateTileRack:[[self activePlayer] tiles]];
+}
+
+- (void)_checkTileRacksForUnplayableTiles;
+{
+	NSEnumerator *playerEnumerator = [_players objectEnumerator];
+	id curPlayer;
+	while (curPlayer = [playerEnumerator nextObject]) {
+		NSEnumerator *tileEnumerator = [[NSArray arrayWithArray:[curPlayer tiles]] objectEnumerator];
+		id curTile;
+		while (curTile = [tileEnumerator nextObject]) {
+			if (curTile == [NSNull null])
+				continue;
+			
+			if ([self tileIsUnplayable:curTile]) {
+				[_gameWindowController incomingGameLogEntry:[NSString stringWithFormat:@"* %@ discarded unplayable tile %@", [curPlayer name], [curTile description]]];
+				[curPlayer playedTileNamed:[curTile description]];
+				[_gameWindowController tilesChanged:[NSArray arrayWithObject:curTile]];
+			}
+		}
+	}
 }
 
 - (void)_showPurchaseSharesSheetIfNeededOrAdvanceTurn;
@@ -811,6 +836,27 @@
 			while (curMinorityShareholder = [minorityShareholderEnumerator nextObject]) {
 				[curMinorityShareholder addCash:cashPerPlayer];
 				[_gameWindowController incomingGameLogEntry:[NSString stringWithFormat:@"* %@ gets $%d as minority shareholder of %@", [curMinorityShareholder name], cashPerPlayer, [curHotel name]]];
+			}
+		}
+	}
+	
+	[_gameWindowController reloadScoreboard];
+}
+
+- (void)_payPlayersForSharesInHotels:(NSArray *)hotelsToPay;
+{
+	NSArray *hotels = [NSArray arrayWithArray:hotelsToPay];
+	NSEnumerator *hotelEnumerator = [hotels objectEnumerator];
+	id curHotel;
+	while (curHotel = [hotelEnumerator nextObject]) {
+		NSEnumerator *playerEnumerator = [_players objectEnumerator];
+		id curPlayer;
+		while (curPlayer = [playerEnumerator nextObject]) {
+			if ([curPlayer hasSharesOfHotelNamed:[curHotel name]]) {
+				int cashAdded = ([curPlayer numberOfSharesOfHotelNamed:[curHotel name]] * [curHotel sharePrice]);
+				[curPlayer addCash:cashAdded];
+				NSString *plural = ([curPlayer numberOfSharesOfHotelNamed:[curHotel name]] > 1) ? [NSString stringWithString:@"S"] : [NSString stringWithString:@""];
+				[_gameWindowController incomingGameLogEntry:[NSString stringWithFormat:@"* %@ got $%d for %d share%@ of %@", [curPlayer name], cashAdded, [curPlayer numberOfSharesOfHotelNamed:[curHotel name]], plural, [curHotel name]]];
 			}
 		}
 	}

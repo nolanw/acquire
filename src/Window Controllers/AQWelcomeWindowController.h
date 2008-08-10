@@ -20,6 +20,7 @@
 	IBOutlet NSForm			*_localPlayerNamesForm;
 	IBOutlet NSTextField	*_localNumberOfPlayersTextField;
 	IBOutlet NSStepper		*_localNumberOfPlayersStepper;
+	IBOutlet NSButton		*_startLocalGameButton;
 	
 	BOOL _quitOnNextWindowClose;
 }

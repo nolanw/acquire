@@ -8,6 +8,7 @@
 	IBOutlet NSWindow	*_purchaseSharesSheet;
 	IBOutlet NSMatrix	*_hotelNamesMatrix;
 	IBOutlet NSMatrix	*_shareNumbersAndSteppersMatrix;
+	IBOutlet NSButton	*_letMeSeeTheBoardButton;
 	IBOutlet NSButton	*_purchaseSharesButton;
 	
 	id		_gameWindowController;

@@ -155,6 +155,8 @@
 	
 	[self _updateTextFieldsAndSteppers];
 	
+	[_allocateMergingHotelSharesSheet makeFirstResponder:_allocateButton];
+	
 	[NSApp beginSheet:_allocateMergingHotelSharesSheet modalForWindow:window modalDelegate:nil didEndSelector:nil contextInfo:nil];
 	[NSApp runModalForWindow:_allocateMergingHotelSharesSheet];
 	

@@ -49,6 +49,7 @@
 - (void)showEndGameButton;
 - (void)hideEndGameButton;
 - (void)disableBoardAndTileRack;
+- (void)updateFirstResponderAndKeyEquivalents;
 
 - (void)reloadScoreboard;
 - (void)tilesChanged:(NSArray *)changedTiles;

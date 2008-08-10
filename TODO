@@ -1,12 +1,10 @@
 New features
 ------------
-- Implement AQGame class.
-	- Discard unplayable tiles.
-	- Finish implementing -_payPlayersForSharesInHotels:;
 - Allow for both new and old hotel names (user-configurable?).
 - Make scoreboard columns' backgrounds relate to their hotels.
 - Provide a legend of hotels and their colors.
 - Design and implement a proper game logging class (which the Game Log in the Game Window class can access).
+- Make separate local game and network game menus.
 
 Known bugs
 ---------

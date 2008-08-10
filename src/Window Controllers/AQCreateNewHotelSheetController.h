@@ -7,6 +7,7 @@
 {
 	IBOutlet NSWindow	*_createNewHotelSheet;
 	IBOutlet NSMatrix	*_hotelNamesMatrix;
+	IBOutlet NSButton	*_reconsiderButton;
 	
 	id		_gameWindowController;
 	
@@ -21,7 +22,7 @@
 
 - (void)awakeFromNib;
 
-- (IBAction)letMeThinkAboutIt:(id)sender;
+- (IBAction)reconsider:(id)sender;
 - (IBAction)createNewHotel:(id)sender;
 - (void)didEndSheet:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
 

@@ -193,6 +193,8 @@
 	if (!_purchaseSharesSheet)
         [NSBundle loadNibNamed:@"PurchaseSharesSheet" owner:self];
 	
+	[_purchaseSharesSheet makeFirstResponder:_letMeSeeTheBoardButton];
+	
 	[NSApp beginSheet:_purchaseSharesSheet modalForWindow:window modalDelegate:self didEndSelector:@selector(didEndSheet:returnCode:contextInfo:) contextInfo:nil];
 }
 @end

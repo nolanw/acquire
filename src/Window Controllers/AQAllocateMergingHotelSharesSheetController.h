@@ -18,6 +18,7 @@
 	IBOutlet NSTextField	*_sharesTradedTextField;
 	IBOutlet NSStepper		*_sharesTradedStepper;
 	IBOutlet NSTextField	*_sharesKeptInMergingHotelTextField;
+	IBOutlet NSButton		*_allocateButton;
 	
 	id		_gameWindowController;
 	id		_mergingHotel;

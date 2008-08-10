@@ -62,14 +62,17 @@
 
 - (void)showPurchaseSharesButton;
 {
+	[_purchaseSharesButton setState:NSOffState];
 	[_purchaseSharesButton setEnabled:YES];
 	[_purchaseSharesButton setTransparent:NO];
+	[self updateFirstResponderAndKeyEquivalents];
 }
 
 - (void)hidePurchaseSharesButton;
 {
 	[_purchaseSharesButton setTransparent:YES];
 	[_purchaseSharesButton setEnabled:NO];
+	[self updateFirstResponderAndKeyEquivalents];
 }
 
 - (IBAction)endCurrentTurn:(id)sender;
@@ -79,14 +82,17 @@
 
 - (void)showEndCurrentTurnButton;
 {
+	[_endCurrentTurnButton setState:NSOffState];
 	[_endCurrentTurnButton setEnabled:YES];
 	[_endCurrentTurnButton setTransparent:NO];
+	[self updateFirstResponderAndKeyEquivalents];
 }
 
 - (void)hideEndCurrentTurnButton;
 {
 	[_endCurrentTurnButton setTransparent:YES];
 	[_endCurrentTurnButton setEnabled:NO];
+	[self updateFirstResponderAndKeyEquivalents];
 }
 
 - (IBAction)endGame:(id)sender;
@@ -96,20 +102,53 @@
 
 - (void)showEndGameButton;
 {
+	[_endGameButton setState:NSOffState];
 	[_endGameButton setEnabled:YES];
 	[_endGameButton setTransparent:NO];
+	[self updateFirstResponderAndKeyEquivalents];
 }
 
 - (void)hideEndGameButton;
 {
 	[_endGameButton setTransparent:YES];
 	[_endGameButton setEnabled:NO];
+	[self updateFirstResponderAndKeyEquivalents];
 }
 
 - (void)disableBoardAndTileRack;
 {
 	[_boardMatrix setEnabled:NO];
 	[_tileRackMatrix setEnabled:NO];
+}
+
+- (void)updateFirstResponderAndKeyEquivalents;
+{
+	[_purchaseSharesButton setKeyEquivalent:@""];
+	[_endCurrentTurnButton setKeyEquivalent:@""];
+	[_endGameButton setKeyEquivalent:@""];
+	
+	if ([_purchaseSharesButton isEnabled] && ![_endCurrentTurnButton isEnabled]) {
+		[_purchaseSharesButton setKeyEquivalent:@"\r"];
+		[_gameWindow makeFirstResponder:_purchaseSharesButton];
+		return;
+	}
+	
+	if ([_purchaseSharesButton isEnabled] && [_endCurrentTurnButton isEnabled]) {
+		[_purchaseSharesButton setKeyEquivalent:@"\r"];
+		[_gameWindow makeFirstResponder:_endCurrentTurnButton];
+		return;
+	}
+	
+	if ([_endCurrentTurnButton isEnabled]) {
+		[_endCurrentTurnButton setKeyEquivalent:@"\r"];
+		[_gameWindow makeFirstResponder:_endCurrentTurnButton];
+		return;
+	}
+	
+	if ([_endGameButton isEnabled]) {
+		[_endGameButton setKeyEquivalent:@"\r"];
+		return;
+	}
 }
 
 
