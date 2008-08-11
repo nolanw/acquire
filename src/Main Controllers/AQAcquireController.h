@@ -7,13 +7,15 @@
 #import "AQConnectionArrayController.h"
 #import "AQWelcomeWindowController.h"
 #import "AQLobbyWindowController.h"
+#import "AQPreferencesWindowController.h"
 
 @interface AQAcquireController : NSObject
 {
-	AQGameArrayController 		*_gameArrayController;
-	AQConnectionArrayController	*_connectionArrayController;
-	AQLobbyWindowController		*_lobbyWindowController;
-	AQWelcomeWindowController	*_welcomeWindowController;
+	AQGameArrayController 			*_gameArrayController;
+	AQConnectionArrayController		*_connectionArrayController;
+	AQLobbyWindowController			*_lobbyWindowController;
+	AQPreferencesWindowController	*_preferencesWindowController;
+	AQWelcomeWindowController		*_welcomeWindowController;
 	
 	NSString *_localPlayerName;
 }
@@ -47,6 +49,7 @@
 - (void)updateGameListFor:(id)anObject;
 - (void)showLobbyWindow;
 - (NSString *)connectedHostOrIPAddress;
+- (IBAction)showPreferencesWindow:(id)sender;
 
 // Allow objects in loaded nibs to say hi
 - (void)registerWelcomeWindowController:(AQWelcomeWindowController *)welcomeWindowController;

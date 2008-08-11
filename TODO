@@ -8,10 +8,11 @@ New features
 
 Known bugs
 ---------
+- Crash on quit (seems related to releasing the game window)
 
 Fixed bugs
 ----------
-- Crash on appearance of Purchase Shares Sheet after Allocate Merging Hotel Shares Sheet pops up (seemingly randomly; see comment in AQGame (Private)'s _mergerHappeningAtTile: selector implementation). (FIXED 2008-Aug-07: I don't understand 100% why, but it seems to have gone without leakage.)
+- Crash on appearance of Purchase Shares Sheet after Allocate Merging Hotel Shares Sheet pops up (seemingly randomly; see comment in AQGame (Private)'s _mergerHappeningAtTile: selector implementation). (FIXED 2008-Aug-07: I don't understand 100% why, but it seems to have gone without leakage; see comment at end of implementation of selector.)
 - Program crashes on certain instances of allocating merging hotel shares (happens when clicking sold shares stepper). (Potentially happens when merging hotels of different sizes.) (FIXED 2008-Aug-07: problem disappeared with decision to make the allocating merging hotel shares sheet application-modal.)
 - Canceling the Create New Hotel sheet seems to make the game think a tile has been played, even though it was canceled. (FIXED 2008-Aug-07: reorganized selectors called in showing sheet)
 - If Create New Hotel sheet is cancelled, it won't come back. (FIXED 2008-Aug-04: was trying to print instances of AQHotel instead of asking for the hotel's name, resulting in an attempted copyWithZone, which is intentionally not implemented for AQHotel)

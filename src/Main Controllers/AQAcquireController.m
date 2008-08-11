@@ -23,6 +23,7 @@
 	_gameArrayController = [[AQGameArrayController alloc] init];
 	_connectionArrayController = [[AQConnectionArrayController alloc] init];
 	
+	_preferencesWindowController = nil;
 	_welcomeWindowController = nil;
 	_lobbyWindowController = nil;
 
@@ -69,6 +70,9 @@
 	
 	if ([[menuItem title] isEqualToString:@"Leave Game"] || [[menuItem title] isEqualToString:@"End Game"])
 		return ([_gameArrayController activeGame] != nil);
+	
+	if ([[menuItem title] isEqualToString:@"Preferences…"])
+		return YES;
 	
 	return NO;
 }
@@ -195,6 +199,13 @@
 - (void)displayNameAlreadyInUse;
 {
 	[_welcomeWindowController displayNameAlreadyInUse];
+}
+
+- (IBAction)showPreferencesWindow:(id)sender;
+{
+	if (_preferencesWindowController == nil)
+		_preferencesWindowController = [[AQPreferencesWindowController alloc] init];
+	[_preferencesWindowController openPreferencesWindowAndBringToFront];
 }
 
 

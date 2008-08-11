@@ -20,6 +20,7 @@
 		F224F2890DEBC16F0004978C /* WelcomeWindow.nib in Resources */ = {isa = PBXBuildFile; fileRef = F224F2870DEBC16F0004978C /* WelcomeWindow.nib */; };
 		F23A376D0E39661F00202DE2 /* PurchaseSharesSheet.nib in Resources */ = {isa = PBXBuildFile; fileRef = F23A376B0E39661F00202DE2 /* PurchaseSharesSheet.nib */; };
 		F24990240DED297F004F3509 /* AsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = F24990230DED297F004F3509 /* AsyncSocket.m */; };
+		F266ABDE0E50A39A0063B294 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F266ABDD0E50A39A0063B294 /* Sparkle.framework */; };
 		F2892B8C0DF0E02E00387EAB /* AQGame.m in Sources */ = {isa = PBXBuildFile; fileRef = F2892B8B0DF0E02E00387EAB /* AQGame.m */; };
 		F2892B980DF0E0A000387EAB /* LobbyWindow.nib in Resources */ = {isa = PBXBuildFile; fileRef = F2892B960DF0E0A000387EAB /* LobbyWindow.nib */; };
 		F28B09760E1460BD00D100DF /* AQNetacquireDirective.m in Sources */ = {isa = PBXBuildFile; fileRef = F28B09750E1460BD00D100DF /* AQNetacquireDirective.m */; };
@@ -35,11 +36,25 @@
 		F2ABA5AD0DEE72F300F58E4B /* AQWelcomeWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = F2ABA5AC0DEE72F300F58E4B /* AQWelcomeWindowController.m */; };
 		F2ABA5B30DEE76F700F58E4B /* AQGameWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = F2ABA5B20DEE76F700F58E4B /* AQGameWindowController.m */; };
 		F2ABA5C10DEE7B9200F58E4B /* AQLobbyWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = F2ABA5C00DEE7B9200F58E4B /* AQLobbyWindowController.m */; };
+		F2C135870E50A0E800638FD0 /* PreferencesWindow.nib in Resources */ = {isa = PBXBuildFile; fileRef = F2C135850E50A0E800638FD0 /* PreferencesWindow.nib */; };
+		F2C1358D0E50A26200638FD0 /* AQPreferencesWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = F2C1358C0E50A26200638FD0 /* AQPreferencesWindowController.m */; };
 		F2CF48C20E31B45A00A3AEFA /* CCDColoredButton.m in Sources */ = {isa = PBXBuildFile; fileRef = F2CF48BF0E31B45A00A3AEFA /* CCDColoredButton.m */; };
 		F2CF48C30E31B45A00A3AEFA /* CCDColoredButtonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F2CF48C10E31B45A00A3AEFA /* CCDColoredButtonCell.m */; };
 		F2D44CAB0E48274D003B1E91 /* AQAllocateMergingHotelSharesSheetController.m in Sources */ = {isa = PBXBuildFile; fileRef = F2D44CAA0E48274D003B1E91 /* AQAllocateMergingHotelSharesSheetController.m */; };
 		F2EB62A60E1EF87E00FE5E45 /* AQConnectionController.m in Sources */ = {isa = PBXBuildFile; fileRef = F2EB62A50E1EF87E00FE5E45 /* AQConnectionController.m */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		F2C135440E5094C400638FD0 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		089C165DFE840E0CC02AAC07 /* English */ = {isa = PBXFileReference; fileEncoding = 10; lastKnownFileType = text.plist.strings; name = English; path = English.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -65,6 +80,7 @@
 		F23A376C0E39661F00202DE2 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/PurchaseSharesSheet.nib; sourceTree = "<group>"; };
 		F24990220DED297F004F3509 /* AsyncSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AsyncSocket.h; sourceTree = "<group>"; };
 		F24990230DED297F004F3509 /* AsyncSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AsyncSocket.m; sourceTree = "<group>"; };
+		F266ABDD0E50A39A0063B294 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Sparkle.framework; path = sparkle/Sparkle.framework; sourceTree = "<group>"; };
 		F2892B8A0DF0E02E00387EAB /* AQGame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AQGame.h; sourceTree = "<group>"; };
 		F2892B8B0DF0E02E00387EAB /* AQGame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AQGame.m; sourceTree = "<group>"; };
 		F2892B970DF0E0A000387EAB /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/LobbyWindow.nib; sourceTree = "<group>"; };
@@ -92,6 +108,9 @@
 		F2ABA5B20DEE76F700F58E4B /* AQGameWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AQGameWindowController.m; sourceTree = "<group>"; };
 		F2ABA5BF0DEE7B9200F58E4B /* AQLobbyWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AQLobbyWindowController.h; sourceTree = "<group>"; };
 		F2ABA5C00DEE7B9200F58E4B /* AQLobbyWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AQLobbyWindowController.m; sourceTree = "<group>"; };
+		F2C135860E50A0E800638FD0 /* English */ = {isa = PBXFileReference; lastKnownFileType = wrapper.nib; name = English; path = English.lproj/PreferencesWindow.nib; sourceTree = "<group>"; };
+		F2C1358B0E50A26200638FD0 /* AQPreferencesWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AQPreferencesWindowController.h; sourceTree = "<group>"; };
+		F2C1358C0E50A26200638FD0 /* AQPreferencesWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AQPreferencesWindowController.m; sourceTree = "<group>"; };
 		F2CF48BE0E31B45A00A3AEFA /* CCDColoredButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCDColoredButton.h; sourceTree = "<group>"; };
 		F2CF48BF0E31B45A00A3AEFA /* CCDColoredButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CCDColoredButton.m; sourceTree = "<group>"; };
 		F2CF48C00E31B45A00A3AEFA /* CCDColoredButtonCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCDColoredButtonCell.h; sourceTree = "<group>"; };
@@ -108,6 +127,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */,
+				F266ABDE0E50A39A0063B294 /* Sparkle.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -128,6 +148,7 @@
 		1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F266ABDD0E50A39A0063B294 /* Sparkle.framework */,
 				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
 			);
 			name = "Linked Frameworks";
@@ -182,6 +203,7 @@
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
 				F2ABA5A70DEE728C00F58E4B /* GameWindow.nib */,
 				F219596E0E4B7453009379CA /* AllocateMergingHotelSharesSheet.nib */,
+				F2C135850E50A0E800638FD0 /* PreferencesWindow.nib */,
 				F23A376B0E39661F00202DE2 /* PurchaseSharesSheet.nib */,
 				F21959680E4B7407009379CA /* ChooseMergerSurvivorSheet.nib */,
 				F201599F0E455D810044BFCB /* CreateNewHotelSheet.nib */,
@@ -276,6 +298,8 @@
 				F2ABA5B20DEE76F700F58E4B /* AQGameWindowController.m */,
 				F2ABA5BF0DEE7B9200F58E4B /* AQLobbyWindowController.h */,
 				F2ABA5C00DEE7B9200F58E4B /* AQLobbyWindowController.m */,
+				F2C1358B0E50A26200638FD0 /* AQPreferencesWindowController.h */,
+				F2C1358C0E50A26200638FD0 /* AQPreferencesWindowController.m */,
 				F2ABA5AB0DEE72F300F58E4B /* AQWelcomeWindowController.h */,
 				F2ABA5AC0DEE72F300F58E4B /* AQWelcomeWindowController.m */,
 				F222AA670E3430700037443E /* Sheet Controllers */,
@@ -306,6 +330,7 @@
 				8D1107290486CEB800E47090 /* Resources */,
 				8D11072C0486CEB800E47090 /* Sources */,
 				8D11072E0486CEB800E47090 /* Frameworks */,
+				F2C135440E5094C400638FD0 /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -349,6 +374,7 @@
 				F20159A10E455D810044BFCB /* CreateNewHotelSheet.nib in Resources */,
 				F219596A0E4B7407009379CA /* ChooseMergerSurvivorSheet.nib in Resources */,
 				F21959700E4B7453009379CA /* AllocateMergingHotelSharesSheet.nib in Resources */,
+				F2C135870E50A0E800638FD0 /* PreferencesWindow.nib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -380,6 +406,7 @@
 				F20159A70E455DAE0044BFCB /* AQCreateNewHotelSheetController.m in Sources */,
 				F2D44CAB0E48274D003B1E91 /* AQAllocateMergingHotelSharesSheetController.m in Sources */,
 				F219592A0E4B6885009379CA /* AQChooseMergerSurvivorSheetController.m in Sources */,
+				F2C1358D0E50A26200638FD0 /* AQPreferencesWindowController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -458,6 +485,14 @@
 			name = GameWindow.nib;
 			sourceTree = "<group>";
 		};
+		F2C135850E50A0E800638FD0 /* PreferencesWindow.nib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F2C135860E50A0E800638FD0 /* English */,
+			);
+			name = PreferencesWindow.nib;
+			sourceTree = "<group>";
+		};
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
@@ -465,6 +500,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+					"\"$(SRCROOT)/sparkle\"",
+				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_MODEL_TUNING = G5;
@@ -483,6 +523,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)\"",
+					"\"$(SRCROOT)/sparkle\"",
+				);
 				GCC_MODEL_TUNING = G5;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "src/Other Sources/Acquire_Prefix.pch";
