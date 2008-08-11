@@ -18,6 +18,7 @@
 		F21959700E4B7453009379CA /* AllocateMergingHotelSharesSheet.nib in Resources */ = {isa = PBXBuildFile; fileRef = F219596E0E4B7453009379CA /* AllocateMergingHotelSharesSheet.nib */; };
 		F222AA640E3430660037443E /* AQPurchaseSharesSheetController.m in Sources */ = {isa = PBXBuildFile; fileRef = F222AA630E3430660037443E /* AQPurchaseSharesSheetController.m */; };
 		F224F2890DEBC16F0004978C /* WelcomeWindow.nib in Resources */ = {isa = PBXBuildFile; fileRef = F224F2870DEBC16F0004978C /* WelcomeWindow.nib */; };
+		F236ED280E50AC3E00A0B1D0 /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = F266ABDD0E50A39A0063B294 /* Sparkle.framework */; };
 		F23A376D0E39661F00202DE2 /* PurchaseSharesSheet.nib in Resources */ = {isa = PBXBuildFile; fileRef = F23A376B0E39661F00202DE2 /* PurchaseSharesSheet.nib */; };
 		F24990240DED297F004F3509 /* AsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = F24990230DED297F004F3509 /* AsyncSocket.m */; };
 		F266ABDE0E50A39A0063B294 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F266ABDD0E50A39A0063B294 /* Sparkle.framework */; };
@@ -45,12 +46,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		F2C135440E5094C400638FD0 /* CopyFiles */ = {
+		F236ED2C0E50AC6600A0B1D0 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				F236ED280E50AC3E00A0B1D0 /* Sparkle.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -330,7 +332,7 @@
 				8D1107290486CEB800E47090 /* Resources */,
 				8D11072C0486CEB800E47090 /* Sources */,
 				8D11072E0486CEB800E47090 /* Frameworks */,
-				F2C135440E5094C400638FD0 /* CopyFiles */,
+				F236ED2C0E50AC6600A0B1D0 /* CopyFiles */,
 			);
 			buildRules = (
 			);

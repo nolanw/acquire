@@ -6,6 +6,14 @@
       <description>Most recent changes with links to updates.</description>
       <language>en</language>
          <item>
+			<title>Version 0.5.1 (minor release; preferences window)</title>
+						<sparkle:releaseNotesLink>
+							http://acquire.nwaite.com/release/Acquire_0.5.1.html
+						</sparkle:releaseNotesLink>
+			<pubDate>Mon, 11 Aug 2008 11:10:00 -0600</pubDate>
+			<enclosure sparkle:dsaSignature="MC4CFQCq/Q1s0lG1TmnRIFP6dE4Vc43JygIVALt6k6QWuJWq5mPkV3nukoEmon7o" url="http://acquire.nwaite.com/release/Acquire_0.5.1.zip" sparkle:version="0.5.1" length="996853" type="application/octet-stream"/>
+		</item>
+		<item>
             <title>Version 0.5 (initial release; local play functional)</title>
 						<sparkle:releaseNotesLink>
 							http://acquire.nwaite.com/release/Acquire_0.5.html
