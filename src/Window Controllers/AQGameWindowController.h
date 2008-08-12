@@ -12,7 +12,8 @@
 
 @interface AQGameWindowController : NSObject
 {
-	IBOutlet id				_game;
+	id	_game;
+	
 	IBOutlet NSWindow		*_gameWindow;
 	IBOutlet NSMatrix		*_boardMatrix;
 	IBOutlet NSMatrix		*_tileRackMatrix;
@@ -33,11 +34,8 @@
 	NSColor	*_tileUnplayedColor;
 }
 
-- (id)init;
+- (id)initWithGame:(id)game;
 - (void)dealloc;
-
-// NSObject (NSNibAwakening)
-- (void)awakeFromNib;
 
 - (IBAction)showPurchaseSharesSheet:(id)sender;
 - (void)showPurchaseSharesButton;

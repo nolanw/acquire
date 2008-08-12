@@ -5,13 +5,15 @@ New features
 - Provide a legend of hotels and their colors.
 - Design and implement a proper game logging class (which the Game Log in the Game Window class can access).
 - Make separate local game and network game menus.
+- Implement the board's winning of some shares in two-player local games.
 
 Known bugs
 ---------
-- Crash on quit (seems related to releasing the game window)
+
 
 Fixed bugs
 ----------
+- Crash on quit (seems related to releasing the game window) (FIXED 2008-Aug-11: Still had a couple NIBs lingering using the stupid "call a registration selector in awakeFromNib" instead of using the File Owner and passing along needed pointers with the init selector.)
 - Crash on appearance of Purchase Shares Sheet after Allocate Merging Hotel Shares Sheet pops up (seemingly randomly; see comment in AQGame (Private)'s _mergerHappeningAtTile: selector implementation). (FIXED 2008-Aug-07: I don't understand 100% why, but it seems to have gone without leakage; see comment at end of implementation of selector.)
 - Program crashes on certain instances of allocating merging hotel shares (happens when clicking sold shares stepper). (Potentially happens when merging hotels of different sizes.) (FIXED 2008-Aug-07: problem disappeared with decision to make the allocating merging hotel shares sheet application-modal.)
 - Canceling the Create New Hotel sheet seems to make the game think a tile has been played, even though it was canceled. (FIXED 2008-Aug-07: reorganized selectors called in showing sheet)

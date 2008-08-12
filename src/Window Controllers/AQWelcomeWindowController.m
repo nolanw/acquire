@@ -17,12 +17,50 @@
 @end
 
 @implementation AQWelcomeWindowController
-- (id)init;
+- (id)initWithAcquireController:(id)acquireController;
 {
 	if (![super init])
 		return nil;
 	
+	_acquireController = [acquireController retain];
 	_quitOnNextWindowClose = YES;
+	
+	if (_welcomeWindow == nil) {
+		if (![NSBundle loadNibNamed:@"WelcomeWindow" owner:self]) {
+			NSLog(@"%s failed to load WelcomeWindow.nib", _cmd);
+			return nil;
+		}
+	}
+	
+	[_localNumberOfPlayersStepper setTarget:self];
+	[_localNumberOfPlayersStepper setAction:@selector(localNumberOfPlayersStepperHasChanged:)];
+	[self _updateLocalPlayerNamesForm];
+	
+	NSString *lastHostOrIPAddress = [[NSUserDefaults standardUserDefaults] objectForKey:@"LastHostOrIPAddress"];
+	if (lastHostOrIPAddress != nil)
+		[_hostOrIPAddressTextField setStringValue:lastHostOrIPAddress];
+	
+	NSString *lastPort = [[NSUserDefaults standardUserDefaults] objectForKey:@"LastPort"];
+	if (lastPort != nil)
+		[_portTextField setStringValue:lastPort];
+	
+	NSString *lastDisplayName = [[NSUserDefaults standardUserDefaults] objectForKey:@"LastDisplayName"];
+	if (lastDisplayName != nil)
+		[_displayNameTextField setStringValue:lastDisplayName];
+	
+	NSArray *lastLocalPlayerNames = [[NSUserDefaults standardUserDefaults] objectForKey:@"LastLocalPlayerNames"];
+	if (lastLocalPlayerNames != nil) {
+		[_localNumberOfPlayersStepper setIntValue:[lastLocalPlayerNames count]];
+		[self localNumberOfPlayersStepperHasChanged:self];
+		
+		int i;
+		for (i = 0; i < [lastLocalPlayerNames count]; ++i)
+			[[_localPlayerNamesForm cellAtIndex:i] setStringValue:[lastLocalPlayerNames objectAtIndex:i]];
+	}
+	
+	BOOL mostRecentGameWasLocalGame = [[NSUserDefaults standardUserDefaults] boolForKey:@"MostRecentGameWasLocalGame"];
+	if (mostRecentGameWasLocalGame)
+		[_gameTypeTabView selectTabViewItemAtIndex:1];
 
 	return self;
 }
@@ -32,6 +70,8 @@
 	[_welcomeWindow close];
 	[_welcomeWindow release];
 	_welcomeWindow = nil;
+	[_acquireController release];
+	_acquireController = nil;
 	
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	
@@ -68,36 +108,7 @@
 // NSObject (NSNibAwakening)
 - (void)awakeFromNib;
 {
-	[(AQAcquireController *)_acquireController registerWelcomeWindowController:self];
-	[_localNumberOfPlayersStepper setTarget:self];
-	[_localNumberOfPlayersStepper setAction:@selector(localNumberOfPlayersStepperHasChanged:)];
-	[self _updateLocalPlayerNamesForm];
 	
-	NSString *lastHostOrIPAddress = [[NSUserDefaults standardUserDefaults] objectForKey:@"LastHostOrIPAddress"];
-	if (lastHostOrIPAddress != nil)
-		[_hostOrIPAddressTextField setStringValue:lastHostOrIPAddress];
-	
-	NSString *lastPort = [[NSUserDefaults standardUserDefaults] objectForKey:@"LastPort"];
-	if (lastPort != nil)
-		[_portTextField setStringValue:lastPort];
-	
-	NSString *lastDisplayName = [[NSUserDefaults standardUserDefaults] objectForKey:@"LastDisplayName"];
-	if (lastDisplayName != nil)
-		[_displayNameTextField setStringValue:lastDisplayName];
-	
-	NSArray *lastLocalPlayerNames = [[NSUserDefaults standardUserDefaults] objectForKey:@"LastLocalPlayerNames"];
-	if (lastLocalPlayerNames != nil) {
-		[_localNumberOfPlayersStepper setIntValue:[lastLocalPlayerNames count]];
-		[self localNumberOfPlayersStepperHasChanged:self];
-		
-		int i;
-		for (i = 0; i < [lastLocalPlayerNames count]; ++i)
-			[[_localPlayerNamesForm cellAtIndex:i] setStringValue:[lastLocalPlayerNames objectAtIndex:i]];
-	}
-	
-	BOOL mostRecentGameWasLocalGame = [[NSUserDefaults standardUserDefaults] boolForKey:@"MostRecentGameWasLocalGame"];
-	if (mostRecentGameWasLocalGame)
-		[_gameTypeTabView selectTabViewItemAtIndex:1];
 }
 
 

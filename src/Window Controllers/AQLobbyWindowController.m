@@ -6,31 +6,19 @@
 @end
 
 @implementation AQLobbyWindowController
-- (id)init;
+- (id)initWithAcquireController:(id)acquireController;
 {
 	if (![super init])
 		return nil;
 	
+	_acquireController = [acquireController retain];
 	
-
-	return self;
-}
-
-- (void)dealloc;
-{
-	[_gameListUpdateTimer invalidate];
-	[_gameListUpdateTimer release];
-	_gameListUpdateTimer = nil;
-	[_lobbyWindow release];
-	
-	[super dealloc];
-}
-
-
-// NSObject (NSNibAwakening)
-- (void)awakeFromNib;
-{
-	[(AQAcquireController *)_acquireController registerLobbyWindowController:self];
+	if (!_lobbyWindow) {
+		if (![NSBundle loadNibNamed:@"LobbyWindow" owner:self]) {
+			NSLog(@"%s failed to load LobbyWindow.nib", _cmd);
+			return nil;
+		}
+	}
 	
 	[_lobbyWindow setTitle:[NSString stringWithFormat:@"Acquire – %@ – %@", NSLocalizedStringFromTable(@"Lobby", @"Acquire", @"The word 'lobby'."), [_acquireController connectedHostOrIPAddress]]];
 	
@@ -41,6 +29,21 @@
 	[_gameListDrawer open];
 	
 	_gameListUpdateTimer = [[NSTimer scheduledTimerWithTimeInterval:4.0 target:self selector:@selector(requestGameListUpdate:) userInfo:nil repeats:YES] retain];
+
+	return self;
+}
+
+- (void)dealloc;
+{
+	[_gameListUpdateTimer invalidate];
+	[_gameListUpdateTimer release];
+	_gameListUpdateTimer = nil;
+	[_lobbyWindow release];
+	_lobbyWindow = nil;
+	[_acquireController release];
+	_acquireController = nil;
+	
+	[super dealloc];
 }
 
 

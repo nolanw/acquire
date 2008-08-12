@@ -5,7 +5,8 @@
 
 @interface AQWelcomeWindowController : NSObject
 {
-	IBOutlet id			_acquireController;
+	id	_acquireController;
+	
 	IBOutlet NSWindow	*_welcomeWindow;
 	IBOutlet NSTabView 	*_gameTypeTabView;
 	
@@ -25,7 +26,7 @@
 	BOOL _quitOnNextWindowClose;
 }
 
-- (id)init;
+- (id)initWithAcquireController:(id)acquireController;
 - (void)dealloc;
 
 // Accessors
@@ -49,7 +50,7 @@
 
 // UI widget actions
 - (IBAction)connectToServer:(id)sender;
-- (IBAction)cancelConnectingToServer:(id)sender;
+- (void)cancelConnectingToServer:(id)sender;
 - (IBAction)startLocalGame:(id)sender;
 - (void)localNumberOfPlayersStepperHasChanged:(id)sender;
 - (void)networkErrorAlertDismissed:(id)sender;

@@ -50,8 +50,4 @@
 - (void)showLobbyWindow;
 - (NSString *)connectedHostOrIPAddress;
 - (IBAction)showPreferencesWindow:(id)sender;
-
-// Allow objects in loaded nibs to say hi
-- (void)registerWelcomeWindowController:(AQWelcomeWindowController *)welcomeWindowController;
-- (void)registerLobbyWindowController:(AQLobbyWindowController *)lobbyWindowController;
 @end

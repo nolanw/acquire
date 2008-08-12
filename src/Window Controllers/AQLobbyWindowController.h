@@ -1,6 +1,7 @@
 @interface AQLobbyWindowController : NSObject
 {
-	IBOutlet id			_acquireController;
+	id	_acquireController;
+	
 	IBOutlet NSWindow	*_lobbyWindow;
 	IBOutlet NSDrawer	*_gameListDrawer;
 	
@@ -14,11 +15,8 @@
 	NSTimer	*_gameListUpdateTimer;
 }
 
-- (id)init;
+- (id)initWithAcquireController:(id)acquireController;
 - (void)dealloc;
-
-// NSObject (NSNibAwakening)
-- (void)awakeFromNib;
 
 // Window visibility
 - (void)closeLobbyWindow;

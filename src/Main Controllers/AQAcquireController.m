@@ -24,8 +24,8 @@
 	_connectionArrayController = [[AQConnectionArrayController alloc] init];
 	
 	_preferencesWindowController = nil;
-	_welcomeWindowController = nil;
-	_lobbyWindowController = nil;
+	_welcomeWindowController = [[AQWelcomeWindowController alloc] initWithAcquireController:self];
+	_lobbyWindowController = [[AQLobbyWindowController alloc] initWithAcquireController:self];
 
 	return self;
 }
@@ -206,28 +206,6 @@
 	if (_preferencesWindowController == nil)
 		_preferencesWindowController = [[AQPreferencesWindowController alloc] init];
 	[_preferencesWindowController openPreferencesWindowAndBringToFront];
-}
-
-
-// Allow objects in loaded nibs to say hi
-- (void)registerWelcomeWindowController:(AQWelcomeWindowController *)welcomeWindowController;
-{
-	if (_welcomeWindowController != nil) {
-		NSLog(@"%s another WelcomeWindowController is already registered", _cmd);
-		return;
-	}
-	
-	_welcomeWindowController = welcomeWindowController;
-}
-
-- (void)registerLobbyWindowController:(AQLobbyWindowController *)lobbyWindowController;
-{
-	if (_lobbyWindowController != nil) {
-		NSLog(@"%s another LobbyWindowController is already registered", _cmd);
-		return;
-	}
-	
-	_lobbyWindowController = lobbyWindowController;
 }
 @end
 

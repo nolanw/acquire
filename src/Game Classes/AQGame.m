@@ -95,13 +95,10 @@
 
 - (void)loadGameWindow;
 {
-	if (_gameWindowController != nil) {
-		NSLog(@"%s GameWindow already loaded", _cmd);
-		return;
-	}
+	if (_gameWindowController == nil)
+		_gameWindowController = [[AQGameWindowController alloc] initWithGame:self];
 	
-	if (![NSBundle loadNibNamed:@"GameWindow" owner:self])
-		NSLog(@"%s failed to load GameWindow.nib", _cmd);
+	[self _updateGameWindow];
 }
 
 - (void)bringGameWindowToFront;
@@ -213,6 +210,7 @@
 
 - (void)tileClickedString:(NSString *)tileClickedString;
 {
+	NSLog(@"%s called", _cmd);
 	if ([self isNetworkGame] && [self localPlayer] != [self activePlayer])
 		return;
 	
@@ -225,11 +223,16 @@
 	if ([self isNetworkGame])
 		return;
 	
+	NSLog(@"%s continuing execution", _cmd);
+	
 	AQTile *clickedTile = [_board tileOnBoardByString:tileClickedString];
 	if ([self playedTileCreatesNewHotel:clickedTile]) {
+		NSLog(@"%s creates new hotel", _cmd);
 		NSArray *hotelsNotOnBoard = [self _hotelsNotOnBoard];
-		if ([hotelsNotOnBoard count] == 0)
+		if ([hotelsNotOnBoard count] == 0) {
+			NSLog(@"%s all hotels on board", _cmd);
 			return;
+		}
 		
 		[self _showCreateNewHotelSheetWithHotels:hotelsNotOnBoard tile:clickedTile];
 		
@@ -510,20 +513,6 @@
 {
 	return [_board tileOnBoardByString:tileString];
 }
-
-
-// Allow objects in loaded nibs to say hi
-- (void)registerGameWindowController:(AQGameWindowController *)gameWindowController;
-{
-	if (_gameWindowController != nil) {
-		NSLog(@"%s another GameWindowController is already registered", _cmd);
-		return;
-	}
-
-	_gameWindowController = gameWindowController;
-	
-	[self _updateGameWindow];
-}
 @end
 
 @implementation AQGame (Private)
@@ -618,6 +607,7 @@
 
 - (void)_showCreateNewHotelSheetWithHotels:(NSArray *)hotels tile:(AQTile *)tile;
 {
+	NSLog(@"%s called", _cmd);
 	[_gameWindowController showCreateNewHotelSheetWithHotels:hotels atTile:tile];
 }
 

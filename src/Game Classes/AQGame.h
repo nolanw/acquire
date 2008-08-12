@@ -13,8 +13,9 @@
 @interface AQGame : NSObject
 {
 	id						_arrayController;
-	AQGameWindowController	*_gameWindowController;
 	AQConnectionController	*_associatedConnection;
+	
+	AQGameWindowController	*_gameWindowController;
 	
 	AQBoard			*_board;
 	NSArray			*_hotels;
@@ -65,9 +66,6 @@
 - (NSColor *)tilePlayableColor;
 - (NSColor *)tileUnplayedColor;
 - (AQTile *)tileOnBoardByString:(NSString *)tileString;
-
-// Allow objects in loaded nibs to say hi
-- (void)registerGameWindowController:(AQGameWindowController *)gameWindowController;
 @end
 
 @interface AQGame (NetworkGame)

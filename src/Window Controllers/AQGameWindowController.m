@@ -12,15 +12,37 @@
 @end
 
 @implementation AQGameWindowController
-- (id)init;
+- (id)initWithGame:(id)game;
 {
 	if (![super init])
 		return nil;
+	
+	NSLog(@"%s called", _cmd);
+	
+	_game = [game retain];
 	
 	_allocateMergingHotelSharesSheetController = [[AQAllocateMergingHotelSharesSheetController alloc] initWithGameWindowController:self];
 	_chooseMergerSurvivorSheetController = [[AQChooseMergerSurvivorSheetController alloc] initWithGameWindowController:self];
 	_createNewHotelSheetController = [[AQCreateNewHotelSheetController alloc] initWithGameWindowController:self];
 	_purchaseSharesSheetController = [[AQPurchaseSharesSheetController alloc] initWithGameWindowController:self];
+	
+	if (_gameWindow == nil) {
+		if (![NSBundle loadNibNamed:@"GameWindow" owner:self]) {
+			NSLog(@"%s failed to load GameWindow.nib", _cmd);
+			return nil;
+		}
+	}
+	
+	[[_gameChatTextView textStorage] setAttributedString:[[[NSAttributedString alloc] initWithString:@""] autorelease]];
+	[[_gameLogTextView textStorage] setAttributedString:[[[NSAttributedString alloc] initWithString:@""] autorelease]];
+	[self _labelBoard];
+	[_scoreboardTableView setDataSource:self];
+	
+	_tileUnplayedColor = [(CCDColoredButtonCell *)[_boardMatrix cellAtRow:0 column:0] buttonColor];
+	
+	[self hidePurchaseSharesButton];
+	[self hideEndCurrentTurnButton];
+	[self hideEndGameButton];
 
 	return self;
 }
@@ -31,27 +53,10 @@
 	[_gameWindow release];
 	_gameWindow = nil;
 	
-	[_game endGame];
+	[_game release];
+	_game = nil;
 	
 	[super dealloc];
-}
-
-
-// NSObject (NSNibAwakening)
-- (void)awakeFromNib;
-{
-	// Tell the Game about us
-	[[_gameChatTextView textStorage] setAttributedString:[[[NSAttributedString alloc] initWithString:@""] autorelease]];
-	[[_gameLogTextView textStorage] setAttributedString:[[[NSAttributedString alloc] initWithString:@""] autorelease]];
-	[(AQGame *)_game registerGameWindowController:self];
-	[self _labelBoard];
-	[_scoreboardTableView setDataSource:self];
-	
-	_tileUnplayedColor = [(CCDColoredButtonCell *)[_boardMatrix cellAtRow:0 column:0] buttonColor];
-	
-	[self hidePurchaseSharesButton];
-	[self hideEndCurrentTurnButton];
-	[self hideEndGameButton];
 }
 
 
@@ -150,19 +155,6 @@
 		return;
 	}
 }
-
-
-- (void)registerPurchaseSharesSheetController:(AQPurchaseSharesSheetController *)purchaseSharesSheetController;
-{
-	if (_purchaseSharesSheetController != nil) {
-		NSLog(@"%s Purchase Shares Sheet Controller already registered.", _cmd);
-		return;
-	}
-	
-	_purchaseSharesSheetController = purchaseSharesSheetController;
-}
-
-
 
 
 - (void)reloadScoreboard;
@@ -378,6 +370,7 @@
 
 - (void)showCreateNewHotelSheetWithHotels:(NSArray *)hotels atTile:(id)tile;
 {
+	NSLog(@"%s called", _cmd);
 	[_createNewHotelSheetController resizeAndPopulateMatricesWithHotels:hotels tile:tile];
 	[_createNewHotelSheetController showCreateNewHotelSheet:_gameWindow];
 }
