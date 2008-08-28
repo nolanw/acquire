@@ -44,6 +44,7 @@
 		return nil;
 	
 	_associatedConnection = [associatedConnection retain];
+	_localPlayerName = nil;
 
 	return self;
 }
@@ -54,6 +55,7 @@
 		return nil;
 	
 	_associatedConnection = nil;
+	_localPlayerName = nil;
 	
 	return self;
 }
@@ -79,17 +81,6 @@
 - (BOOL)isLocalGame;
 {
 	return (_associatedConnection == nil);
-}
-
-- (NSString *)localPlayerName;
-{
-	return _localPlayerName;
-}
-
-- (void)setLocalPlayerName:(NSString *)localPlayerName;
-{
-	[_localPlayerName release];
-	_localPlayerName = [localPlayerName copy];
 }
 
 
@@ -139,6 +130,19 @@
 	id curPlayer;
 	while (curPlayer = [playerEnumerator nextObject])
 		if ([[curPlayer name] isEqualToString:_localPlayerName])
+			return curPlayer;
+	
+	return nil;
+}
+
+- (AQPlayer *)playerNamed:(NSString *)name;
+{
+	if (_players == nil)
+		return nil;
+	NSEnumerator *playerEnumerator = [_players objectEnumerator];
+	id curPlayer;
+	while (curPlayer = [playerEnumerator nextObject])
+		if ([[curPlayer name] compare:name options:NSCaseInsensitiveSearch range:NSMakeRange(0, [name length])] == NSOrderedSame)
 			return curPlayer;
 	
 	return nil;
@@ -210,7 +214,6 @@
 
 - (void)tileClickedString:(NSString *)tileClickedString;
 {
-	NSLog(@"%s called", _cmd);
 	if ([self isNetworkGame] && [self localPlayer] != [self activePlayer])
 		return;
 	
@@ -513,6 +516,54 @@
 {
 	return [_board tileOnBoardByString:tileString];
 }
+
+- (void)incomingGameMessage:(NSString *)gameMessage;
+{
+	[_gameWindowController incomingGameMessage:gameMessage];
+}
+@end
+
+@implementation AQGame (NetworkGame)
+- (AQPlayer *)localPlayer;
+{
+	if (_localPlayerName == nil)
+		return nil;
+	
+	return [self playerNamed:_localPlayerName];
+}
+
+- (NSString *)localPlayerName;
+{
+	return _localPlayerName;
+}
+
+- (void)setLocalPlayerName:(NSString *)localPlayerName;
+{
+	[_localPlayerName release];
+	_localPlayerName = [localPlayerName copy];
+	
+	if (_players != nil && [_players count] > 0)
+		return;
+	
+	_players = [NSMutableArray arrayWithCapacity:6];
+	[_players addObject:[[AQPlayer alloc] initWithName:_localPlayerName]];
+}
+
+- (void)boardTileAtRow:(NSString *)row column:(int)column isNetacquireChainID:(int)netacquireChainID;
+{
+	
+}
+
+- (void)rackTileAtIndex:(int)index isNetacquireID:(int)netacquireID netacquireChainID:(int)netacquireChainID;
+{
+	[[self localPlayer] drewTile:[_board tileFromNetacquireID:netacquireID] atRackIndex:index];
+	[_gameWindowController updateTileRack:[[self localPlayer] tiles]];
+}
+
+- (void)outgoingGameMessage:(NSString *)gameMessage;
+{
+	[_associatedConnection outgoingGameMessage:gameMessage];
+}
 @end
 
 @implementation AQGame (Private)
@@ -607,7 +658,6 @@
 
 - (void)_showCreateNewHotelSheetWithHotels:(NSArray *)hotels tile:(AQTile *)tile;
 {
-	NSLog(@"%s called", _cmd);
 	[_gameWindowController showCreateNewHotelSheetWithHotels:hotels atTile:tile];
 }
 

@@ -31,4 +31,5 @@
 - (void)incomingLobbyMessage:(NSString *)LobbyMessage;
 - (void)requestGameListUpdate:(NSTimer *)theTimer;
 - (void)updatedGameList:(NSArray *)gameList;
+- (void)updateWindowTitle;
 @end

@@ -206,6 +206,11 @@
 	NSRange parameterStringEndRange = [dataAsString rangeOfString:@";" options:NSBackwardsSearch];
 	++(parameterStringRange.location);
 	parameterStringRange.length = parameterStringEndRange.location - parameterStringRange.location;
+	if (parameterStringRange.length <= 0) {
+		NSLog(@"%s parameterStringRange <= 0", _cmd);
+		return [NSArray array];
+	}
+	
 	NSString *parameterString = [dataAsString substringWithRange:parameterStringRange];
 	
 	if ([parameterString characterAtIndex:0] == '"')

@@ -43,6 +43,8 @@
 {
 	if ([_gameArray count] == 0)
 		[self startNewNetworkGameWithAssociatedConnection:associatedConnection];
+	else if ([_gameArray objectAtIndex:0] == [NSNull null])
+		[_gameArray replaceObjectAtIndex:0 withObject:[[AQGame alloc] initNetworkGameWithArrayController:self associatedConnection:associatedConnection]];
 	else
 		[_gameArray insertObject:[[AQGame alloc] initNetworkGameWithArrayController:self associatedConnection:associatedConnection] atIndex:0];
 }

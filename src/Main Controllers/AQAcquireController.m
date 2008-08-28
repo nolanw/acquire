@@ -6,10 +6,6 @@
 
 @interface AQAcquireController (Private)
 - (void)_setMenuItemTargetsAndActions;
-
-// Nib loaders
-- (void)_loadWelcomeWindow;
-- (void)_loadLobbyWindow;
 @end
 
 @implementation AQAcquireController
@@ -54,7 +50,6 @@
 - (void)awakeFromNib;
 {
 	[self _setMenuItemTargetsAndActions];
-	[self _loadWelcomeWindow];
 	[_welcomeWindowController bringWelcomeWindowToFront:nil];
 }
 
@@ -87,12 +82,12 @@
 
 - (void)connectedToServer;
 {
-	[self _loadLobbyWindow];
 	[_welcomeWindowController saveNetworkGameDefaults];
 	[_welcomeWindowController closeWelcomeWindow];
 	[_welcomeWindowController release];
 	_welcomeWindowController = nil;
 	[_lobbyWindowController bringLobbyWindowToFront];
+	[_lobbyWindowController updateWindowTitle];
 	[self updateGameListFor:_lobbyWindowController];
 }
 
@@ -121,7 +116,7 @@
 	[[_gameArrayController activeGame] endGame];
 	
 	if (_lobbyWindowController == nil)
-		[self _loadLobbyWindow];
+		_lobbyWindowController = [[AQLobbyWindowController alloc] initWithAcquireController:self];
 	else
 		[_lobbyWindowController leftGame];
 
@@ -139,7 +134,7 @@
 	_lobbyWindowController = nil;
 	
 	if (_welcomeWindowController == nil)
-		[self _loadWelcomeWindow];
+		_welcomeWindowController = [[AQWelcomeWindowController alloc] initWithAcquireController:self];
 	
 	[_welcomeWindowController bringWelcomeWindowToFront:nil];
 }
@@ -181,6 +176,11 @@
 	[[_connectionArrayController serverConnection] outgoingLobbyMessage:lobbyMessage];
 }
 
+- (void)incomingGameMessage:(NSString *)gameMessage;
+{
+	[[_gameArrayController activeGame] incomingGameMessage:gameMessage];
+}
+
 - (void)updateGameListFor:(id)anObject;
 {
 	[[_connectionArrayController serverConnection] updateGameListFor:anObject];
@@ -207,6 +207,14 @@
 		_preferencesWindowController = [[AQPreferencesWindowController alloc] init];
 	[_preferencesWindowController openPreferencesWindowAndBringToFront];
 }
+
+- (void)rackTileAtIndex:(int)index isNetacquireID:(int)netacquireID netacquireChainID:(int)netacquireChainID;
+{
+	if ([_gameArrayController activeGame] == nil)
+		return;
+	
+	[[_gameArrayController activeGame] rackTileAtIndex:index isNetacquireID:netacquireID netacquireChainID:netacquireChainID];
+}
 @end
 
 @implementation AQAcquireController (Private)
@@ -218,27 +226,5 @@
 	[[[[[NSApp mainMenu] itemWithTitle:@"Server"] submenu] itemWithTitle:@"Disconnect From Server"] setAction:@selector(disconnectFromServer:)];
 	[[[[[NSApp mainMenu] itemWithTitle:@"Game"] submenu] itemWithTitle:@"Leave Game"] setTarget:self];
 	[[[[[NSApp mainMenu] itemWithTitle:@"Game"] submenu] itemWithTitle:@"Leave Game"] setAction:@selector(leaveGame:)];
-}
-
-
-// Nib loaders
-- (void)_loadWelcomeWindow;
-{
-	if (_welcomeWindowController != nil)
-		return;
-	
-	if (![NSBundle loadNibNamed:@"WelcomeWindow" owner:self]) {
-		NSLog(@"%s failed to load WelcomeWindow.nib", _cmd);
-	}
-}
-
-- (void)_loadLobbyWindow;
-{
-	if (_lobbyWindowController != nil)
-		return;
-	
-	if (![NSBundle loadNibNamed:@"LobbyWindow" owner:self]) {
-		NSLog(@"%s failed to load LobbyWindow.nib", _cmd);
-	}
 }
 @end

@@ -12,8 +12,6 @@
 	if (![super init])
 		return nil;
 	
-	NSLog(@"%s called", _cmd);
-	
 	_gameWindowController = [gameWindowController retain];
 	_tile = nil;
 	
@@ -62,7 +60,6 @@
 
 - (void)resizeAndPopulateMatricesWithHotels:(NSArray *)hotels tile:(id)tile;
 {
-	NSLog(@"%s called", _cmd);
 	[_tile release];
 	_tile = [tile retain];
 	

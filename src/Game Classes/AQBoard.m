@@ -125,15 +125,15 @@
 
 
 // Netacquire selectors
-- (AQTile *)getTileByNetacquireID:(int)tileID;
+- (AQTile *)tileFromNetacquireID:(int)netacquireID;
 {
 	// Figure out what tile we're talking about.
-	int column = tileID / 9 + 1;
-	int rowInt = tileID % 9 - 1;
+	int column = ((netacquireID - 1) / 9) + 1;
+	int rowInt = (netacquireID - 1) % 9;
 	if (rowInt == -1)
 		rowInt = 8;
 	
-	return [self tileOnBoardByString:[NSString stringWithFormat:@"%d%@", column, [self rowStringFromInt:rowInt]]];
+	return [self tileOnBoardAtColumn:column row:[self rowStringFromInt:rowInt]];
 }
 @end
 

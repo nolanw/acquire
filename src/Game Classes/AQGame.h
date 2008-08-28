@@ -40,7 +40,7 @@
 - (AQPlayer *)playerAtIndex:(int)index;
 - (AQPlayer *)activePlayer;
 - (int)activePlayerIndex;
-- (AQPlayer *)localPlayer;
+- (AQPlayer *)playerNamed:(NSString *)name;
 - (void)addPlayerNamed:(NSString *)playerName;
 - (void)clearPlayers;
 - (AQHotel *)hotelNamed:(NSString *)hotelName;
@@ -66,14 +66,16 @@
 - (NSColor *)tilePlayableColor;
 - (NSColor *)tileUnplayedColor;
 - (AQTile *)tileOnBoardByString:(NSString *)tileString;
+- (void)incomingGameMessage:(NSString *)gameMessage;
 @end
 
 @interface AQGame (NetworkGame)
+- (AQPlayer *)localPlayer;
 - (NSString *)localPlayerName;
 - (void)setLocalPlayerName:(NSString *)localPlayerName;
-- (void)boardTileAtRow:(NSString *)row column:(int)column changedStateTo:(int)newState;
-- (void)rackTileAtIndex:(int)index changedStateTo:(int)newState;
-- (void)outgoingGameChatMessage:(NSString *)chatMessage;
+- (void)boardTileAtRow:(NSString *)row column:(int)column isNetacquireChainID:(int)netacquireChainID;
+- (void)rackTileAtIndex:(int)index isNetacquireID:(int)netacquireID netacquireChainID:(int)netacquireChainID;
+- (void)outgoingGameMessage:(NSString *)gameMessage;
 @end
 
 @interface AQGame (LocalGame)

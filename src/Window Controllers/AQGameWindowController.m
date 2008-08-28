@@ -17,8 +17,6 @@
 	if (![super init])
 		return nil;
 	
-	NSLog(@"%s called", _cmd);
-	
 	_game = [game retain];
 	
 	_allocateMergingHotelSharesSheetController = [[AQAllocateMergingHotelSharesSheetController alloc] initWithGameWindowController:self];
@@ -31,6 +29,9 @@
 			NSLog(@"%s failed to load GameWindow.nib", _cmd);
 			return nil;
 		}
+		
+		[_messageToGameTextField setTarget:self];
+		[_messageToGameTextField setAction:@selector(sendGameMessage:)];
 	}
 	
 	[[_gameChatTextView textStorage] setAttributedString:[[[NSAttributedString alloc] initWithString:@""] autorelease]];
@@ -197,13 +198,13 @@
 
 - (IBAction)sendGameMessage:(id)sender;
 {
-	NSString *trimmedGameChatMessage = [[_messageToGameTextField stringValue] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-	if ([trimmedGameChatMessage length] == 0)
+	NSString *trimmedGameMessage = [[_messageToGameTextField stringValue] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+	if ([trimmedGameMessage length] == 0)
 		return;
 
 	[_messageToGameTextField setStringValue:@""];
 
-	[_game outgoingGameChatMessage:trimmedGameChatMessage];
+	[_game outgoingGameMessage:trimmedGameMessage];
 }
 
 - (void)incomingGameLogEntry:(NSString *)gameLogEntry;
@@ -370,7 +371,6 @@
 
 - (void)showCreateNewHotelSheetWithHotels:(NSArray *)hotels atTile:(id)tile;
 {
-	NSLog(@"%s called", _cmd);
 	[_createNewHotelSheetController resizeAndPopulateMatricesWithHotels:hotels tile:tile];
 	[_createNewHotelSheetController showCreateNewHotelSheet:_gameWindow];
 }

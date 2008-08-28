@@ -18,15 +18,15 @@
 			NSLog(@"%s failed to load LobbyWindow.nib", _cmd);
 			return nil;
 		}
+		
+		[_messageToLobbyTextField setTarget:self];
+		[_messageToLobbyTextField setAction:@selector(sendLobbyMessage:)];
 	}
-	
-	[_lobbyWindow setTitle:[NSString stringWithFormat:@"Acquire – %@ – %@", NSLocalizedStringFromTable(@"Lobby", @"Acquire", @"The word 'lobby'."), [_acquireController connectedHostOrIPAddress]]];
 	
 	[_messageToLobbyTextField selectText:self];
 	[[_lobbyChatTextView textStorage] setAttributedString:[[[NSAttributedString alloc] initWithString:@""] autorelease]];
 	
 	[_gameListDrawer setPreferredEdge:NSMaxXEdge];
-	[_gameListDrawer open];
 	
 	_gameListUpdateTimer = [[NSTimer scheduledTimerWithTimeInterval:4.0 target:self selector:@selector(requestGameListUpdate:) userInfo:nil repeats:YES] retain];
 
@@ -112,6 +112,15 @@
 - (void)updatedGameList:(NSArray *)gameList;
 {
 	[self _populateGameListDrawerWithGames:gameList];
+	[_gameListDrawer open];
+}
+
+- (void)updateWindowTitle;
+{
+	if (!_lobbyWindow)
+		return;
+	
+	[_lobbyWindow setTitle:[NSString stringWithFormat:@"Acquire – %@ – %@", NSLocalizedStringFromTable(@"Lobby", @"Acquire", @"The word 'lobby'."), [_acquireController connectedHostOrIPAddress]]];
 }
 @end
 

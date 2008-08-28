@@ -1,14 +1,23 @@
 New features
 ------------
+- Implement network play.
+	- Implement AQGame (NetworkGame) selectors.
+	- Finish implementing support for all incoming directives.
 - Allow for both new and old hotel names (user-configurable?).
 - Make scoreboard columns' backgrounds relate to their hotels.
 - Provide a legend of hotels and their colors.
 - Design and implement a proper game logging class (which the Game Log in the Game Window class can access).
 - Make separate local game and network game menus.
 - Implement the board's winning of some shares in two-player local games.
+- Divide classes into Common, LocalGame and NetworkGame sections.
+- Store ~5 last connected servers and ports (instead of one) for the Welcome Window.
 
 Known bugs
 ---------
+- AQConnectionController (Private)'s _parseMultipleDirectives method often seems to give up parsing partway through (perhaps thrown off by a substring, or running into other difficulties).
+	- The last-parsed directive appears to be "SV directive with parameters: frmScoreSheet, lblData, 13, Caption, 25".
+	- The bug seems to arise only when rejoining a game; being in a game works fine.
+	- The failure appears to affect little outside of game log messages and informing the local player of his rack tiles.
 
 
 Fixed bugs

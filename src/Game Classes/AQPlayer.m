@@ -174,31 +174,22 @@
 // Netacquire selectors
 - (void)drewTile:(AQTile *)tile atRackIndex:(int)rackIndex;
 {
-	if (_tiles == nil) {
-		[self drewTile:tile];
+	if (tile == nil) {
+		NSLog(@"%s tried to draw nil tile", _cmd);
 		return;
 	}
 	
-	int tileArrayIndex = rackIndex - 1;
-
-	// Check to see if the tile at rackIndex is already the right tile.
-	if ([_tiles count] > tileArrayIndex && [[_tiles objectAtIndex:tileArrayIndex] isEqualToTile:tile])
-		return;
-	
-	// Guess we have a new tile.
-	if ([_tiles count] <= tileArrayIndex)
-		[_tiles addObject:tile];
-	else
-		[_tiles insertObject:tile atIndex:tileArrayIndex];
+	[_tiles replaceObjectAtIndex:rackIndex withObject:tile];
 }
 
 - (int)rackIndexOfTileNamed:(NSString *)tileName;
 {
 	int i;
 	for (i = 0; i < [_tiles count]; ++i) {
-		if ([[[_tiles objectAtIndex:i] description] isEqualToString:tileName]) {
+		if ([_tiles objectAtIndex:i] == [NSNull null])
+			continue;
+		if ([[[_tiles objectAtIndex:i] description] isEqualToString:tileName])
 			return i;
-		}
 	}
     
     return -1;

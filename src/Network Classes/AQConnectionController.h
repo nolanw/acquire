@@ -33,6 +33,7 @@
 
 // Sending some outgoing mail
 - (void)outgoingLobbyMessage:(NSString *)lobbyMessage;
+- (void)outgoingGameMessage:(NSString *)gameMessage;
 - (void)updateGameListFor:(id)anObject;
 - (void)retryUpdateGameList:(NSTimer *)aTimer;
 

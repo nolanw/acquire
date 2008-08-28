@@ -46,8 +46,10 @@
 // Passthrus
 - (void)incomingLobbyMessage:(NSString *)lobbyMessage;
 - (void)outgoingLobbyMessage:(NSString *)lobbyMessage;
+- (void)incomingGameMessage:(NSString *)gameMessage;
 - (void)updateGameListFor:(id)anObject;
 - (void)showLobbyWindow;
 - (NSString *)connectedHostOrIPAddress;
 - (IBAction)showPreferencesWindow:(id)sender;
+- (void)rackTileAtIndex:(int)index isNetacquireID:(int)netacquireID netacquireChainID:(int)netacquireChainID;
 @end

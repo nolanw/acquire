@@ -27,5 +27,5 @@
 - (NSArray *)tilesOrthogonalToTile:(AQTile *)tile;
 
 // Netacquire selectors
-- (AQTile *)getTileByNetacquireID:(int)tileID;
+- (AQTile *)tileFromNetacquireID:(int)netacquireID;
 @end
