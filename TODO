@@ -11,6 +11,11 @@ New features
 - Implement the board's winning of some shares in two-player local games.
 - Divide classes into Common, LocalGame and NetworkGame sections.
 - Store ~5 last connected servers and ports (instead of one) for the Welcome Window.
+- Local games with two players: implement board's hand in hotel mergers.
+- Redo game list drawer.
+	- Make it look nicer!
+	- Differentiate games that can be joined as player, as observer, or not at all.
+	- Update on new game creation (instead of timed events).
 
 Known bugs
 ---------

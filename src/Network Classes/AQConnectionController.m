@@ -445,7 +445,7 @@
 {
 	// The server's response to LG and LU directives come in chunks of LM directives.
 	NSString *messageText = [[lobbyMessageDirective parameters] objectAtIndex:0];
-	if ([[messageText substringToIndex:15] isEqualToString:@"\"# Active games"]) {
+	if ([messageText length] > 14 && [[messageText substringToIndex:15] isEqualToString:@"\"# Active games"]) {
 		[self _receivedGameListDirective:lobbyMessageDirective];
 		return;
 	}
