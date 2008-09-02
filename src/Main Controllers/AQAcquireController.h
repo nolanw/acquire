@@ -44,12 +44,16 @@
 - (void)startNewLocalGameWithPlayersNamed:(NSArray *)playerNames;
 
 // Passthrus
+/*
 - (void)incomingLobbyMessage:(NSString *)lobbyMessage;
 - (void)outgoingLobbyMessage:(NSString *)lobbyMessage;
 - (void)incomingGameMessage:(NSString *)gameMessage;
+- (void)boardTileAtNetacquireID:(int)netacquireID isNetacquireChainID:(int)netacquireChainID;
+- (void)rackTileAtIndex:(int)index isNetacquireID:(int)netacquireID netacquireChainID:(int)netacquireChainID;
+- (void)playerAtIndex:(int)playerIndex isNamed:(NSString *)name;
+*/
 - (void)updateGameListFor:(id)anObject;
 - (void)showLobbyWindow;
 - (NSString *)connectedHostOrIPAddress;
 - (IBAction)showPreferencesWindow:(id)sender;
-- (void)rackTileAtIndex:(int)index isNetacquireID:(int)netacquireID netacquireChainID:(int)netacquireChainID;
 @end

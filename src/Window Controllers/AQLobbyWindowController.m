@@ -28,7 +28,8 @@
 	
 	[_gameListDrawer setPreferredEdge:NSMaxXEdge];
 	
-	_gameListUpdateTimer = [[NSTimer scheduledTimerWithTimeInterval:4.0 target:self selector:@selector(requestGameListUpdate:) userInfo:nil repeats:YES] retain];
+	_gameListUpdateTimer = nil;
+	[self beginScheduledGameListUpdates];
 
 	return self;
 }
@@ -109,6 +110,21 @@
 	[_acquireController updateGameListFor:self];
 }
 
+- (void)beginScheduledGameListUpdates;
+{
+	if (_gameListUpdateTimer != nil)
+		return;
+	
+	_gameListUpdateTimer = [[NSTimer scheduledTimerWithTimeInterval:4.0 target:self selector:@selector(requestGameListUpdate:) userInfo:nil repeats:YES] retain];
+}
+
+- (void)invalidateGameListUpdateTimer;
+{
+	[_gameListUpdateTimer invalidate];
+	[_gameListUpdateTimer release];
+	_gameListUpdateTimer = nil;
+}
+
 - (void)updatedGameList:(NSArray *)gameList;
 {
 	[self _populateGameListDrawerWithGames:gameList];
@@ -121,6 +137,11 @@
 		return;
 	
 	[_lobbyWindow setTitle:[NSString stringWithFormat:@"Acquire – %@ – %@", NSLocalizedStringFromTable(@"Lobby", @"Acquire", @"The word 'lobby'."), [_acquireController connectedHostOrIPAddress]]];
+}
+
+- (void)resetLobbyMessages;
+{
+	[[_lobbyChatTextView textStorage] setAttributedString:[[[NSAttributedString alloc] initWithString:@""] autorelease]];
 }
 @end
 

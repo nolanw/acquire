@@ -14,10 +14,9 @@ New features
 
 Known bugs
 ---------
-- AQConnectionController (Private)'s _parseMultipleDirectives method often seems to give up parsing partway through (perhaps thrown off by a substring, or running into other difficulties).
-	- The last-parsed directive appears to be "SV directive with parameters: frmScoreSheet, lblData, 13, Caption, 25".
-	- The bug seems to arise only when rejoining a game; being in a game works fine.
-	- The failure appears to affect little outside of game log messages and informing the local player of his rack tiles.
+- Network error sometimes comes up immediately after a display name in use error.
+- Joining a game sometimes screws up players in the scoreboard.
+	- Probably updates active player before players are set up.
 
 
 Fixed bugs

@@ -9,18 +9,21 @@
 {
 	AsyncSocket	*_socket;
 	id			_arrayController;
-	id			_associatedObject;
 	NSError		*_error;
 	BOOL		_handshakeComplete;
 	BOOL		_haveSeenFirstLMDirectives;
 	id			_objectRequestingGameListUpdate;
+	
+	NSMutableArray	*_associatedObjects;
 }
 
 - (id)initWithHost:(NSString *)host port:(UInt16)port for:(id)sender arrayController:(id)arrayController;
 - (void)dealloc;
 
 // Accessors/setters/etc.
-- (id)associatedObject;
+- (void)registerAssociatedObject:(id)newAssociatedObject;
+- (void)registerAssociatedObjectAndPrioritize:(id)newPriorityAssociatedObject;
+- (void)deregisterAssociatedObject:(id)oldAssociatedObject;
 - (NSError *)error;
 - (BOOL)isServerConnection;
 - (void)close;
@@ -36,6 +39,9 @@
 - (void)outgoingGameMessage:(NSString *)gameMessage;
 - (void)updateGameListFor:(id)anObject;
 - (void)retryUpdateGameList:(NSTimer *)aTimer;
+- (void)playTileAtRackIndex:(int)rackIndex;
+- (void)choseChainID:(int)chainID selectionType:(int)selectionType;
+- (void)purchaseShares:(NSArray *)pDirectiveParameters;
 
 // AsyncSocket delegate selectors
 - (void)onSocket:(AsyncSocket *)socket willDisconnectWithError:(NSError *)err;

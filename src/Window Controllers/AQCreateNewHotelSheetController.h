@@ -8,6 +8,7 @@
 	IBOutlet NSWindow	*_createNewHotelSheet;
 	IBOutlet NSMatrix	*_hotelNamesMatrix;
 	IBOutlet NSButton	*_reconsiderButton;
+	IBOutlet NSButton	*_createHotelButton;
 	
 	id		_gameWindowController;
 	
@@ -27,5 +28,5 @@
 - (void)didEndSheet:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
 
 - (void)resizeAndPopulateMatricesWithHotels:(NSArray *)hotels tile:(id)tile;
-- (void)showCreateNewHotelSheet:(NSWindow *)window;
+- (void)showCreateNewHotelSheet:(NSWindow *)window isNetworkGame:(BOOL)isNetworkGame;
 @end

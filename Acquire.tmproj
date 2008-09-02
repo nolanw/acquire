@@ -64,7 +64,7 @@
 			<key>filename</key>
 			<string>TODO</string>
 			<key>lastUsed</key>
-			<date>2008-08-28T06:08:04Z</date>
+			<date>2008-08-28T22:40:09Z</date>
 			<key>selected</key>
 			<true/>
 		</dict>
@@ -78,23 +78,38 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>118</integer>
+				<integer>121</integer>
 				<key>line</key>
-				<integer>19</integer>
+				<integer>17</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
+		<key>src/Network Classes/AQConnectionController.m</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>1</integer>
+				<key>line</key>
+				<integer>244</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>230</integer>
+		</dict>
 	</dict>
 	<key>openDocuments</key>
 	<array>
 		<string>TODO</string>
+		<string>src/Network Classes/AQConnectionController.m</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{33, 4}, {853, 874}}</string>
+	<string>{{-3, 4}, {853, 874}}</string>
 </dict>
 </plist>

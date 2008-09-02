@@ -21,13 +21,14 @@
 	return self;
 }
 
-- (id)initWithName:(NSString *)name tier:(int)tier color:(NSColor *)color oldName:(NSString *)oldName;
+- (id)initWithName:(NSString *)name tier:(int)tier color:(NSColor *)color oldName:(NSString *)oldName netacquireID:(int)netacquireID;
 {
 	if (![super init])
 		return nil;
 	
 	[self initWithName:name tier:tier color:color];
 	_oldName = [oldName copy];
+	_netacquireID = netacquireID;
 	
 	return self;
 }
@@ -35,37 +36,37 @@
 
 + (AQHotel *)sacksonHotel;
 {
-	return [[[self alloc] initWithName:@"Sackson" tier:0 color:[NSColor colorWithCalibratedRed:1.0 green:0.0 blue:0.0 alpha:1.0] oldName:@"Luxor"] autorelease];
+	return [[[self alloc] initWithName:@"Sackson" tier:0 color:[NSColor colorWithCalibratedRed:1.0 green:0.0 blue:0.0 alpha:1.0] oldName:@"Luxor" netacquireID:255] autorelease];
 }
 
 + (AQHotel *)zetaHotel;
 {
-	return [[[self alloc] initWithName:@"Zeta" tier:0 color:[NSColor colorWithCalibratedRed:1.0 green:0.75 blue:0.0 alpha:1.0] oldName:@"Tower"] autorelease];
+	return [[[self alloc] initWithName:@"Zeta" tier:0 color:[NSColor colorWithCalibratedRed:1.0 green:0.75 blue:0.0 alpha:1.0] oldName:@"Tower" netacquireID:65535] autorelease];
 }
 
 + (AQHotel *)americaHotel;
 {
-	return [[[self alloc] initWithName:@"America" tier:1 color:[NSColor colorWithCalibratedRed:0.0 green:0.0 blue:1.0 alpha:1.0] oldName:@"America"] autorelease];
+	return [[[self alloc] initWithName:@"America" tier:1 color:[NSColor colorWithCalibratedRed:0.0 green:0.0 blue:1.0 alpha:1.0] oldName:@"America" netacquireID:16711680] autorelease];
 }
 
 + (AQHotel *)fusionHotel;
 {
-	return [[[self alloc] initWithName:@"Fusion" tier:1 color:[NSColor colorWithCalibratedRed:0.0 green:1.0 blue:0.0 alpha:1.0] oldName:@"Fusion"] autorelease];
+	return [[[self alloc] initWithName:@"Fusion" tier:1 color:[NSColor colorWithCalibratedRed:0.0 green:1.0 blue:0.0 alpha:1.0] oldName:@"Fusion" netacquireID:65280] autorelease];
 }
 
 + (AQHotel *)hydraHotel;
 {
-	return [[[self alloc] initWithName:@"Hydra" tier:1 color:[NSColor colorWithCalibratedRed:1.0 green:0.5 blue:0.0 alpha:1.0] oldName:@"Worldwide"] autorelease];
+	return [[[self alloc] initWithName:@"Hydra" tier:1 color:[NSColor colorWithCalibratedRed:1.0 green:0.5 blue:0.0 alpha:1.0] oldName:@"Worldwide" netacquireID:16512] autorelease];
 }
 
 + (AQHotel *)phoenixHotel;
 {
-	return [[[self alloc] initWithName:@"Phoenix" tier:2 color:[NSColor colorWithCalibratedRed:1.0 green:0.25 blue:1.0 alpha:1.0] oldName:@"Imperial"] autorelease];
+	return [[[self alloc] initWithName:@"Phoenix" tier:2 color:[NSColor colorWithCalibratedRed:1.0 green:0.25 blue:1.0 alpha:1.0] oldName:@"Continental" netacquireID:16776960] autorelease];
 }
 
 + (AQHotel *)quantumHotel;
 {
-	return [[[self alloc] initWithName:@"Quantum" tier:2 color:[NSColor colorWithCalibratedRed:0.0 green:1.0 blue:1.0 alpha:1.0] oldName:@"Continental"] autorelease];
+	return [[[self alloc] initWithName:@"Quantum" tier:2 color:[NSColor colorWithCalibratedRed:0.0 green:1.0 blue:1.0 alpha:1.0] oldName:@"Imperial" netacquireID:12632319] autorelease];
 }
 
 
@@ -143,6 +144,9 @@
 
 - (void)addTile:(AQTile *)tile;
 {
+	if ([_tilesInHotel containsObject:tile])
+		return;
+	
 	[_tilesInHotel addObject:tile];
 	[tile setHotel:self];
 }

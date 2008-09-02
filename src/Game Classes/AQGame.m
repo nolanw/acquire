@@ -113,6 +113,9 @@
 
 - (AQPlayer *)activePlayer;
 {
+	if (_activePlayerIndex < 0 || _activePlayerIndex >= [_players count])
+		return nil;
+	
 	return [_players objectAtIndex:_activePlayerIndex];
 }
 
@@ -126,24 +129,23 @@
 	if ([self isLocalGame])
 		return nil;
 	
-	NSEnumerator *playerEnumerator = [_players objectEnumerator];
-	id curPlayer;
-	while (curPlayer = [playerEnumerator nextObject])
-		if ([[curPlayer name] isEqualToString:_localPlayerName])
-			return curPlayer;
-	
-	return nil;
+	return [self playerNamed:_localPlayerName];
 }
 
 - (AQPlayer *)playerNamed:(NSString *)name;
 {
-	if (_players == nil)
+	if (name == nil || _players == nil || [_players count] == 0)
 		return nil;
+	
 	NSEnumerator *playerEnumerator = [_players objectEnumerator];
 	id curPlayer;
-	while (curPlayer = [playerEnumerator nextObject])
+	while (curPlayer = [playerEnumerator nextObject]) {
+		if ([[curPlayer name] length] != [name length])
+			continue;
+		
 		if ([[curPlayer name] compare:name options:NSCaseInsensitiveSearch range:NSMakeRange(0, [name length])] == NSOrderedSame)
 			return curPlayer;
+	}
 	
 	return nil;
 }
@@ -163,6 +165,9 @@
 
 - (AQHotel *)hotelNamed:(NSString *)hotelName;
 {
+	if (hotelName == nil)
+		return nil;
+	
 	NSEnumerator *hotelEnumerator = [_hotels objectEnumerator];
 	id curHotel;
 	while (curHotel = [hotelEnumerator nextObject])
@@ -174,6 +179,29 @@
 
 - (void)purchaseShares:(NSArray *)sharesPurchased ofHotelsNamed:(NSArray *)hotelNames;
 {
+	if ([self isNetworkGame]) {
+		NSMutableArray *pDirectiveParameters = [NSMutableArray arrayWithCapacity:7];
+		NSEnumerator *hotelEnumerator = [_hotels objectEnumerator];
+		id curHotel;
+		while (curHotel = [hotelEnumerator nextObject]) {
+			BOOL foundIt = NO;
+			int i;
+			for (i = 0; i < [hotelNames count]; ++i) {
+				if ([[hotelNames objectAtIndex:i] isEqualToString:[curHotel name]]) {
+					[pDirectiveParameters addObject:[sharesPurchased objectAtIndex:i]];
+					foundIt = YES;
+					break;
+				}
+			}
+			
+			if (!foundIt)
+				[pDirectiveParameters addObject:[NSNumber numberWithInt:0]];
+		}
+		
+		[_associatedConnection purchaseShares:pDirectiveParameters];
+		return;
+	}
+	
 	NSMutableString *purchaseLog = [NSMutableString stringWithFormat:@"* %@ purchased:", [[self activePlayer] name]];
 	
 	int hotelsWithNoSharesPurchased = 0;
@@ -223,14 +251,15 @@
 	if (_tilePlayedThisTurn)
 		return;
 	
-	if ([self isNetworkGame])
+	if ([self isNetworkGame]) {
+		[_associatedConnection playTileAtRackIndex:([[self activePlayer] rackIndexOfTileNamed:tileClickedString] + 1)];
+		_tilePlayedThisTurn = YES;
+		
 		return;
-	
-	NSLog(@"%s continuing execution", _cmd);
+	}
 	
 	AQTile *clickedTile = [_board tileOnBoardByString:tileClickedString];
 	if ([self playedTileCreatesNewHotel:clickedTile]) {
-		NSLog(@"%s creates new hotel", _cmd);
 		NSArray *hotelsNotOnBoard = [self _hotelsNotOnBoard];
 		if ([hotelsNotOnBoard count] == 0) {
 			NSLog(@"%s all hotels on board", _cmd);
@@ -263,6 +292,11 @@
 
 - (void)createHotelNamed:(NSString *)hotelName atTile:(id)tile;
 {
+	if ([self isNetworkGame]) {
+		[_associatedConnection choseChainID:[[self hotelNamed:hotelName] netacquireID] selectionType:4];
+		return;
+	}
+	
 	if (tile == nil || ![tile isKindOfClass:[AQTile class]])
 		return;
 	
@@ -459,7 +493,7 @@
 - (void)endGame;
 {
 	if ([self isNetworkGame])
-		[_associatedConnection leaveGame];
+		return;
 	
 	[_gameWindowController hidePurchaseSharesButton];
 	[_gameWindowController hideEndCurrentTurnButton];
@@ -541,17 +575,47 @@
 {
 	[_localPlayerName release];
 	_localPlayerName = [localPlayerName copy];
-	
-	if (_players != nil && [_players count] > 0)
-		return;
-	
-	_players = [NSMutableArray arrayWithCapacity:6];
-	[_players addObject:[[AQPlayer alloc] initWithName:_localPlayerName]];
 }
 
-- (void)boardTileAtRow:(NSString *)row column:(int)column isNetacquireChainID:(int)netacquireChainID;
+- (void)setActivePlayerName:(NSString *)activePlayerName;
 {
+	int i;
+	for (i = 0; i < [_players count]; ++i) {
+		if ([[[_players objectAtIndex:i] name] isEqualToString:activePlayerName]) {
+			_activePlayerIndex = i;
+			[_gameWindowController reloadScoreboard];
+			break;
+		}
+	}
 	
+	if ([self activePlayer] == [self localPlayer]) {
+		_tilePlayedThisTurn = NO;
+		[_gameWindowController highlightTilesOnBoard:[[self activePlayer] tiles]];
+	} else {
+		[_gameWindowController tilesChanged:[[self activePlayer] tiles]];
+	}
+}
+
+- (void)boardTile:(AQTile *)tile isNetacquireChainID:(int)netacquireChainID;
+{
+	if ([[self activePlayer] hasTileNamed:[tile description]]) {
+		[[self activePlayer] playedTileNamed:[tile description]];
+		[_gameWindowController updateTileRack:[[self activePlayer] tiles]];
+	}
+	
+	AQTileState tileState = [self tileStateFromChainID:netacquireChainID];
+	if (tileState == AQTileInHotel)
+		[[self hotelFromChainID:netacquireChainID] addTile:tile];
+	else
+		[tile setState:tileState];
+	
+	[_gameWindowController tilesChanged:[NSArray arrayWithObject:tile]];
+}
+
+- (void)boardTileAtNetacquireID:(int)netacquireID isNetacquireChainID:(int)netacquireChainID;
+{
+	AQTile *tile = [_board tileFromNetacquireID:netacquireID];
+	[self boardTile:tile isNetacquireChainID:netacquireChainID];
 }
 
 - (void)rackTileAtIndex:(int)index isNetacquireID:(int)netacquireID netacquireChainID:(int)netacquireChainID;
@@ -563,6 +627,69 @@
 - (void)outgoingGameMessage:(NSString *)gameMessage;
 {
 	[_associatedConnection outgoingGameMessage:gameMessage];
+}
+
+- (void)playerAtIndex:(int)playerIndex isNamed:(NSString *)name;
+{
+	if ([_players count] < playerIndex) {
+		[_players addObject:[AQPlayer playerWithName:name]];
+	}
+	
+	[_gameWindowController reloadScoreboard];
+}
+
+- (void)playerAtIndex:(int)playerIndex hasCash:(int)cash;
+{
+	if (playerIndex < 0 || playerIndex >= [_players count])
+		return;
+	
+	[[_players objectAtIndex:playerIndex] setCash:cash];
+}
+
+- (void)getChainFromHotelIndexes:(NSArray *)hotelIndexes;
+{
+	NSMutableArray *hotels = [NSMutableArray arrayWithCapacity:[hotelIndexes count]];
+	hotelIndexes = [NSArray arrayWithArray:hotelIndexes];
+	NSEnumerator *indexesEnumerator = [hotelIndexes objectEnumerator];
+	id curIndex;
+	while (curIndex = [indexesEnumerator nextObject])
+		[hotels addObject:[_hotels objectAtIndex:[curIndex intValue]]];
+	
+	[self _showCreateNewHotelSheetWithHotels:hotels tile:nil];
+}
+
+- (void)getPurchaseWithGameEndFlag:(int)gameEndFlag cash:(int)cash;
+{
+	[[self localPlayer] setCash:cash];
+	[self _showPurchaseSharesSheetWithHotels:[self _hotelsWithPurchaseableShares]];
+}
+
+- (AQTileState)tileStateFromChainID:(int)chainID;
+{
+	if (chainID == 0 || chainID == 12632256)
+		return AQTileNotInHotel;
+	
+	if ([self hotelFromChainID:chainID] != nil)
+		return AQTileInHotel;
+	
+	return AQTileUnplayed;
+}
+
+- (AQHotel *)hotelFromChainID:(int)chainID;
+{
+	NSEnumerator *hotelEnumerator = [_hotels objectEnumerator];
+	id curHotel;
+	while (curHotel = [hotelEnumerator nextObject]) {
+		if ([curHotel netacquireID] == chainID)
+			return curHotel;
+	}
+	
+	return nil;
+}
+
+- (void)closeGameWindow;
+{
+	[_gameWindowController closeGameWindow];
 }
 @end
 

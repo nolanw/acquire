@@ -67,15 +67,24 @@
 - (NSColor *)tileUnplayedColor;
 - (AQTile *)tileOnBoardByString:(NSString *)tileString;
 - (void)incomingGameMessage:(NSString *)gameMessage;
+- (void)closeGameWindow;
 @end
 
 @interface AQGame (NetworkGame)
 - (AQPlayer *)localPlayer;
 - (NSString *)localPlayerName;
 - (void)setLocalPlayerName:(NSString *)localPlayerName;
-- (void)boardTileAtRow:(NSString *)row column:(int)column isNetacquireChainID:(int)netacquireChainID;
+- (void)setActivePlayerName:(NSString *)activePlayerName;
+- (void)boardTile:(AQTile *)tile isNetacquireChainID:(int)netacquireChainID;
+- (void)boardTileAtNetacquireID:(int)netacquireID isNetacquireChainID:(int)netacquireChainID;
 - (void)rackTileAtIndex:(int)index isNetacquireID:(int)netacquireID netacquireChainID:(int)netacquireChainID;
 - (void)outgoingGameMessage:(NSString *)gameMessage;
+- (void)playerAtIndex:(int)playerIndex isNamed:(NSString *)name;
+- (void)playerAtIndex:(int)playerIndex hasCash:(int)cash;
+- (void)getChainFromHotelIndexes:(NSArray *)hotelIndexes;
+- (void)getPurchaseWithGameEndFlag:(int)gameEndFlag cash:(int)cash;
+- (AQTileState)tileStateFromChainID:(int)chainID;
+- (AQHotel *)hotelFromChainID:(int)chainID;
 @end
 
 @interface AQGame (LocalGame)

@@ -5,7 +5,7 @@
 #import "AQAcquireController.h"
 
 @interface AQAcquireController (Private)
-- (void)_setMenuItemTargetsAndActions;
+- (void)_updateMenuItemTargetsAndActions;
 @end
 
 @implementation AQAcquireController
@@ -49,7 +49,7 @@
 // NSObject (NSNibAwakening)
 - (void)awakeFromNib;
 {
-	[self _setMenuItemTargetsAndActions];
+	[self _updateMenuItemTargetsAndActions];
 	[_welcomeWindowController bringWelcomeWindowToFront:nil];
 }
 
@@ -66,7 +66,7 @@
 	if ([[menuItem title] isEqualToString:@"Leave Game"] || [[menuItem title] isEqualToString:@"End Game"])
 		return ([_gameArrayController activeGame] != nil);
 	
-	if ([[menuItem title] isEqualToString:@"Preferences…"])
+	if ([menuItem action] == @selector(showPreferencesWindow:))
 		return YES;
 	
 	return NO;
@@ -86,9 +86,11 @@
 	[_welcomeWindowController closeWelcomeWindow];
 	[_welcomeWindowController release];
 	_welcomeWindowController = nil;
-	[_lobbyWindowController bringLobbyWindowToFront];
+	[[_connectionArrayController serverConnection] registerAssociatedObject:_lobbyWindowController];
+	[_lobbyWindowController resetLobbyMessages];
 	[_lobbyWindowController updateWindowTitle];
 	[self updateGameListFor:_lobbyWindowController];
+	[_lobbyWindowController bringLobbyWindowToFront];
 }
 
 - (void)cancelConnectingToServer;
@@ -104,7 +106,9 @@
 
 - (void)joiningGame;
 {
+	[_lobbyWindowController invalidateGameListUpdateTimer];
 	[_gameArrayController startNewNetworkGameAndMakeActiveWithAssociatedConnection:[_connectionArrayController serverConnection]];
+	[[_connectionArrayController serverConnection] registerAssociatedObjectAndPrioritize:[_gameArrayController activeGame]];
 	[[_gameArrayController activeGame] setLocalPlayerName:_localPlayerName];
 	[[_gameArrayController activeGame] loadGameWindow];
 	[[_gameArrayController activeGame] bringGameWindowToFront];
@@ -112,8 +116,9 @@
 
 - (void)leaveGame;
 {
+	[[_connectionArrayController serverConnection] deregisterAssociatedObject:[_gameArrayController activeGame]];
 	[[_connectionArrayController serverConnection] leaveGame];
-	[[_gameArrayController activeGame] endGame];
+	[_gameArrayController removeGame:[_gameArrayController activeGame]];
 	
 	if (_lobbyWindowController == nil)
 		_lobbyWindowController = [[AQLobbyWindowController alloc] initWithAcquireController:self];
@@ -127,7 +132,7 @@
 {
 	[[_connectionArrayController serverConnection] disconnectFromServer];
 	if (_gameArrayController != nil)
-		[[_gameArrayController activeGame] endGame];
+		[_gameArrayController removeGame:[_gameArrayController activeGame]];
 	
 	[_lobbyWindowController closeLobbyWindow];
 	[_lobbyWindowController release];
@@ -166,6 +171,7 @@
 
 
 // Passthrus
+/*
 - (void)incomingLobbyMessage:(NSString *)lobbyMessage;
 {
 	[_lobbyWindowController incomingLobbyMessage:lobbyMessage];
@@ -180,7 +186,7 @@
 {
 	[[_gameArrayController activeGame] incomingGameMessage:gameMessage];
 }
-
+*/
 - (void)updateGameListFor:(id)anObject;
 {
 	[[_connectionArrayController serverConnection] updateGameListFor:anObject];
@@ -207,6 +213,14 @@
 		_preferencesWindowController = [[AQPreferencesWindowController alloc] init];
 	[_preferencesWindowController openPreferencesWindowAndBringToFront];
 }
+/*
+- (void)boardTileAtNetacquireID:(int)netacquireID isNetacquireChainID:(int)netacquireChainID;
+{
+	if ([_gameArrayController activeGame] == nil)
+		return;
+	
+	[[_gameArrayController activeGame] boardTileAtNetacquireID:netacquireID isNetacquireChainID:netacquireChainID];
+}
 
 - (void)rackTileAtIndex:(int)index isNetacquireID:(int)netacquireID netacquireChainID:(int)netacquireChainID;
 {
@@ -215,16 +229,25 @@
 	
 	[[_gameArrayController activeGame] rackTileAtIndex:index isNetacquireID:netacquireID netacquireChainID:netacquireChainID];
 }
+
+- (void)playerAtIndex:(int)playerIndex isNamed:(NSString *)name;
+{
+	[[_gameArrayController activeGame] playerAtIndex:playerIndex isNamed:name];
+}
+*/
 @end
 
 @implementation AQAcquireController (Private)
-- (void)_setMenuItemTargetsAndActions;
+- (void)_updateMenuItemTargetsAndActions;
 {
-	[[[[[NSApp mainMenu] itemWithTitle:@"Server"] submenu] itemWithTitle:@"Show Lobby Window"] setTarget:self];
-	[[[[[NSApp mainMenu] itemWithTitle:@"Server"] submenu] itemWithTitle:@"Show Lobby Window"] setAction:@selector(showLobbyWindow:)];
-	[[[[[NSApp mainMenu] itemWithTitle:@"Server"] submenu] itemWithTitle:@"Disconnect From Server"] setTarget:self];
-	[[[[[NSApp mainMenu] itemWithTitle:@"Server"] submenu] itemWithTitle:@"Disconnect From Server"] setAction:@selector(disconnectFromServer:)];
-	[[[[[NSApp mainMenu] itemWithTitle:@"Game"] submenu] itemWithTitle:@"Leave Game"] setTarget:self];
-	[[[[[NSApp mainMenu] itemWithTitle:@"Game"] submenu] itemWithTitle:@"Leave Game"] setAction:@selector(leaveGame:)];
+	NSMenu *serverMenu = [[[NSApp mainMenu] itemWithTitle:@"Server"] submenu];
+	NSMenu *gameMenu = [[[NSApp mainMenu] itemWithTitle:@"Game"] submenu];
+	
+	[[serverMenu itemWithTitle:@"Show Lobby Window"] setTarget:self];
+	[[serverMenu itemWithTitle:@"Show Lobby Window"] setAction:@selector(showLobbyWindow)];
+	[[serverMenu itemWithTitle:@"Disconnect From Server"] setTarget:self];
+	[[serverMenu itemWithTitle:@"Disconnect From Server"] setAction:@selector(disconnectFromServer)];
+	[[gameMenu itemWithTitle:@"Leave Game"] setTarget:self];
+	[[gameMenu itemWithTitle:@"Leave Game"] setAction:@selector(leaveGame)];
 }
 @end

@@ -54,6 +54,11 @@
     return _cash;
 }
 
+- (void)setCash:(int)dollars;
+{
+	_cash = dollars;
+}
+
 - (void)addCash:(int)dollars;
 {
     _cash += dollars;
@@ -68,7 +73,7 @@
 // Tiles
 - (BOOL)hasTileNamed:(NSString *)tileName;
 {
-	if (_tiles == nil)
+	if (_tiles == nil || [_tiles count] == 0)
 		return NO;
 	
 	NSEnumerator *tileEnum = [_tiles objectEnumerator];
@@ -109,12 +114,16 @@
 
 - (int)numberOfTiles;
 {
+	if (_tiles == nil)
+		return -1;
+	
 	int numberOfTiles = 0;
 	NSEnumerator *tileEnumerator = [_tiles objectEnumerator];
 	id curTile;
 	while (curTile = [tileEnumerator nextObject])
 		if (curTile != [NSNull null])
 			++numberOfTiles;
+	
 	return numberOfTiles;
 }
 
@@ -179,7 +188,7 @@
 		return;
 	}
 	
-	[_tiles replaceObjectAtIndex:rackIndex withObject:tile];
+	[_tiles replaceObjectAtIndex:(rackIndex - 1) withObject:tile];
 }
 
 - (int)rackIndexOfTileNamed:(NSString *)tileName;

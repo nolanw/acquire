@@ -30,6 +30,9 @@
 
 - (void)incomingLobbyMessage:(NSString *)LobbyMessage;
 - (void)requestGameListUpdate:(NSTimer *)theTimer;
+- (void)beginScheduledGameListUpdates;
+- (void)invalidateGameListUpdateTimer;
 - (void)updatedGameList:(NSArray *)gameList;
 - (void)updateWindowTitle;
+- (void)resetLobbyMessages;
 @end

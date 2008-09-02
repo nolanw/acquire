@@ -104,12 +104,18 @@
 	}
 }
 
-- (void)showCreateNewHotelSheet:(NSWindow *)window;
+- (void)showCreateNewHotelSheet:(NSWindow *)window isNetworkGame:(BOOL)isNetworkGame;
 {
 	if (!_createNewHotelSheet)
 		[NSBundle loadNibNamed:@"CreateNewHotelSheet" owner:self];
 	
-	[_createNewHotelSheet makeFirstResponder:_reconsiderButton];
+	if (isNetworkGame) {
+		[_reconsiderButton setTransparent:YES];
+		[_reconsiderButton setEnabled:NO];
+		[_createNewHotelSheet makeFirstResponder:_createHotelButton];
+	} else {
+		[_createNewHotelSheet makeFirstResponder:_reconsiderButton];
+	}
 	
 	[NSApp beginSheet:_createNewHotelSheet modalForWindow:window modalDelegate:self didEndSelector:@selector(didEndSheet:returnCode:contextInfo:) contextInfo:nil];
 }

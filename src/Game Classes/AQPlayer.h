@@ -21,6 +21,7 @@
 
 // Money
 - (int)cash;
+- (void)setCash:(int)dollars;
 - (void)addCash:(int)dollars;
 - (void)subtractCash:(int)dollars;
 

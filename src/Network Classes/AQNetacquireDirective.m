@@ -200,16 +200,15 @@
 	NSString *dataAsString = [[[NSString alloc] initWithData:_protocolData encoding:NSASCIIStringEncoding] autorelease];
 	
 	NSRange parameterStringRange = [dataAsString rangeOfString:@";"];
-	if (parameterStringRange.location == NSNotFound)
+	NSRange endOfDirectiveRange = [dataAsString rangeOfString:@";:"];
+	if (parameterStringRange.location == NSNotFound || (endOfDirectiveRange.location - parameterStringRange.location) <= 1)
 		return [NSArray array];
 	
 	NSRange parameterStringEndRange = [dataAsString rangeOfString:@";" options:NSBackwardsSearch];
 	++(parameterStringRange.location);
 	parameterStringRange.length = parameterStringEndRange.location - parameterStringRange.location;
-	if (parameterStringRange.length <= 0) {
-		NSLog(@"%s parameterStringRange <= 0", _cmd);
+	if (parameterStringRange.length <= 0)
 		return [NSArray array];
-	}
 	
 	NSString *parameterString = [dataAsString substringWithRange:parameterStringRange];
 	
