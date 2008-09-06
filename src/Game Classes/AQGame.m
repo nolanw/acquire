@@ -631,8 +631,12 @@
 
 - (void)playerAtIndex:(int)playerIndex isNamed:(NSString *)name;
 {
+	NSLog(@"%s index=%d, name=%@", _cmd, playerIndex, name);
 	if ([_players count] < playerIndex) {
 		[_players addObject:[AQPlayer playerWithName:name]];
+	} else if (![[[_players objectAtIndex:(playerIndex - 1)] name] isEqualToString:name]) {
+		// The only time the names will change are when we have shells of empty player objects anyway, so it's not a huge deal to just wholesale replace the object. In theory, we should rearrange this more appropriately.
+		[_players replaceObjectAtIndex:(playerIndex - 1) withObject:[AQPlayer playerWithName:name]];
 	}
 	
 	[_gameWindowController reloadScoreboard];

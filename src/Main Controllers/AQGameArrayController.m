@@ -65,7 +65,6 @@
 - (void)removeGame:(AQGame *)game;
 {
 	[_gameArray removeObject:game];
-	[game closeGameWindow];
 }
 
 - (AQGame *)activeGame;

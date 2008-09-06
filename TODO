@@ -20,17 +20,5 @@ New features
 Known bugs
 ---------
 - Network error sometimes comes up immediately after a display name in use error.
-- Joining a game sometimes screws up players in the scoreboard.
-	- Probably updates active player before players are set up.
-
-
-Fixed bugs
-----------
-- Crash on quit (seems related to releasing the game window) (FIXED 2008-Aug-11: Still had a couple NIBs lingering using the stupid "call a registration selector in awakeFromNib" instead of using the File Owner and passing along needed pointers with the init selector.)
-- Crash on appearance of Purchase Shares Sheet after Allocate Merging Hotel Shares Sheet pops up (seemingly randomly; see comment in AQGame (Private)'s _mergerHappeningAtTile: selector implementation). (FIXED 2008-Aug-07: I don't understand 100% why, but it seems to have gone without leakage; see comment at end of implementation of selector.)
-- Program crashes on certain instances of allocating merging hotel shares (happens when clicking sold shares stepper). (Potentially happens when merging hotels of different sizes.) (FIXED 2008-Aug-07: problem disappeared with decision to make the allocating merging hotel shares sheet application-modal.)
-- Canceling the Create New Hotel sheet seems to make the game think a tile has been played, even though it was canceled. (FIXED 2008-Aug-07: reorganized selectors called in showing sheet)
-- If Create New Hotel sheet is cancelled, it won't come back. (FIXED 2008-Aug-04: was trying to print instances of AQHotel instead of asking for the hotel's name, resulting in an attempted copyWithZone, which is intentionally not implemented for AQHotel)
-- Game log scrolls to one line above bottom. (FIXED 2008-Jul-24: got text view to scroll itself instead of using its scroll view)
-- Joining a game doesn't work. (FIXED 2008-Jul-13; was caused by not retrieving a UI widget's tag from the correct UI widget)
-- Sometimes Netacquire doesn't send any handshake directives despite the connection being successful; should fail on such an occasion. (FIXED 2008-Jul-09; was caused by Netacquire not removing the player's display name fast enough, yet picking an odd way to send an error about the issue)
+- In a network game, closing a game window does not correctly leave the game.
+- In a network game, selecting "Leave Game" from the Game menu does not close the game window.

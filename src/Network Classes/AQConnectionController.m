@@ -578,7 +578,7 @@
 	
 	if (netacquireTableIndex < 7) {
 		// Player name
-		if ([netacquireCaption length] <= 0)
+		if ([netacquireCaption length] == 0)
 			return;
 		
 		id associatedObject = [self _firstAssociatedObjectThatRespondsToSelector:@selector(playerAtIndex:isNamed:)];
@@ -598,7 +598,7 @@
 		return;
 	}
 	
-	NSLog(@"%s %@", _cmd, setValueDirective);
+	// NSLog(@"%s %@", _cmd, setValueDirective);
 }
 
 

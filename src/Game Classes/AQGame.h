@@ -67,7 +67,6 @@
 - (NSColor *)tileUnplayedColor;
 - (AQTile *)tileOnBoardByString:(NSString *)tileString;
 - (void)incomingGameMessage:(NSString *)gameMessage;
-- (void)closeGameWindow;
 @end
 
 @interface AQGame (NetworkGame)
