@@ -1,8 +1,8 @@
 New features
 ------------
 - Implement network play.
-	- Implement AQGame (NetworkGame) selectors.
 	- Finish implementing support for all incoming directives.
+	- Finish implementing scoreboard updating.
 - Allow for both new and old hotel names (user-configurable?).
 - Make scoreboard columns' backgrounds relate to their hotels.
 - Provide a legend of hotels and their colors.
