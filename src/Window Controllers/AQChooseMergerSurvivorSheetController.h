@@ -10,6 +10,7 @@
 	IBOutlet NSWindow	*_chooseMergerSurvivorSheet;
 	IBOutlet NSMatrix	*_hotelNamesMatrix;
 	IBOutlet NSButton	*_reconsiderButton;
+	IBOutlet NSButton	*_chooseSurvivorButton;
 	
 	id		_gameWindowController;
 	
@@ -30,5 +31,5 @@
 - (void)didEndSheet:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
 
 - (void)resizeAndPopulateMatricesWithMergingHotels:(NSArray *)mergingHotels potentialSurvivors:(NSArray *)potentialSurvivors mergeTile:(id)mergeTile;
-- (void)showChooseMergerSurvivorSheet:(NSWindow *)window;
+- (void)showChooseMergerSurvivorSheet:(NSWindow *)window isNetworkGame:(BOOL)isNetworkGame;
 @end

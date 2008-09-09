@@ -221,7 +221,6 @@
 
 - (void)mergerSharesSold:(int)sharesSold sharesTraded:(int)sharesTraded;
 {
-	NSLog(@"%s (from AQConnectionController) sharesSold: %d; sharesTraded: %d", _cmd, sharesSold, sharesTraded);
 	[self _sendMDDirectiveWithSharesSold:sharesSold sharesTraded:sharesTraded];
 }
 
@@ -475,8 +474,6 @@
 	if ([messageText characterAtIndex:1] == '*' && [messageText length] > 19 && [[messageText substringWithRange:NSMakeRange(1, ([messageText length] - 2))] isEqualToString:@"*>>>>GAME OVER<<<<"]) {
 		[[self _firstAssociatedObjectThatRespondsToSelector:@selector(determineAndCongratulateWinner)] determineAndCongratulateWinner];
 	}
-	
-	NSLog(@"%s %@", _cmd, [messageText substringWithRange:NSMakeRange(1, 19)]);
 	
 	if ([messageText characterAtIndex:1] == '>' && [messageText length] > 20 && [[messageText substringWithRange:NSMakeRange(1, 19)] isEqualToString:@"> This game is over"]) {
 		[[self _firstAssociatedObjectThatRespondsToSelector:@selector(disableBoardAndTileRack)] disableBoardAndTileRack];

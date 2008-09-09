@@ -409,7 +409,7 @@
 - (void)showChooseMergerSurvivorSheetWithMergingHotels:(NSArray *)mergingHotels potentialSurvivors:(NSArray *)potentialSurvivors mergeTile:(id)mergeTile;
 {
 	[_chooseMergerSurvivorSheetController resizeAndPopulateMatricesWithMergingHotels:mergingHotels potentialSurvivors:potentialSurvivors mergeTile:mergeTile];
-	[_chooseMergerSurvivorSheetController showChooseMergerSurvivorSheet:_gameWindow];
+	[_chooseMergerSurvivorSheetController showChooseMergerSurvivorSheet:_gameWindow isNetworkGame:[self isNetworkGame]];
 }
 
 - (void)showAllocateMergingHotelSharesSheetForMergingHotel:(AQHotel *)mergingHotel survivingHotel:(AQHotel *)survivingHotel player:(AQPlayer *)player sharePrice:(int)sharePrice;

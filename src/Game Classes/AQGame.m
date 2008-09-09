@@ -222,6 +222,7 @@
 			[_associatedConnection purchaseShares:pDirectiveParameters];
 		
 		[_gameWindowController tilesChanged:[[self localPlayer] tiles]];
+		[_gameWindowController hidePurchaseSharesButton];
 		return;
 	}
 	

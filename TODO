@@ -22,9 +22,9 @@ New features
 
 
 Desired rearrangements
----
+----------------------
 - Instead of sheets calling different methods depending on local/network game, ensure they call the same method, which itself does what's needed.
-- Divide classes into Common, LocalGame and NetworkGame sections.
+- Divide classes into common, LocalGame and NetworkGame sections.
 
 
 Known bugs
@@ -33,5 +33,5 @@ Known bugs
 - In a network game, closing a game window does not correctly leave the game.
 - In a network game, selecting "Leave Game" from the Game menu does not close the game window.
 - In a network game, clicking "Reconsider" on the Choose Merger Survivor sheet doesn't let you reconsider.
-- In a network game, the Create New Hotel sheet has a reconsider button, but that action cannot be reconsidered; this leaves Acquire in a useless state, as the server still expects a selection.
 - Can't disconnect from a server that has crashed.
+- "Active player" is indicated at odd times (e.g. after the game is over and before the game begins).

@@ -123,12 +123,20 @@
 	}
 }
 
-- (void)showChooseMergerSurvivorSheet:(NSWindow *)window;
+- (void)showChooseMergerSurvivorSheet:(NSWindow *)window isNetworkGame:(BOOL)isNetworkGame;
 {
 	if (!_chooseMergerSurvivorSheet)
 		[NSBundle loadNibNamed:@"ChooseMergerSurvivorSheet" owner:self];
 	
-	[_chooseMergerSurvivorSheet makeFirstResponder:_reconsiderButton];
+	if (isNetworkGame) {
+		[_reconsiderButton setTransparent:YES];
+		[_reconsiderButton setEnabled:NO];
+		[_chooseMergerSurvivorSheet makeFirstResponder:_chooseSurvivorButton];
+	} else {
+		[_reconsiderButton setEnabled:YES];
+		[_reconsiderButton setTransparent:NO];
+		[_chooseMergerSurvivorSheet makeFirstResponder:_reconsiderButton];
+	}
 	
 	[NSApp beginSheet:_chooseMergerSurvivorSheet modalForWindow:window modalDelegate:self didEndSelector:@selector(didEndSheet:returnCode:contextInfo:) contextInfo:nil];
 }
