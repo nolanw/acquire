@@ -1,8 +1,11 @@
+Things Left For Version 0.9
+---------------------------
+- In a network game, closing a game window does not correctly leave the game.
+- In a network game, selecting "Leave Game" from the Game menu does not close the game window.
+
 New features
 ------------
 - Implement network play.
-	- Finish implementing support for all incoming directives.
-	- Finish implementing scoreboard updating.
 	- Let user create a new game.
 - Allow for both new and old hotel names (user-configurable?).
 - Make scoreboard columns' backgrounds relate to their hotels.
@@ -32,6 +35,5 @@ Known bugs
 - Network error sometimes comes up immediately or shortly after a display name in use error.
 - In a network game, closing a game window does not correctly leave the game.
 - In a network game, selecting "Leave Game" from the Game menu does not close the game window.
-- In a network game, clicking "Reconsider" on the Choose Merger Survivor sheet doesn't let you reconsider.
 - Can't disconnect from a server that has crashed.
 - "Active player" is indicated at odd times (e.g. after the game is over and before the game begins).

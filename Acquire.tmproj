@@ -64,7 +64,7 @@
 			<key>filename</key>
 			<string>TODO</string>
 			<key>lastUsed</key>
-			<date>2008-09-02T04:53:11Z</date>
+			<date>2008-09-09T07:01:17Z</date>
 			<key>selected</key>
 			<true/>
 		</dict>
@@ -78,9 +78,9 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>60</integer>
+				<integer>94</integer>
 				<key>line</key>
-				<integer>18</integer>
+				<integer>3</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -92,29 +92,29 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>23</integer>
+				<integer>0</integer>
 				<key>line</key>
-				<integer>69</integer>
+				<integer>73</integer>
 			</dict>
 			<key>columnSelection</key>
 			<false/>
 			<key>firstVisibleColumn</key>
-			<integer>0</integer>
+			<integer>96</integer>
 			<key>firstVisibleLine</key>
-			<integer>48</integer>
+			<integer>53</integer>
 			<key>selectFrom</key>
 			<dict>
 				<key>column</key>
-				<integer>8</integer>
+				<integer>32</integer>
 				<key>line</key>
-				<integer>69</integer>
+				<integer>73</integer>
 			</dict>
 			<key>selectTo</key>
 			<dict>
 				<key>column</key>
-				<integer>23</integer>
+				<integer>0</integer>
 				<key>line</key>
-				<integer>69</integer>
+				<integer>73</integer>
 			</dict>
 		</dict>
 		<key>src/Game Classes/AQGame.m</key>
@@ -122,129 +122,81 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>1</integer>
+				<integer>67</integer>
 				<key>line</key>
-				<integer>690</integer>
+				<integer>672</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>666</integer>
+			<integer>629</integer>
 		</dict>
-		<key>src/Main Controllers/AQAcquireController.m</key>
+		<key>src/Network Classes/AQConnectionController.h</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>17</integer>
+				<integer>32</integer>
 				<key>line</key>
-				<integer>116</integer>
+				<integer>44</integer>
 			</dict>
-			<key>columnSelection</key>
-			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>8</integer>
+		</dict>
+		<key>src/Network Classes/AQConnectionController.m</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>2</integer>
+				<key>line</key>
+				<integer>475</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>460</integer>
+		</dict>
+		<key>src/Window Controllers/AQChooseMergerSurvivorSheetController.m</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>2</integer>
+				<key>line</key>
+				<integer>138</integer>
+			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>102</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>8</integer>
-				<key>line</key>
-				<integer>116</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>17</integer>
-				<key>line</key>
-				<integer>116</integer>
-			</dict>
-		</dict>
-		<key>src/Main Controllers/AQGameArrayController.m</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>1</integer>
-				<key>line</key>
-				<integer>65</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>42</integer>
-		</dict>
-		<key>src/Window Controllers/AQGameWindowController.h</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>23</integer>
-				<key>line</key>
-				<integer>66</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>44</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>8</integer>
-				<key>line</key>
-				<integer>66</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>23</integer>
-				<key>line</key>
-				<integer>66</integer>
-			</dict>
 		</dict>
 		<key>src/Window Controllers/AQGameWindowController.m</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>18</integer>
+				<integer>115</integer>
 				<key>line</key>
-				<integer>348</integer>
+				<integer>411</integer>
 			</dict>
-			<key>columnSelection</key>
-			<false/>
 			<key>firstVisibleColumn</key>
-			<integer>76</integer>
+			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>334</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>8</integer>
-				<key>line</key>
-				<integer>348</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>23</integer>
-				<key>line</key>
-				<integer>348</integer>
-			</dict>
+			<integer>392</integer>
 		</dict>
 	</dict>
 	<key>openDocuments</key>
 	<array>
 		<string>TODO</string>
-		<string>src/Main Controllers/AQGameArrayController.m</string>
-		<string>src/Main Controllers/AQAcquireController.m</string>
-		<string>src/Window Controllers/AQGameWindowController.h</string>
-		<string>src/Game Classes/AQGame.m</string>
-		<string>src/Window Controllers/AQGameWindowController.m</string>
 		<string>src/Game Classes/AQGame.h</string>
+		<string>src/Game Classes/AQGame.m</string>
+		<string>src/Network Classes/AQConnectionController.h</string>
+		<string>src/Network Classes/AQConnectionController.m</string>
+		<string>src/Window Controllers/AQChooseMergerSurvivorSheetController.m</string>
+		<string>src/Window Controllers/AQGameWindowController.m</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
