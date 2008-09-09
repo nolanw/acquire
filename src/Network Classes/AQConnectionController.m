@@ -19,6 +19,7 @@
 - (void)_parseMultipleDirectives:(AQNetacquireDirective *)bunchOfDirectives;
 - (void)_receivedATDirective:(AQNetacquireDirective *)activateTileDirective;
 - (void)_receivedGCDirective:(AQNetacquireDirective *)getChainDirective;
+- (void)_receivedGDDirective:(AQNetacquireDirective *)getDispositionDirective;
 - (void)_receivedGMDirective:(AQNetacquireDirective *)gameMessageDirective;
 - (void)_receivedGMDirective:(AQNetacquireDirective *)gameMessageDirective isFirstPass:(BOOL)isFirstPass;
 - (void)_receivedGPDirective:(AQNetacquireDirective *)getPurchaseDirective;
@@ -40,6 +41,7 @@
 - (void)_sendBMDirectiveToGameRoomWithMessage:(NSString *)message;
 - (void)_sendCSDirectiveWithChainID:(int)chainID selectionType:(int)selectionType;
 - (void)_sendJGDirectiveWithGameNumber:(int)gameNumber;
+- (void)_sendMDDirectiveWithSharesSold:(int)sharesSold sharesTraded:(int)sharesTraded;
 - (void)_sendPDirectiveWithParameters:(NSArray *)parameters;
 - (void)_sendPLDirectiveWithDisplayName:(NSString *)displayName versionStrings:(NSArray *)versionStrings;
 - (void)_sendPRDirectiveWithTimestamp:(NSString *)timestamp;
@@ -198,14 +200,34 @@
 	[self _sendPTDirectiveWithIndex:rackIndex];
 }
 
-- (void)choseChainID:(int)chainID selectionType:(int)selectionType;
+- (void)choseHotelToCreate:(int)newHotelNetacquireID;
 {
-	[self _sendCSDirectiveWithChainID:chainID selectionType:selectionType];
+	[self _sendCSDirectiveWithChainID:newHotelNetacquireID selectionType:4];
 }
 
-- (void)purchaseShares:(NSArray *)pDirectiveParameters;
+- (void)purchaseShares:(NSArray *)sharesPurchasedAsParameters;
 {
+	NSMutableArray *pDirectiveParameters = [NSMutableArray arrayWithArray:sharesPurchasedAsParameters];
+	[pDirectiveParameters addObject:@"0"];
 	[self _sendPDirectiveWithParameters:pDirectiveParameters];
+}
+
+- (void)purchaseSharesAndEndGame:(NSArray *)sharesPurchasedAsParameters;
+{
+	NSMutableArray *pDirectiveParameters = [NSMutableArray arrayWithArray:sharesPurchasedAsParameters];
+	[pDirectiveParameters addObject:@"1"];
+	[self _sendPDirectiveWithParameters:pDirectiveParameters];
+}
+
+- (void)mergerSharesSold:(int)sharesSold sharesTraded:(int)sharesTraded;
+{
+	NSLog(@"%s (from AQConnectionController) sharesSold: %d; sharesTraded: %d", _cmd, sharesSold, sharesTraded);
+	[self _sendMDDirectiveWithSharesSold:sharesSold sharesTraded:sharesTraded];
+}
+
+- (void)selectedMergeSurvivor:(int)survivingHotelNetacquireID;
+{
+	[self _sendCSDirectiveWithChainID:survivingHotelNetacquireID selectionType:6];
 }
 
 
@@ -302,6 +324,11 @@
 		return;
 	}
 	
+	if ([directiveCode isEqualToString:@"GD"]) {
+		[self _receivedGDDirective:directive];
+		return;
+	}
+	
 	if ([directiveCode isEqualToString:@"GM"]) {
 		[self _receivedGMDirective:directive isFirstPass:NO];
 		return;
@@ -386,10 +413,16 @@
 - (void)_receivedGCDirective:(AQNetacquireDirective *)getChainDirective;
 {
 	NSArray *parameters = [getChainDirective parameters];
+	if ([parameters count] == 1 && [[parameters objectAtIndex:0] intValue] == 4) {
+		[[self _firstAssociatedObjectThatRespondsToSelector:@selector(showCreateNewHotelSheet)] showCreateNewHotelSheet];
+		return;
+	}
+	
 	if ([parameters count] <= 1 || [parameters count] > 8)
 		return;
 	
-	if ([[parameters objectAtIndex:0] intValue] != 4)
+	int selectionType = [[parameters objectAtIndex:0] intValue];
+	if (selectionType != 4 && selectionType != 6)
 		return;
 	
 	NSMutableArray *hotelIndexes = [NSMutableArray arrayWithCapacity:7];
@@ -397,8 +430,24 @@
 	for (i = 1; i < [parameters count]; ++i)
 		[hotelIndexes addObject:[NSNumber numberWithInt:([[parameters objectAtIndex:i] intValue] - 1)]];
 	
-	id associatedObject = [self _firstAssociatedObjectThatRespondsToSelector:@selector(getChainFromHotelIndexes:)];
-	[associatedObject getChainFromHotelIndexes:hotelIndexes];
+	if (selectionType == 4) {
+		id associatedObject = [self _firstAssociatedObjectThatRespondsToSelector:@selector(getChainFromHotelIndexes:)];
+		[associatedObject getChainFromHotelIndexes:hotelIndexes];
+		return;
+	}
+	
+	if (selectionType == 6) {
+		id associatedObject = [self _firstAssociatedObjectThatRespondsToSelector:@selector(chooseMergeSurvivorFromHotelIndexes:)];
+		[associatedObject chooseMergeSurvivorFromHotelIndexes:hotelIndexes];
+		return;
+	}
+}
+
+- (void)_receivedGDDirective:(AQNetacquireDirective *)getDispositionDirective;
+{
+	NSArray *parameters = [getDispositionDirective parameters];
+	id associatedObject = [self _firstAssociatedObjectThatRespondsToSelector:@selector(showAllocateMergingHotelSharesSheetForHotelWithNetacquireID:survivingHotelNetacquireID:)];
+	[associatedObject showAllocateMergingHotelSharesSheetForHotelWithNetacquireID:[[parameters objectAtIndex:4] intValue] survivingHotelNetacquireID:[[parameters objectAtIndex:5] intValue]];
 }
 
 - (void)_receivedGMDirective:(AQNetacquireDirective *)gameMessageDirective;
@@ -413,7 +462,7 @@
 	
 	NSString *messageText = [[gameMessageDirective parameters] objectAtIndex:0];
 	
-	if (isFirstPass && [messageText characterAtIndex:1] == '*') {
+	if (isFirstPass && ([messageText characterAtIndex:1] == '*' || [messageText characterAtIndex:1] == '>')) {
 		[self _parseMultipleDirectives:gameMessageDirective];
 		return;
 	}
@@ -421,6 +470,16 @@
 	if ([messageText characterAtIndex:1] == '*' && [messageText length] > 13 && [[messageText substringToIndex:14] isEqualToString:@"\"*Waiting for "]) {
 		id associatedObject = [self _firstAssociatedObjectThatRespondsToSelector:@selector(setActivePlayerName:)];
 		[associatedObject setActivePlayerName:[messageText substringWithRange:NSMakeRange(14, [messageText length] - 29)]];
+	}
+	
+	if ([messageText characterAtIndex:1] == '*' && [messageText length] > 19 && [[messageText substringWithRange:NSMakeRange(1, ([messageText length] - 2))] isEqualToString:@"*>>>>GAME OVER<<<<"]) {
+		[[self _firstAssociatedObjectThatRespondsToSelector:@selector(determineAndCongratulateWinner)] determineAndCongratulateWinner];
+	}
+	
+	NSLog(@"%s %@", _cmd, [messageText substringWithRange:NSMakeRange(1, 19)]);
+	
+	if ([messageText characterAtIndex:1] == '>' && [messageText length] > 20 && [[messageText substringWithRange:NSMakeRange(1, 19)] isEqualToString:@"> This game is over"]) {
+		[[self _firstAssociatedObjectThatRespondsToSelector:@selector(disableBoardAndTileRack)] disableBoardAndTileRack];
 	}
 	
 	id associatedObject = [self _firstAssociatedObjectThatRespondsToSelector:@selector(incomingGameMessage:)];
@@ -451,7 +510,7 @@
 	}
 	
 	// Messages starting with an asterisk are server information, so they're safe to parse for multiple directives.
-	if (isFirstPass && [messageText characterAtIndex:1] == '*') {
+	if (isFirstPass && ([messageText characterAtIndex:1] == '*' || [messageText characterAtIndex:1] == '>')) {
 		[self _parseMultipleDirectives:lobbyMessageDirective];
 		return;
 	}
@@ -531,7 +590,7 @@
 {
 	if ([[setBoardStatusDirective parameters] count] != 2)
 		return;
-	
+
 	id associatedObject = [self _firstAssociatedObjectThatRespondsToSelector:@selector(boardTileAtNetacquireID:isNetacquireChainID:)];
 	[associatedObject boardTileAtNetacquireID:[[[setBoardStatusDirective parameters] objectAtIndex:0] intValue] isNetacquireChainID:[[[setBoardStatusDirective parameters] objectAtIndex:1] intValue]];
 }
@@ -585,6 +644,56 @@
 		[associatedObject playerAtIndex:netacquireTableIndex isNamed:netacquireCaption];
 		
 		return;
+	}
+	
+	if (netacquireTableIndex >= 33 && netacquireTableIndex <= 80) {
+		// Shares in a hotel
+		if ([netacquireCaption length] <= 0)
+			return;
+		
+		id associatedObject;
+		
+		if (netacquireTableIndex >= 33 && netacquireTableIndex <= 38) {
+			associatedObject = [self _firstAssociatedObjectThatRespondsToSelector:@selector(playerAtIndex:hasSacksonShares:)];
+			[associatedObject playerAtIndex:(netacquireTableIndex - 33) hasSacksonShares:[netacquireCaption intValue]];
+			return;			
+		}
+		
+		if (netacquireTableIndex >= 40 && netacquireTableIndex <= 45) {
+			associatedObject = [self _firstAssociatedObjectThatRespondsToSelector:@selector(playerAtIndex:hasZetaShares:)];
+			[associatedObject playerAtIndex:(netacquireTableIndex - 40) hasZetaShares:[netacquireCaption intValue]];
+			return;			
+		}
+		
+		if (netacquireTableIndex >= 47 && netacquireTableIndex <= 52) {
+			associatedObject = [self _firstAssociatedObjectThatRespondsToSelector:@selector(playerAtIndex:hasAmericaShares:)];
+			[associatedObject playerAtIndex:(netacquireTableIndex - 47) hasAmericaShares:[netacquireCaption intValue]];
+			return;			
+		}
+		
+		if (netacquireTableIndex >= 54 && netacquireTableIndex <= 59) {
+			associatedObject = [self _firstAssociatedObjectThatRespondsToSelector:@selector(playerAtIndex:hasFusionShares:)];
+			[associatedObject playerAtIndex:(netacquireTableIndex - 54) hasFusionShares:[netacquireCaption intValue]];
+			return;			
+		}
+		
+		if (netacquireTableIndex >= 61 && netacquireTableIndex <= 66) {
+			associatedObject = [self _firstAssociatedObjectThatRespondsToSelector:@selector(playerAtIndex:hasHydraShares:)];
+			[associatedObject playerAtIndex:(netacquireTableIndex - 61) hasHydraShares:[netacquireCaption intValue]];
+			return;			
+		}
+		
+		if (netacquireTableIndex >= 68 && netacquireTableIndex <= 73) {
+			associatedObject = [self _firstAssociatedObjectThatRespondsToSelector:@selector(playerAtIndex:hasQuantumShares:)];
+			[associatedObject playerAtIndex:(netacquireTableIndex - 68) hasQuantumShares:[netacquireCaption intValue]];
+			return;			
+		}
+		
+		if (netacquireTableIndex >= 75 && netacquireTableIndex <= 80) {
+			associatedObject = [self _firstAssociatedObjectThatRespondsToSelector:@selector(playerAtIndex:hasPhoenixShares:)];
+			[associatedObject playerAtIndex:(netacquireTableIndex - 75) hasPhoenixShares:[netacquireCaption intValue]];
+			return;			
+		}
 	}
 	
 	if (netacquireTableIndex >= 82 && netacquireTableIndex <= 87) {
@@ -652,12 +761,22 @@
 	[self _sendDirectiveData:[directive protocolData]];
 }
 
+- (void)_sendMDDirectiveWithSharesSold:(int)sharesSold sharesTraded:(int)sharesTraded;
+{
+	AQNetacquireDirective *directive = [[[AQNetacquireDirective alloc] init] autorelease];
+	[directive setDirectiveCode:@"MD"];
+	[directive addParameter:[NSString stringWithFormat:@"%d", sharesSold]];
+	[directive addParameter:[NSString stringWithFormat:@"%d", sharesTraded]];
+	
+	NSLog(@"%s sending %@", _cmd, directive);
+	[self _sendDirectiveData:[directive protocolData]];
+}
+
 - (void)_sendPDirectiveWithParameters:(NSArray *)parameters;
 {
 	AQNetacquireDirective *directive = [[[AQNetacquireDirective alloc] init] autorelease];
 	[directive setDirectiveCode:@"P"];
 	[directive addParameters:parameters];
-	[directive addParameter:@"0"];
 	[self _sendDirectiveData:[directive protocolData]];
 }
 

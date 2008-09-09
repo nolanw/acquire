@@ -54,7 +54,7 @@
 {
 	if (returnCode == 1) {
 		[sheet orderOut:self];
-		[_gameWindowController showPurchaseSharesButton];
+		[_gameWindowController purchaseSharesSheetDismissed];
 		return;
 	}
 	
@@ -68,7 +68,7 @@
 	
 	[sheet orderOut:self];
 	
-	[(AQGameWindowController *)_gameWindowController purchaseShares:sharesPurchased ofHotelsNamed:hotelNames];
+	[(AQGameWindowController *)_gameWindowController purchaseShares:sharesPurchased ofHotelsNamed:hotelNames sender:_purchaseSharesButton];
 }
 
 - (void)stepperChanged:(id)sender;

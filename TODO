@@ -3,22 +3,35 @@ New features
 - Implement network play.
 	- Finish implementing support for all incoming directives.
 	- Finish implementing scoreboard updating.
+	- Let user create a new game.
 - Allow for both new and old hotel names (user-configurable?).
 - Make scoreboard columns' backgrounds relate to their hotels.
 - Provide a legend of hotels and their colors.
 - Design and implement a proper game logging class (which the Game Log in the Game Window class can access).
 - Make separate local game and network game menus.
 - Implement the board's winning of some shares in two-player local games.
-- Divide classes into Common, LocalGame and NetworkGame sections.
 - Store ~5 last connected servers and ports (instead of one) for the Welcome Window.
 - Local games with two players: implement board's hand in hotel mergers.
+- Color rack tiles with the hotels they'd be a part of, or a different color if they merge, or whatever.
+- Similar to previous item: note tiles that cannot currently be played (would create new hotel but no hotels off the board), and don't highlight them.
+- Change the Purchase Shares Sheet's submit button to say something else when it's possible to end the game.
 - Redo game list drawer.
 	- Make it look nicer!
 	- Differentiate games that can be joined as player, as observer, or not at all.
 	- Update on new game creation (instead of timed events).
 
+
+Desired rearrangements
+---
+- Instead of sheets calling different methods depending on local/network game, ensure they call the same method, which itself does what's needed.
+- Divide classes into Common, LocalGame and NetworkGame sections.
+
+
 Known bugs
 ---------
-- Network error sometimes comes up immediately after a display name in use error.
+- Network error sometimes comes up immediately or shortly after a display name in use error.
 - In a network game, closing a game window does not correctly leave the game.
 - In a network game, selecting "Leave Game" from the Game menu does not close the game window.
+- In a network game, clicking "Reconsider" on the Choose Merger Survivor sheet doesn't let you reconsider.
+- In a network game, the Create New Hotel sheet has a reconsider button, but that action cannot be reconsidered; this leaves Acquire in a useless state, as the server still expects a selection.
+- Can't disconnect from a server that has crashed.

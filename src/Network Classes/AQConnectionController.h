@@ -40,8 +40,11 @@
 - (void)updateGameListFor:(id)anObject;
 - (void)retryUpdateGameList:(NSTimer *)aTimer;
 - (void)playTileAtRackIndex:(int)rackIndex;
-- (void)choseChainID:(int)chainID selectionType:(int)selectionType;
-- (void)purchaseShares:(NSArray *)pDirectiveParameters;
+- (void)choseHotelToCreate:(int)newHotelNetacquireID;
+- (void)purchaseShares:(NSArray *)sharesPurchasedAsParameters;
+- (void)purchaseSharesAndEndGame:(NSArray *)sharesPurchasedAsParameters;
+- (void)mergerSharesSold:(int)sharesSold sharesTraded:(int)sharesTraded;
+- (void)selectedMergeSurvivor:(int)survivingHotelNetacquireID;
 
 // AsyncSocket delegate selectors
 - (void)onSocket:(AsyncSocket *)socket willDisconnectWithError:(NSError *)err;

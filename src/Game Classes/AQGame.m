@@ -34,7 +34,6 @@
 - (void)_payShareholderBonusesForHotels:(NSArray *)hotels;
 - (void)_payPlayersForSharesInHotels:(NSArray *)hotels;
 - (NSArray *)_winningPlayers;
-- (BOOL)_gameCanEnd;
 @end
 
 @implementation AQGame
@@ -177,9 +176,24 @@
 	return nil;
 }
 
-- (void)purchaseShares:(NSArray *)sharesPurchased ofHotelsNamed:(NSArray *)hotelNames;
+- (void)purchaseShares:(NSArray *)sharesPurchased ofHotelsNamed:(NSArray *)hotelNames sender:(id)sender;
+{
+	[self purchaseShares:sharesPurchased ofHotelsNamed:hotelNames endGame:NO sender:sender];
+}
+
+- (void)purchaseShares:(NSArray *)sharesPurchased ofHotelsNamed:(NSArray *)hotelNames endGame:(BOOL)endGame sender:(id)sender;
 {
 	if ([self isNetworkGame]) {
+		if (!endGame && [self gameCanEnd] && [sender isKindOfClass:[NSButton class]]) {
+			_finalTurnSharesPurchased = [[NSArray arrayWithArray:sharesPurchased] retain];
+			_finalTurnHotelNames = [[NSArray arrayWithArray:hotelNames] retain];
+			[_gameWindowController showPurchaseSharesButton];
+			[_gameWindowController showEndCurrentTurnButton];
+			[_gameWindowController showEndGameButton];
+			
+			return;
+		}
+		
 		NSMutableArray *pDirectiveParameters = [NSMutableArray arrayWithCapacity:7];
 		NSEnumerator *hotelEnumerator = [_hotels objectEnumerator];
 		id curHotel;
@@ -198,7 +212,16 @@
 				[pDirectiveParameters addObject:[NSNumber numberWithInt:0]];
 		}
 		
-		[_associatedConnection purchaseShares:pDirectiveParameters];
+		NSNumber *tmp = [pDirectiveParameters objectAtIndex:5];
+		[pDirectiveParameters replaceObjectAtIndex:5 withObject:[pDirectiveParameters objectAtIndex:6]];
+		[pDirectiveParameters replaceObjectAtIndex:6 withObject:tmp];
+		
+		if (endGame && [self gameCanEnd])
+			[_associatedConnection purchaseSharesAndEndGame:pDirectiveParameters];
+		else
+			[_associatedConnection purchaseShares:pDirectiveParameters];
+		
+		[_gameWindowController tilesChanged:[[self localPlayer] tiles]];
 		return;
 	}
 	
@@ -225,7 +248,7 @@
 		[_gameWindowController incomingGameLogEntry:purchaseLog];
 	
 	if ([self isLocalGame]) {
-		if ([self _gameCanEnd]) {
+		if ([self gameCanEnd]) {
 			[_gameWindowController showEndGameButton];
 			[_gameWindowController showEndCurrentTurnButton];
 		} else {
@@ -251,14 +274,19 @@
 	if (_tilePlayedThisTurn)
 		return;
 	
+	AQTile *clickedTile = [_board tileOnBoardByString:tileClickedString];
+	
 	if ([self isNetworkGame]) {
+		if ([self playedTileCreatesNewHotel:clickedTile] && [[self _hotelsNotOnBoard] count] == 0)
+			return;
+		
 		[_associatedConnection playTileAtRackIndex:([[self activePlayer] rackIndexOfTileNamed:tileClickedString] + 1)];
 		_tilePlayedThisTurn = YES;
 		
 		return;
 	}
 	
-	AQTile *clickedTile = [_board tileOnBoardByString:tileClickedString];
+
 	if ([self playedTileCreatesNewHotel:clickedTile]) {
 		NSArray *hotelsNotOnBoard = [self _hotelsNotOnBoard];
 		if ([hotelsNotOnBoard count] == 0) {
@@ -293,7 +321,7 @@
 - (void)createHotelNamed:(NSString *)hotelName atTile:(id)tile;
 {
 	if ([self isNetworkGame]) {
-		[_associatedConnection choseChainID:[[self hotelNamed:hotelName] netacquireID] selectionType:4];
+		[_associatedConnection choseHotelToCreate:[[self hotelNamed:hotelName] netacquireID]];
 		return;
 	}
 	
@@ -333,6 +361,11 @@
 
 - (void)hotelSurvives:(AQHotel *)hotel mergingHotels:(NSArray *)mergingHotels mergeTile:(AQTile *)mergeTile;
 {
+	if ([self isNetworkGame]) {
+		[_associatedConnection selectedMergeSurvivor:[hotel netacquireID]];
+		return;
+	}
+	
 	[self _tilePlayed:mergeTile];
 	[_gameWindowController incomingGameLogEntry:@"* Hotel merger occuring!"];
 	[_gameWindowController incomingGameLogEntry:[NSString stringWithFormat:@"* %@ is the surviving hotel.", [hotel name]]];
@@ -451,6 +484,15 @@
 
 - (void)endCurrentTurn;
 {
+	if ([self isNetworkGame]) {
+		[self purchaseShares:_finalTurnSharesPurchased ofHotelsNamed:_finalTurnHotelNames endGame:NO sender:self];
+		
+		[_gameWindowController hidePurchaseSharesButton];
+		[_gameWindowController hideEndCurrentTurnButton];
+		[_gameWindowController hideEndGameButton];
+		return;
+	}
+	
 	int i;
 	for (i = [[self activePlayer] numberOfTiles]; i < 6; ++i)
 		[[self activePlayer] drewTile:[_board tileFromTileBag]];
@@ -468,7 +510,7 @@
 	
 	[_gameWindowController hideEndCurrentTurnButton];
 	
-	if ([self _gameCanEnd])
+	if ([self gameCanEnd])
 		[_gameWindowController showEndGameButton];
 	else
 		[_gameWindowController hideEndGameButton];
@@ -490,10 +532,35 @@
 	}
 }
 
+- (BOOL)gameCanEnd;
+{
+	NSArray *hotelsOnBoard = [self _hotelsOnBoard];
+	NSEnumerator *hotelEnumerator = [hotelsOnBoard objectEnumerator];
+	id curHotel;
+	int safeHotels = 0;
+	while (curHotel = [hotelEnumerator nextObject]) {
+		if ([(AQHotel *)curHotel size] > 40)
+			return YES;
+		if ([curHotel isSafe])
+			++safeHotels;
+	}
+	
+	if ([hotelsOnBoard count] == 0)
+		return NO;
+	
+	return (safeHotels == [hotelsOnBoard count]);
+}
+
 - (void)endGame;
 {
-	if ([self isNetworkGame])
+	if ([self isNetworkGame]) {
+		[self purchaseShares:_finalTurnSharesPurchased ofHotelsNamed:_finalTurnHotelNames endGame:YES sender:self];
+		
+		[_gameWindowController hidePurchaseSharesButton];
+		[_gameWindowController hideEndCurrentTurnButton];
+		[_gameWindowController hideEndGameButton];
 		return;
+	}
 	
 	[_gameWindowController hidePurchaseSharesButton];
 	[_gameWindowController hideEndCurrentTurnButton];
@@ -555,6 +622,11 @@
 {
 	[_gameWindowController incomingGameMessage:gameMessage];
 }
+
+- (void)disableBoardAndTileRack;
+{
+	[_gameWindowController disableBoardAndTileRack];
+}
 @end
 
 @implementation AQGame (NetworkGame)
@@ -591,8 +663,15 @@
 	if ([self activePlayer] == [self localPlayer]) {
 		_tilePlayedThisTurn = NO;
 		[_gameWindowController highlightTilesOnBoard:[[self activePlayer] tiles]];
+		
+		if ([self gameCanEnd]) {
+			[_gameWindowController showEndCurrentTurnButton];
+			[_gameWindowController showEndGameButton];
+		}
 	} else {
 		[_gameWindowController tilesChanged:[[self activePlayer] tiles]];
+		[_gameWindowController hideEndCurrentTurnButton];
+		[_gameWindowController hideEndGameButton];
 	}
 }
 
@@ -604,8 +683,9 @@
 	}
 	
 	AQTileState tileState = [self tileStateFromChainID:netacquireChainID];
-	if (tileState == AQTileInHotel)
+	if (tileState == AQTileInHotel) {
 		[[self hotelFromChainID:netacquireChainID] addTile:tile];
+	}
 	else
 		[tile setState:tileState];
 	
@@ -631,7 +711,6 @@
 
 - (void)playerAtIndex:(int)playerIndex isNamed:(NSString *)name;
 {
-	NSLog(@"%s index=%d, name=%@", _cmd, playerIndex, name);
 	if ([_players count] < playerIndex) {
 		[_players addObject:[AQPlayer playerWithName:name]];
 	} else if (![[[_players objectAtIndex:(playerIndex - 1)] name] isEqualToString:name]) {
@@ -650,6 +729,70 @@
 	[[_players objectAtIndex:playerIndex] setCash:cash];
 }
 
+- (void)playerAtIndex:(int)playerIndex hasSacksonShares:(int)sacksonShares;
+{
+	int diff = sacksonShares - [[_players objectAtIndex:playerIndex] numberOfSharesOfHotelNamed:@"Sackson"];
+	[[_players objectAtIndex:playerIndex] addSharesOfHotelNamed:@"Sackson" numberOfShares:diff];
+	[[self hotelNamed:@"Sackson"] removeSharesFromBank:diff];
+	
+	[_gameWindowController reloadScoreboard];
+}
+
+- (void)playerAtIndex:(int)playerIndex hasZetaShares:(int)zetaShares;
+{
+	int diff = zetaShares - [[_players objectAtIndex:playerIndex] numberOfSharesOfHotelNamed:@"Zeta"];
+	[[_players objectAtIndex:playerIndex] addSharesOfHotelNamed:@"Zeta" numberOfShares:diff];
+	[[self hotelNamed:@"Zeta"] removeSharesFromBank:diff];
+	
+	[_gameWindowController reloadScoreboard];
+}
+
+- (void)playerAtIndex:(int)playerIndex hasAmericaShares:(int)americaShares;
+{
+	int diff = americaShares - [[_players objectAtIndex:playerIndex] numberOfSharesOfHotelNamed:@"America"];
+	[[_players objectAtIndex:playerIndex] addSharesOfHotelNamed:@"America" numberOfShares:diff];
+	[[self hotelNamed:@"America"] removeSharesFromBank:diff];
+	
+	[_gameWindowController reloadScoreboard];
+}
+
+- (void)playerAtIndex:(int)playerIndex hasFusionShares:(int)fusionShares;
+{
+	int diff = fusionShares - [[_players objectAtIndex:playerIndex] numberOfSharesOfHotelNamed:@"Fusion"];
+	[[_players objectAtIndex:playerIndex] addSharesOfHotelNamed:@"Fusion" numberOfShares:diff];
+	[[self hotelNamed:@"Fusion"] removeSharesFromBank:diff];
+	
+	[_gameWindowController reloadScoreboard];
+}
+
+- (void)playerAtIndex:(int)playerIndex hasHydraShares:(int)hydraShares;
+{
+	int diff = hydraShares - [[_players objectAtIndex:playerIndex] numberOfSharesOfHotelNamed:@"Hydra"];
+	[[_players objectAtIndex:playerIndex] addSharesOfHotelNamed:@"Hydra" numberOfShares:diff];
+	[[self hotelNamed:@"Hydra"] removeSharesFromBank:diff];
+	
+	[_gameWindowController reloadScoreboard];
+}
+
+- (void)playerAtIndex:(int)playerIndex hasPhoenixShares:(int)phoenixShares;
+{
+	int diff = phoenixShares - [[_players objectAtIndex:playerIndex] numberOfSharesOfHotelNamed:@"Phoenix"];
+	[[_players objectAtIndex:playerIndex] addSharesOfHotelNamed:@"Phoenix" numberOfShares:diff];
+	[[self hotelNamed:@"Phoenix"] removeSharesFromBank:diff];
+	
+	[_gameWindowController reloadScoreboard];
+}
+
+- (void)playerAtIndex:(int)playerIndex hasQuantumShares:(int)quantumShares;
+{
+	int diff = quantumShares - [[_players objectAtIndex:playerIndex] numberOfSharesOfHotelNamed:@"Quantum"];
+	[[_players objectAtIndex:playerIndex] addSharesOfHotelNamed:@"Quantum" numberOfShares:diff];
+	[[self hotelNamed:@"Quantum"] removeSharesFromBank:diff];
+	
+	[_gameWindowController reloadScoreboard];
+}
+
+
 - (void)getChainFromHotelIndexes:(NSArray *)hotelIndexes;
 {
 	NSMutableArray *hotels = [NSMutableArray arrayWithCapacity:[hotelIndexes count]];
@@ -660,6 +803,18 @@
 		[hotels addObject:[_hotels objectAtIndex:[curIndex intValue]]];
 	
 	[self _showCreateNewHotelSheetWithHotels:hotels tile:nil];
+}
+
+- (void)chooseMergeSurvivorFromHotelIndexes:(NSArray *)hotelIndexes;
+{
+	NSMutableArray *hotels = [NSMutableArray arrayWithCapacity:[hotelIndexes count]];
+	hotelIndexes = [NSArray arrayWithArray:hotelIndexes];
+	NSEnumerator *indexesEnumerator = [hotelIndexes objectEnumerator];
+	id curIndex;
+	while (curIndex = [indexesEnumerator nextObject])
+		[hotels addObject:[_hotels objectAtIndex:[curIndex intValue]]];
+	
+	[self _showChooseMergerSurvivorSheetWithMergingHotels:hotels potentialSurvivors:hotels mergeTile:nil];
 }
 
 - (void)getPurchaseWithGameEndFlag:(int)gameEndFlag cash:(int)cash;
@@ -691,9 +846,42 @@
 	return nil;
 }
 
+- (void)showAllocateMergingHotelSharesSheetForHotelWithNetacquireID:(int)mergingHotelNetacquireID survivingHotelNetacquireID:(int)survivingHotelNetacquireID;
+{
+	[self _showAllocateMergingHotelSharesSheetForMergingHotel:[self hotelWithNetacquireID:mergingHotelNetacquireID] survivingHotel:[self hotelWithNetacquireID:survivingHotelNetacquireID] player:[self localPlayer] sharePrice:[[self hotelWithNetacquireID:mergingHotelNetacquireID] sharePrice]];
+}
+
 - (void)closeGameWindow;
 {
 	[_gameWindowController closeGameWindow];
+}
+
+- (AQHotel *)hotelWithNetacquireID:(int)netacquireID;
+{
+	NSEnumerator *hotelEnumerator = [_hotels objectEnumerator];
+	id curHotel;
+	while (curHotel = [hotelEnumerator nextObject])
+		if ([curHotel netacquireID] == netacquireID)
+			return curHotel;
+	
+	return nil;
+}
+
+- (void)mergerSharesSold:(int)sharesSold sharesTraded:(int)sharesTraded;
+{
+	[_associatedConnection mergerSharesSold:sharesSold sharesTraded:sharesTraded];
+}
+
+- (void)showCreateNewHotelSheet;
+{
+	[self _showCreateNewHotelSheetWithHotels:[self _hotelsNotOnBoard] tile:nil];
+}
+
+- (void)determineAndCongratulateWinner;
+{
+	[_gameWindowController congratulateWinnersByName:[self _winningPlayers]];
+	
+	[_gameWindowController disableBoardAndTileRack];
 }
 @end
 
@@ -711,6 +899,8 @@
 	_players = [[NSMutableArray arrayWithCapacity:6] retain];
 	_localPlayerName = nil;
 	_tilePlayedThisTurn = NO;
+	_finalTurnSharesPurchased = nil;
+	_finalTurnHotelNames = nil;
 
 	return self;
 }
@@ -864,7 +1054,7 @@
 {
 	NSArray *hotelsWithPurchaseableShares = [self _hotelsWithPurchaseableShares];
 	if ([hotelsWithPurchaseableShares count] == 0) {
-		if (![self _gameCanEnd])
+		if (![self gameCanEnd])
 			[self endCurrentTurn];
 		return;
 	}
@@ -881,7 +1071,7 @@
 		return;
 	}
 	
-	if ([self _gameCanEnd]) {
+	if ([self gameCanEnd]) {
 		[_gameWindowController showEndCurrentTurnButton];
 		[_gameWindowController showEndGameButton];
 	} else {
@@ -1068,24 +1258,5 @@
 	}
 	
 	return playersWithMostCash;
-}
-
-- (BOOL)_gameCanEnd;
-{
-	NSArray *hotelsOnBoard = [self _hotelsOnBoard];
-	NSEnumerator *hotelEnumerator = [hotelsOnBoard objectEnumerator];
-	id curHotel;
-	int safeHotels = 0;
-	while (curHotel = [hotelEnumerator nextObject]) {
-		if ([(AQHotel *)curHotel size] > 40)
-			return YES;
-		if ([curHotel isSafe])
-			++safeHotels;
-	}
-	
-	if ([hotelsOnBoard count] == 0)
-		return NO;
-	
-	return (safeHotels == [hotelsOnBoard count]);
 }
 @end

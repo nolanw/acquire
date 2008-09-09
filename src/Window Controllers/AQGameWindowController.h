@@ -48,6 +48,7 @@
 - (void)hideEndGameButton;
 - (void)disableBoardAndTileRack;
 - (void)updateFirstResponderAndKeyEquivalents;
+- (void)purchaseSharesSheetDismissed;
 
 - (void)reloadScoreboard;
 - (void)tilesChanged:(NSArray *)changedTiles;
@@ -77,9 +78,11 @@
 - (void)showCreateNewHotelSheetWithHotels:(NSArray *)hotels atTile:(id)tile;
 - (void)showChooseMergerSurvivorSheetWithMergingHotels:(NSArray *)mergingHotels potentialSurvivors:(NSArray *)potentialSurvivors mergeTile:(id)mergeTile;
 - (void)showAllocateMergingHotelSharesSheetForMergingHotel:(AQHotel *)mergingHotel survivingHotel:(AQHotel *)survivingHotel player:(AQPlayer *)player sharePrice:(int)sharePrice;
-- (void)purchaseShares:(NSArray *)sharesPurchased ofHotelsNamed:(NSArray *)hotelNames;
+- (void)purchaseShares:(NSArray *)sharesPurchased ofHotelsNamed:(NSArray *)hotelNames sender:(id)sender;
 - (void)createHotelNamed:(NSString *)hotelName atTile:(id)tile;
 - (void)sellSharesOfHotel:(AQHotel *)hotel numberOfShares:(int)numberOfShares player:(AQPlayer *)player sharePrice:(int)sharePrice;
 - (void)tradeSharesOfHotel:(AQHotel *)fromHotel forSharesInHotel:(AQHotel *)toHotel numberOfShares:(int)numberOfShares player:(AQPlayer *)player;
 - (void)hotelSurvives:(AQHotel *)hotel mergingHotels:(NSArray *)mergingHotels mergeTile:(AQTile *)mergeTile;
+- (BOOL)isNetworkGame;
+- (void)mergerSharesSold:(int)sharesSold sharesTraded:(int)sharesTraded;
 @end

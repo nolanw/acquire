@@ -61,12 +61,12 @@
 
 + (AQHotel *)phoenixHotel;
 {
-	return [[[self alloc] initWithName:@"Phoenix" tier:2 color:[NSColor colorWithCalibratedRed:1.0 green:0.25 blue:1.0 alpha:1.0] oldName:@"Continental" netacquireID:16776960] autorelease];
+	return [[[self alloc] initWithName:@"Phoenix" tier:2 color:[NSColor colorWithCalibratedRed:1.0 green:0.25 blue:1.0 alpha:1.0] oldName:@"Continental" netacquireID:16711935] autorelease];
 }
 
 + (AQHotel *)quantumHotel;
 {
-	return [[[self alloc] initWithName:@"Quantum" tier:2 color:[NSColor colorWithCalibratedRed:0.0 green:1.0 blue:1.0 alpha:1.0] oldName:@"Imperial" netacquireID:12632319] autorelease];
+	return [[[self alloc] initWithName:@"Quantum" tier:2 color:[NSColor colorWithCalibratedRed:0.0 green:1.0 blue:1.0 alpha:1.0] oldName:@"Imperial" netacquireID:16776960] autorelease];
 }
 
 
