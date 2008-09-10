@@ -894,6 +894,16 @@
 	
 	[_gameWindowController disableBoardAndTileRack];
 }
+
+- (BOOL)isReadyToStart;
+{
+	return _isReadyToStart;
+}
+
+- (void)setIsReadyToStart:(BOOL)isReadyToStart;
+{
+	_isReadyToStart = isReadyToStart;
+}
 @end
 
 @implementation AQGame (Private)
@@ -912,6 +922,7 @@
 	_tilePlayedThisTurn = NO;
 	_finalTurnSharesPurchased = nil;
 	_finalTurnHotelNames = nil;
+	_isReadyToStart = NO;
 
 	return self;
 }

@@ -69,10 +69,11 @@
 	if ([menuItem action] == @selector(showPreferencesWindow:))
 		return YES;
 	
-	if ([menuItem action] == @selector(showActiveGameWindow) && [_gameArrayController activeGame] == nil)
-		return NO;
-	else
+	if ([menuItem action] == @selector(showActiveGameWindow) && [_gameArrayController activeGame] != nil)
 		return YES;
+	
+	if ([menuItem action] == @selector(startActiveGame))
+		return [[_gameArrayController activeGame] isReadyToStart];
 	
 	return NO;
 }
@@ -109,13 +110,27 @@
 	[[_connectionArrayController serverConnection] joinGame:gameNumber];
 }
 
-- (void)joiningGame;
+- (void)joiningGame:(BOOL)createdGame;
 {
 	[_gameArrayController startNewNetworkGameAndMakeActiveWithAssociatedConnection:[_connectionArrayController serverConnection]];
-	[[_connectionArrayController serverConnection] registerAssociatedObjectAndPrioritize:[_gameArrayController activeGame]];
-	[[_gameArrayController activeGame] setLocalPlayerName:_localPlayerName];
-	[[_gameArrayController activeGame] loadGameWindow];
-	[[_gameArrayController activeGame] bringGameWindowToFront];
+	id activeGame = [_gameArrayController activeGame];
+	[[_connectionArrayController serverConnection] registerAssociatedObjectAndPrioritize:activeGame];
+	[activeGame setLocalPlayerName:_localPlayerName];
+	if (createdGame)
+		[activeGame setIsReadyToStart:YES];
+	[activeGame loadGameWindow];
+	[activeGame bringGameWindowToFront];
+}
+
+- (void)createGame:(id)sender;
+{
+	[[_connectionArrayController serverConnection] createGame];
+}
+
+- (void)startActiveGame;
+{
+	[[_connectionArrayController serverConnection] startActiveGame];
+	[[_gameArrayController activeGame] setIsReadyToStart:NO];
 }
 
 - (void)leaveGame;
@@ -222,6 +237,8 @@
 	[[serverMenu itemWithTitle:@"Disconnect From Server"] setAction:@selector(disconnectFromServer)];
 	[[gameMenu itemWithTitle:@"Show Game Window"] setTarget:self];
 	[[gameMenu itemWithTitle:@"Show Game Window"] setAction:@selector(showActiveGameWindow)];
+	[[gameMenu itemWithTitle:@"Start Game"] setTarget:self];
+	[[gameMenu itemWithTitle:@"Start Game"] setAction:@selector(startActiveGame)];
 	[[gameMenu itemWithTitle:@"Leave Game"] setTarget:self];
 	[[gameMenu itemWithTitle:@"Leave Game"] setAction:@selector(leaveGame)];
 }

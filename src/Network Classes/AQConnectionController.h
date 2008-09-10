@@ -13,6 +13,7 @@
 	BOOL		_handshakeComplete;
 	BOOL		_haveSeenFirstLMDirectives;
 	id			_objectRequestingGameListUpdate;
+	BOOL		_creatingGame;
 	
 	NSMutableArray	*_associatedObjects;
 }
@@ -31,6 +32,8 @@
 - (NSString *)connectedHostOrIPAddress;
 
 - (void)joinGame:(int)gameNumber;
+- (void)createGame;
+- (void)startActiveGame;
 - (void)leaveGame;
 - (void)disconnectFromServer;
 

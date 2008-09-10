@@ -26,6 +26,7 @@
 	BOOL			_tilePlayedThisTurn;
 	NSArray			*_finalTurnSharesPurchased;
 	NSArray			*_finalTurnHotelNames;
+	BOOL			_isReadyToStart;
 }
 
 - (id)initNetworkGameWithArrayController:(id)arrayController associatedConnection:(AQConnectionController *)associatedConnection;
@@ -105,6 +106,8 @@
 - (AQHotel *)hotelWithNetacquireID:(int)netacquireID;
 - (void)mergerSharesSold:(int)sharesSold sharesTraded:(int)sharesTraded;
 - (void)determineAndCongratulateWinner;
+- (BOOL)isReadyToStart;
+- (void)setIsReadyToStart:(BOOL)isReadyToStart;
 @end
 
 @interface AQGame (LocalGame)

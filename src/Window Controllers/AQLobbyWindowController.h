@@ -18,6 +18,9 @@
 - (id)initWithAcquireController:(id)acquireController;
 - (void)dealloc;
 
+// NSObject (NSNibAwakening)
+- (void)awakeFromNib;
+
 // Window visibility
 - (void)closeLobbyWindow;
 - (void)bringLobbyWindowToFront;

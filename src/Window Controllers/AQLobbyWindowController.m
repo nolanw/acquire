@@ -48,6 +48,18 @@
 }
 
 
+// NSObject (NSNibAwakening)
+- (void)awakeFromNib;
+{
+	NSButtonCell *newGameButton = [[[NSButtonCell alloc] init] autorelease];
+	[newGameButton setTarget:_acquireController];
+	[newGameButton setAction:@selector(createGame:)];
+	[newGameButton setTitle:NSLocalizedStringFromTable(@"Create Game", @"Acquire", @"The text 'create game' on the topmost button on the games drawer in the lobby window.")];
+	[_gameListMatrix putCell:newGameButton atRow:0 column: 0];
+	[_gameListMatrix putCell:[[[NSCell alloc] init] autorelease] atRow:1 column:0];
+}
+
+
 // Window visibility
 - (void)closeLobbyWindow;
 {
@@ -155,6 +167,11 @@
 
 - (void)_populateGameListDrawerWithGames:(NSArray *)games;
 {
+	NSButtonCell *newGameButton = [[[NSButtonCell alloc] init] autorelease];
+	[newGameButton setTarget:_acquireController];
+	[newGameButton setAction:@selector(createGame:)];
+	[newGameButton setTitle:NSLocalizedStringFromTable(@"Create Game", @"Acquire", @"The text 'create game' on the topmost button on the games drawer in the lobby window.")];
+	
 	NSTextFieldCell *gameListTitle = [[[NSTextFieldCell alloc] init] autorelease];
 	if ([games count] == 0)
 		[gameListTitle setStringValue:NSLocalizedStringFromTable(@"No games", @"Acquire", @"Says there are 'no games'.")];
@@ -168,16 +185,18 @@
 	[_gameListMatrix setPrototype:prototype];
 	[_gameListMatrix setAllowsEmptySelection:NO];
 	[_gameListMatrix setIntercellSpacing:NSMakeSize(4.0f, 2.0f)];
-	[_gameListMatrix setCellSize:NSMakeSize(80.0f, 18.0f)];
+	[_gameListMatrix setCellSize:NSMakeSize(100.0f, 18.0f)];
 	[_gameListMatrix setMode:NSRadioModeMatrix];
 	
-	[_gameListMatrix renewRows:([games count] + 1) columns:1];
+	[_gameListMatrix renewRows:([games count] + 3) columns:1];
 	
-	[_gameListMatrix putCell:gameListTitle atRow:0 column:0];
+	[_gameListMatrix putCell:newGameButton atRow:0 column: 0];
+	[_gameListMatrix putCell:[[[NSCell alloc] init] autorelease] atRow:1 column:0];
+	[_gameListMatrix putCell:gameListTitle atRow:2 column:0];
 	int i;
 	for (i = 0; i < [games count]; ++i) {
-		[[_gameListMatrix cellAtRow:(i + 1) column:0] setTitle:[NSString stringWithFormat:@"%@%@", NSLocalizedStringFromTable(@"Game #", @"Acquire", @"The words 'game number', with a symbol for the word 'number' if possible."), [games objectAtIndex:i]]];
-		[[_gameListMatrix cellAtRow:(i + 1) column:0] setTag:[[games objectAtIndex:i] intValue]];
+		[[_gameListMatrix cellAtRow:(i + 3) column:0] setTitle:[NSString stringWithFormat:@"%@%@", NSLocalizedStringFromTable(@"Game #", @"Acquire", @"The words 'game number', with a symbol for the word 'number' if possible."), [games objectAtIndex:i]]];
+		[[_gameListMatrix cellAtRow:(i + 3) column:0] setTag:[[games objectAtIndex:i] intValue]];
 	}
 	
 	[_gameListMatrix sizeToCells];

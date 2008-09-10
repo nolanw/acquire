@@ -46,6 +46,7 @@
 - (void)_sendPLDirectiveWithDisplayName:(NSString *)displayName versionStrings:(NSArray *)versionStrings;
 - (void)_sendPRDirectiveWithTimestamp:(NSString *)timestamp;
 - (void)_sendPTDirectiveWithIndex:(int)index;
+- (void)_sendSGDirectiveWithMaximumPlayers:(int)maximumPlayers;
 
 // And their supporting cast
 - (void)_incomingLobbyMessage:(NSString *)lobbyMessage;
@@ -69,6 +70,7 @@
 	_handshakeComplete = NO;
 	_haveSeenFirstLMDirectives = NO;
 	_objectRequestingGameListUpdate = nil;
+	_creatingGame = NO;
 	
 	_socket = [[AsyncSocket alloc] initWithDelegate:self];
 	
@@ -148,6 +150,17 @@
 - (void)joinGame:(int)gameNumber;
 {
 	[self _sendJGDirectiveWithGameNumber:gameNumber];
+}
+
+- (void)createGame;
+{
+	[self _sendSGDirectiveWithMaximumPlayers:6];
+	_creatingGame = YES;
+}
+
+- (void)startActiveGame;
+{
+	[self _sendDirectiveWithCode:@"PG"];
 }
 
 - (void)leaveGame;
@@ -614,8 +627,9 @@
 	}
 	
 	if ([[[setStateDirective parameters] objectAtIndex:0] intValue] == 4) {
-		id associatedObject = [self _firstAssociatedObjectThatRespondsToSelector:@selector(joiningGame)];
-		[associatedObject joiningGame];
+		id associatedObject = [self _firstAssociatedObjectThatRespondsToSelector:@selector(joiningGame:)];
+		[associatedObject joiningGame:_creatingGame];
+		_creatingGame = NO;
 	}
 }
 
@@ -765,7 +779,6 @@
 	[directive addParameter:[NSString stringWithFormat:@"%d", sharesSold]];
 	[directive addParameter:[NSString stringWithFormat:@"%d", sharesTraded]];
 	
-	NSLog(@"%s sending %@", _cmd, directive);
 	[self _sendDirectiveData:[directive protocolData]];
 }
 
@@ -799,6 +812,14 @@
 	AQNetacquireDirective *directive = [[[AQNetacquireDirective alloc] init] autorelease];
 	[directive setDirectiveCode:@"PT"];
 	[directive addParameter:[NSString stringWithFormat:@"%d", index]];
+	[self _sendDirectiveData:[directive protocolData]];
+}
+
+- (void)_sendSGDirectiveWithMaximumPlayers:(int)maximumPlayers;
+{
+	AQNetacquireDirective *directive = [[[AQNetacquireDirective alloc] init] autorelease];
+	[directive setDirectiveCode:@"SG"];
+	[directive addParameter:[NSString stringWithFormat:@"%d", maximumPlayers]];
 	[self _sendDirectiveData:[directive protocolData]];
 }
 
