@@ -6,36 +6,12 @@
       <description>Most recent changes with links to updates.</description>
       <language>en</language>
 			<item>
-				<title>Version 0.5.3 (minor release; bugfix)</title>
+				<title>Version 0.9 (major release)</title>
 				<sparkle:releaseNotesLink>
-					http://acquire.nwaite.com/release/Acquire_0.5.3.html
+					http://acquire.nwaite.com/release/Acquire_0.9.html
 				</sparkle:releaseNotesLink>
-				<pubDate>Tue, 26 Aug 2008 15:27:00 -0600</pubDate>
-				<enclosure sparkle:dsaSignature="MC4CFQCQJleZeflXMZ93GvYiAcVHDWcm3AIVAKs1EvW85+R3wgMzpp0sJxR7h1kC" url="http://acquire.nwaite.com/release/Acquire_0.5.3.zip" sparkle:version="0.5.3" length="998990" type="application/octet-stream"/>
+				<pubDate>Wed, 10 Sep 2008 02:00:00 -0400</pubDate>
+				<enclosure sparkle:dsaSignature="MC0CFAuT/A4zWjMEsAaQtJLGHpmqyy9mAhUAuY+h6xzZW6DGYy9tz5q0wTufRiw=" url="http://acquire.nwaite.com/release/Acquire_0.9.zip" sparkle:version="0.9" length="1023006" type="application/octet-stream"/>
 			</item>
-      <item>
-				<title>Version 0.5.2 (minor release; bugfix)</title>
-				<sparkle:releaseNotesLink>
-					http://acquire.nwaite.com/release/Acquire_0.5.2.html
-				</sparkle:releaseNotesLink>
-				<pubDate>Mon, 11 Aug 2008 22:10:00 -0600</pubDate>
-				<enclosure sparkle:dsaSignature="MC0CFQCx82yXt/ruEMfEIUEt5wGH9BsgAgIUPyFVAUT+GyzGDPavJPx2mlnRY1Y=" url="http://acquire.nwaite.com/release/Acquire_0.5.2.zip" sparkle:version="0.5.2" length="995988" type="application/octet-stream"/>
-			</item>
-         <item>
-			<title>Version 0.5.1 (minor release; preferences window)</title>
-						<sparkle:releaseNotesLink>
-							http://acquire.nwaite.com/release/Acquire_0.5.1.html
-						</sparkle:releaseNotesLink>
-			<pubDate>Mon, 11 Aug 2008 11:10:00 -0600</pubDate>
-			<enclosure sparkle:dsaSignature="MC4CFQCq/Q1s0lG1TmnRIFP6dE4Vc43JygIVALt6k6QWuJWq5mPkV3nukoEmon7o" url="http://acquire.nwaite.com/release/Acquire_0.5.1.zip" sparkle:version="0.5.1" length="996853" type="application/octet-stream"/>
-		</item>
-		<item>
-            <title>Version 0.5 (initial release; local play functional)</title>
-						<sparkle:releaseNotesLink>
-							http://acquire.nwaite.com/release/Acquire_0.5.html
-						</sparkle:releaseNotesLink>
-            <pubDate>Mon, 11 Aug 2008 10:00:00 -0600</pubDate>
-            <enclosure sparkle:dsaSignature="MCwCFAREfel5Xd3wY/ZSa1RrFSGfxrh6AhRaIDmFL/CSV86js1edso5UIEJwYA==" url="http://acquire.nwaite.com/release/Acquire_0.5.zip" sparkle:version="0.5" length="622754" type="application/octet-stream"/>
-         </item>
    </channel>
 </rss>

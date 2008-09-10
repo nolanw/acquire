@@ -1,0 +1,21 @@
+/* newstyle.css for Acquire Release Notes */
+
+body {
+	margin: 10px;
+	font-family: Helvetica, Tahoma, Arial, sans-serif;
+}
+
+h1 {
+	font-size: 15pt;
+	margin: 0 0 10px 0;
+}
+
+h2 {
+	font-size: 12pt;
+	margin: 0 0 10px 0;
+}
+
+p {
+	font-size: 11pt;
+	margin-bottom: 25px;
+}
