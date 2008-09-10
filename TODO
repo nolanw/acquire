@@ -1,8 +1,3 @@
-Things Left For Version 0.9
----------------------------
-- In a network game, closing a game window does not correctly leave the game.
-- In a network game, selecting "Leave Game" from the Game menu does not close the game window.
-
 New features
 ------------
 - Implement network play.

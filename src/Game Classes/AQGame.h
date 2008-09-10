@@ -72,6 +72,8 @@
 - (AQTile *)tileOnBoardByString:(NSString *)tileString;
 - (void)incomingGameMessage:(NSString *)gameMessage;
 - (void)disableBoardAndTileRack;
+- (void)closeGameWindow;
+- (void)showGameWindow;
 @end
 
 @interface AQGame (NetworkGame)

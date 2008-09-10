@@ -628,6 +628,16 @@
 {
 	[_gameWindowController disableBoardAndTileRack];
 }
+
+- (void)closeGameWindow;
+{
+	[_gameWindowController closeGameWindow];
+}
+
+- (void)showGameWindow;
+{
+	[_gameWindowController bringGameWindowToFront];
+}
 @end
 
 @implementation AQGame (NetworkGame)

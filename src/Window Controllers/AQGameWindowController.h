@@ -70,9 +70,6 @@
 - (void)setWindowTitle:(NSString *)windowTitle;
 - (void)removeGameChatTabViewItem;
 
-// Window delegate
-- (void)windowWillClose:(NSNotification *)notification;
-
 // Passthrus
 - (void)showPurchaseSharesSheetWithHotels:(NSArray *)hotels availableCash:(int)availableCash;
 - (void)showCreateNewHotelSheetWithHotels:(NSArray *)hotels atTile:(id)tile;

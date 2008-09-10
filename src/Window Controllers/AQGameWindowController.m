@@ -379,20 +379,6 @@
 }
 
 
-// Window delegate
-- (void)windowWillClose:(NSNotification *)notification;
-{
-	if ([notification object] != _gameWindow) {
-		NSLog(@"%s wrong window", _cmd);
-		return;
-	}
-	
-	[_game removeGameFromArrayController];
-	
-	[[NSNotificationCenter defaultCenter] postNotificationName:@"LocalGameWindowClosed" object:self];
-}
-
-
 // Passthrus
 - (void)showPurchaseSharesSheetWithHotels:(NSArray *)hotels availableCash:(int)availableCash;
 {

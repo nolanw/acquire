@@ -69,6 +69,11 @@
 	if ([menuItem action] == @selector(showPreferencesWindow:))
 		return YES;
 	
+	if ([menuItem action] == @selector(showActiveGameWindow) && [_gameArrayController activeGame] == nil)
+		return NO;
+	else
+		return YES;
+	
 	return NO;
 }
 
@@ -106,7 +111,6 @@
 
 - (void)joiningGame;
 {
-	[_lobbyWindowController invalidateGameListUpdateTimer];
 	[_gameArrayController startNewNetworkGameAndMakeActiveWithAssociatedConnection:[_connectionArrayController serverConnection]];
 	[[_connectionArrayController serverConnection] registerAssociatedObjectAndPrioritize:[_gameArrayController activeGame]];
 	[[_gameArrayController activeGame] setLocalPlayerName:_localPlayerName];
@@ -116,6 +120,7 @@
 
 - (void)leaveGame;
 {
+	[[_gameArrayController activeGame] closeGameWindow];
 	[[_connectionArrayController serverConnection] deregisterAssociatedObject:[_gameArrayController activeGame]];
 	[[_connectionArrayController serverConnection] leaveGame];
 	[_gameArrayController removeGame:[_gameArrayController activeGame]];
@@ -165,28 +170,10 @@
 		[[_gameArrayController activeGame] addPlayerNamed:curPlayerName];
 	
 	[[_gameArrayController activeGame] startGame];
-	
-	[[NSNotificationCenter defaultCenter] addObserver:_welcomeWindowController selector:@selector(bringWelcomeWindowToFront:) name:@"LocalGameWindowClosed" object:nil];
 }
 
 
 // Passthrus
-/*
-- (void)incomingLobbyMessage:(NSString *)lobbyMessage;
-{
-	[_lobbyWindowController incomingLobbyMessage:lobbyMessage];
-}
-
-- (void)outgoingLobbyMessage:(NSString *)lobbyMessage;
-{
-	[[_connectionArrayController serverConnection] outgoingLobbyMessage:lobbyMessage];
-}
-
-- (void)incomingGameMessage:(NSString *)gameMessage;
-{
-	[[_gameArrayController activeGame] incomingGameMessage:gameMessage];
-}
-*/
 - (void)updateGameListFor:(id)anObject;
 {
 	[[_connectionArrayController serverConnection] updateGameListFor:anObject];
@@ -213,28 +200,14 @@
 		_preferencesWindowController = [[AQPreferencesWindowController alloc] init];
 	[_preferencesWindowController openPreferencesWindowAndBringToFront];
 }
-/*
-- (void)boardTileAtNetacquireID:(int)netacquireID isNetacquireChainID:(int)netacquireChainID;
+
+- (void)showActiveGameWindow;
 {
 	if ([_gameArrayController activeGame] == nil)
 		return;
 	
-	[[_gameArrayController activeGame] boardTileAtNetacquireID:netacquireID isNetacquireChainID:netacquireChainID];
+	[[_gameArrayController activeGame] showGameWindow];
 }
-
-- (void)rackTileAtIndex:(int)index isNetacquireID:(int)netacquireID netacquireChainID:(int)netacquireChainID;
-{
-	if ([_gameArrayController activeGame] == nil)
-		return;
-	
-	[[_gameArrayController activeGame] rackTileAtIndex:index isNetacquireID:netacquireID netacquireChainID:netacquireChainID];
-}
-
-- (void)playerAtIndex:(int)playerIndex isNamed:(NSString *)name;
-{
-	[[_gameArrayController activeGame] playerAtIndex:playerIndex isNamed:name];
-}
-*/
 @end
 
 @implementation AQAcquireController (Private)
@@ -247,6 +220,8 @@
 	[[serverMenu itemWithTitle:@"Show Lobby Window"] setAction:@selector(showLobbyWindow)];
 	[[serverMenu itemWithTitle:@"Disconnect From Server"] setTarget:self];
 	[[serverMenu itemWithTitle:@"Disconnect From Server"] setAction:@selector(disconnectFromServer)];
+	[[gameMenu itemWithTitle:@"Show Game Window"] setTarget:self];
+	[[gameMenu itemWithTitle:@"Show Game Window"] setAction:@selector(showActiveGameWindow)];
 	[[gameMenu itemWithTitle:@"Leave Game"] setTarget:self];
 	[[gameMenu itemWithTitle:@"Leave Game"] setAction:@selector(leaveGame)];
 }
