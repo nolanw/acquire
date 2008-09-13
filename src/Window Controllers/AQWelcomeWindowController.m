@@ -61,6 +61,8 @@
 	BOOL mostRecentGameWasLocalGame = [[NSUserDefaults standardUserDefaults] boolForKey:@"MostRecentGameWasLocalGame"];
 	if (mostRecentGameWasLocalGame)
 		[_gameTypeTabView selectTabViewItemAtIndex:1];
+	
+	_displayNameInUseErrorShown = NO;
 
 	return self;
 }
@@ -184,6 +186,8 @@
 		return;
 	}
 	
+	_displayNameInUseErrorShown = NO;
+	
 	[self _startConnectingToAServer];
 	
 	[_acquireController connectToServer:[_hostOrIPAddressTextField stringValue] port:[_portTextField intValue] withLocalDisplayName:[_displayNameTextField stringValue] sender:self];
@@ -207,6 +211,8 @@
 		
 		[playersNames addObject:[[[_localPlayerNamesForm cellAtIndex:i] stringValue] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
 	}
+	
+	_displayNameInUseErrorShown = NO;
 	
 	[_acquireController startNewLocalGameWithPlayersNamed:playersNames];
 }
@@ -238,6 +244,9 @@
 // Button action responses
 - (void)networkGameConnectionFailed;
 {
+	if (_displayNameInUseErrorShown)
+		return;
+	
 	[_networkProgressIndicator stopAnimation:self];
 	
 	NSAlert *networkErrorAlert = [[[NSAlert alloc] init] autorelease];
@@ -258,6 +267,8 @@
 	[duplicateDisplayNameAlert setMessageText:NSLocalizedStringFromTable(@"Display name already in use.", @"Acquire", @"Alert box title saying that the chosen display name is already in use.")];
 	[duplicateDisplayNameAlert setInformativeText:NSLocalizedStringFromTable(@"The display name you chose is already in use on the server.\n\nIf you are reconnecting to a server you recently disconnected from, try connecting again. Otherwise, choose a different display name.\n\nNote that display names are not case sensitive.", @"Acquire", @"Explain that the user's chosen display name is already in use, and they need to pick a new case-insensitive one (or wait a minute if they just disconnected from the same server).")];
 	[duplicateDisplayNameAlert setAlertStyle:NSWarningAlertStyle];
+	
+	_displayNameInUseErrorShown = YES;
 
 	[duplicateDisplayNameAlert beginSheetModalForWindow:_welcomeWindow modalDelegate:self didEndSelector:@selector(networkErrorAlertDismissed:) contextInfo:nil];
 }
@@ -271,6 +282,20 @@
 	[duplicateLocalPlayerNamesEnteredAlert setAlertStyle:NSWarningAlertStyle];
 
 	[duplicateLocalPlayerNamesEnteredAlert beginSheetModalForWindow:_welcomeWindow modalDelegate:self didEndSelector:nil contextInfo:nil];
+}
+
+- (void)lostServerConnection;
+{
+	if (_displayNameInUseErrorShown)
+		return;
+	
+	NSAlert *lostServerConnectionAlert = [[[NSAlert alloc] init] autorelease];
+	[lostServerConnectionAlert addButtonWithTitle:@"OK"];
+	[lostServerConnectionAlert setMessageText:NSLocalizedStringFromTable(@"Server connection lost", @"Acquire", @"Alert box title saying the server's connection was lost.")];
+	[lostServerConnectionAlert setInformativeText:NSLocalizedStringFromTable(@"The connection to the server was unexpectedly lost. If the server's still up, any games being played should still exist. You can rejoin any game you were a part of so long as your display name doesn't change.", @"Acquire", @"Alert informative text saying the server connection was unexpectedly lost, but games will be safe if the server didn't crash, and to leave the display name unchanged in order to join a new game.")];
+	[lostServerConnectionAlert setAlertStyle:NSWarningAlertStyle];
+	
+	[lostServerConnectionAlert beginSheetModalForWindow:_welcomeWindow modalDelegate:self didEndSelector:nil contextInfo:nil];
 }
 @end
 

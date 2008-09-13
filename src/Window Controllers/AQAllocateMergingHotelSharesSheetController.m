@@ -40,9 +40,8 @@
 
 - (IBAction)allocate:(id)sender;
 {
-	NSLog(@"%s sharesSold: %d; sharesTraded: %d", _cmd, (int)_sharesSold, (int)_sharesTraded);
 	if ([_gameWindowController isNetworkGame]) {
-		[_gameWindowController mergerSharesSold:(int)_sharesSold sharesTraded:(int)_sharesTraded];
+		[_gameWindowController mergerSharesSold:(int)_sharesSold sharesTraded:((int)_sharesTraded * 2)];
 		
 		[NSApp stopModal];
 		return;

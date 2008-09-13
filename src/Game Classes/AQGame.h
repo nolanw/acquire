@@ -27,6 +27,8 @@
 	NSArray			*_finalTurnSharesPurchased;
 	NSArray			*_finalTurnHotelNames;
 	BOOL			_isReadyToStart;
+	BOOL			_isOn;
+	int				_localPlayerTilesDrawn;
 }
 
 - (id)initNetworkGameWithArrayController:(id)arrayController associatedConnection:(AQConnectionController *)associatedConnection;
@@ -72,6 +74,7 @@
 - (NSColor *)tileUnplayedColor;
 - (AQTile *)tileOnBoardByString:(NSString *)tileString;
 - (void)incomingGameMessage:(NSString *)gameMessage;
+- (void)incomingGameLogEntry:(NSString *)gameLogEntry;
 - (void)disableBoardAndTileRack;
 - (void)closeGameWindow;
 - (void)showGameWindow;
@@ -80,6 +83,7 @@
 @interface AQGame (NetworkGame)
 - (AQPlayer *)localPlayer;
 - (NSString *)localPlayerName;
+- (BOOL)isOn;
 - (void)setLocalPlayerName:(NSString *)localPlayerName;
 - (void)setActivePlayerName:(NSString *)activePlayerName;
 - (void)boardTile:(AQTile *)tile isNetacquireChainID:(int)netacquireChainID;

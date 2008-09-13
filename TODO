@@ -18,6 +18,7 @@ New features
 	- Differentiate games that can be joined as player, as observer, or not at all.
 	- Update on new game creation (instead of timed events).
 	- Make 'Create Game' button a permanent fixture on the top.
+- Generate appcast.xml and appropriate release notes page when building a Release.
 
 
 Desired rearrangements
@@ -28,6 +29,23 @@ Desired rearrangements
 
 Known bugs
 ---------
-- Network error sometimes comes up immediately or shortly after a display name in use error.
+- Network game: Merger Survivor sheet and Create Hotel sheet don't switch between Phoenix and Quantum.
+- Network game: Sometimes able to buy five shares.
+- Network game: Just-merged hotel still shows up on the purchase sheet.
+- Network game: Trying to trade in four shares results in only one share being obtained.
+- Network game: need to check for unplayable tiles and disable/discard them. (Unsure how to discard them and get new ones... go Netacquire.)
+
+Fixed
+-----
 - Can't disconnect from a server that has crashed.
 - "Active player" is indicated at odd times (e.g. after the game is over and before the game begins).
+- Network error sometimes comes up immediately or shortly after a display name in use error.
+- Can't send lobby messages.
+- Local games aren't quit properly.
+- Scoreboard columns aren't big enough for two digits.
+- Game log entries don't go to the game log.
+- Network game: Phoenix and Quantum are the same colour (purple).
+
+New
+---
+- Player now alerted when it's his turn.

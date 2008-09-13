@@ -78,7 +78,7 @@
 	int oldValue = [[_shareNumbersAndSteppersMatrix cellAtRow:row column:0] intValue];
 	
 	if (newValue > oldValue) {
-		if (_sharesBeingPurchased == 3) {
+		if (_sharesBeingPurchased >= 3) {
 			[[_shareNumbersAndSteppersMatrix selectedCell] setIntValue:oldValue];
 			return;
 		}

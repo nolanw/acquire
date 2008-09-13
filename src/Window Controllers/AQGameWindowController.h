@@ -32,6 +32,7 @@
 	AQPurchaseSharesSheetController				*_purchaseSharesSheetController;
 	
 	NSColor	*_tileUnplayedColor;
+	BOOL	_justAnnouncedLocalPlayersTurn;
 }
 
 - (id)initWithGame:(id)game;
@@ -59,6 +60,7 @@
 - (void)updateTileRack:(NSArray *)tiles;
 - (void)highlightTilesOnBoard:(NSArray *)tilesToHighlight;
 - (void)congratulateWinnersByName:(NSArray *)winners;
+- (void)announceLocalPlayersTurn;
 
 // NSTableDataSource informal protocol
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView;

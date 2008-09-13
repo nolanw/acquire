@@ -212,10 +212,6 @@
 				[pDirectiveParameters addObject:[NSNumber numberWithInt:0]];
 		}
 		
-		NSNumber *tmp = [pDirectiveParameters objectAtIndex:5];
-		[pDirectiveParameters replaceObjectAtIndex:5 withObject:[pDirectiveParameters objectAtIndex:6]];
-		[pDirectiveParameters replaceObjectAtIndex:6 withObject:tmp];
-		
 		if (endGame && [self gameCanEnd])
 			[_associatedConnection purchaseSharesAndEndGame:pDirectiveParameters];
 		else
@@ -281,6 +277,9 @@
 		if ([self playedTileCreatesNewHotel:clickedTile] && [[self _hotelsNotOnBoard] count] == 0)
 			return;
 		
+		if ([self tileIsUnplayable:clickedTile])
+			return;
+		
 		[_associatedConnection playTileAtRackIndex:([[self activePlayer] rackIndexOfTileNamed:tileClickedString] + 1)];
 		_tilePlayedThisTurn = YES;
 		
@@ -290,10 +289,8 @@
 
 	if ([self playedTileCreatesNewHotel:clickedTile]) {
 		NSArray *hotelsNotOnBoard = [self _hotelsNotOnBoard];
-		if ([hotelsNotOnBoard count] == 0) {
-			NSLog(@"%s all hotels on board", _cmd);
+		if ([hotelsNotOnBoard count] == 0)
 			return;
-		}
 		
 		[self _showCreateNewHotelSheetWithHotels:hotelsNotOnBoard tile:clickedTile];
 		
@@ -624,6 +621,11 @@
 	[_gameWindowController incomingGameMessage:gameMessage];
 }
 
+- (void)incomingGameLogEntry:(NSString *)gameLogEntry;
+{
+	[_gameWindowController incomingGameLogEntry:gameLogEntry];
+}
+
 - (void)disableBoardAndTileRack;
 {
 	[_gameWindowController disableBoardAndTileRack];
@@ -654,6 +656,11 @@
 	return _localPlayerName;
 }
 
+- (BOOL)isOn;
+{
+	return _isOn;
+}
+
 - (void)setLocalPlayerName:(NSString *)localPlayerName;
 {
 	[_localPlayerName release];
@@ -679,6 +686,8 @@
 			[_gameWindowController showEndCurrentTurnButton];
 			[_gameWindowController showEndGameButton];
 		}
+		
+		[_gameWindowController announceLocalPlayersTurn];
 	} else {
 		[_gameWindowController tilesChanged:[[self activePlayer] tiles]];
 		[_gameWindowController hideEndCurrentTurnButton];
@@ -711,8 +720,11 @@
 
 - (void)rackTileAtIndex:(int)index isNetacquireID:(int)netacquireID netacquireChainID:(int)netacquireChainID;
 {
+	++_localPlayerTilesDrawn;
 	[[self localPlayer] drewTile:[_board tileFromNetacquireID:netacquireID] atRackIndex:index];
 	[_gameWindowController updateTileRack:[[self localPlayer] tiles]];
+	if (_localPlayerTilesDrawn > 1)
+		_isOn = YES;
 }
 
 - (void)outgoingGameMessage:(NSString *)gameMessage;
@@ -854,6 +866,8 @@
 			return curHotel;
 	}
 	
+	NSLog(@"%s No hotel has Netacquire chain ID %d.", _cmd, chainID);
+	
 	return nil;
 }
 
@@ -890,6 +904,7 @@
 
 - (void)determineAndCongratulateWinner;
 {
+	_isOn = NO;
 	[_gameWindowController congratulateWinnersByName:[self _winningPlayers]];
 	
 	[_gameWindowController disableBoardAndTileRack];
@@ -923,6 +938,8 @@
 	_finalTurnSharesPurchased = nil;
 	_finalTurnHotelNames = nil;
 	_isReadyToStart = NO;
+	_isOn = NO;
+	_localPlayerTilesDrawn = 0;
 
 	return self;
 }
@@ -941,7 +958,7 @@
 
 - (NSArray *)_initialHotelsArray;
 {
-	return [NSArray arrayWithObjects:[AQHotel sacksonHotel], [AQHotel zetaHotel], [AQHotel americaHotel], [AQHotel fusionHotel], [AQHotel hydraHotel], [AQHotel phoenixHotel], [AQHotel quantumHotel], nil];
+	return [NSArray arrayWithObjects:[AQHotel sacksonHotel], [AQHotel zetaHotel], [AQHotel americaHotel], [AQHotel fusionHotel], [AQHotel hydraHotel], [AQHotel quantumHotel], [AQHotel phoenixHotel], nil];
 }
 
 - (NSArray *)_hotelsWithPurchaseableShares;

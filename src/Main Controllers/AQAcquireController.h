@@ -42,6 +42,7 @@
 - (void)startActiveGame;
 - (void)leaveGame;
 - (void)disconnectFromServer;
+- (void)disconnectedFromServer:(BOOL)connectionWasLost;
 - (void)connection:(AQConnectionController *)connection willDisconnectWithError:(NSError *)err;
 - (void)startNewLocalGameWithPlayersNamed:(NSArray *)playerNames;
 
@@ -51,4 +52,5 @@
 - (NSString *)connectedHostOrIPAddress;
 - (IBAction)showPreferencesWindow:(id)sender;
 - (void)showActiveGameWindow;
+- (void)outgoingLobbyMessage:(NSString *)message;
 @end

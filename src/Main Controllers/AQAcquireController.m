@@ -21,7 +21,7 @@
 	
 	_preferencesWindowController = nil;
 	_welcomeWindowController = [[AQWelcomeWindowController alloc] initWithAcquireController:self];
-	_lobbyWindowController = [[AQLobbyWindowController alloc] initWithAcquireController:self];
+	_lobbyWindowController = nil;
 
 	return self;
 }
@@ -60,7 +60,7 @@
 	if ([[menuItem title] isEqualToString:@"Show Lobby Window"])
 		return ([_connectionArrayController serverConnection] != nil && [[_connectionArrayController serverConnection] isConnected]);
 	
-	if ([[menuItem title] isEqualToString:@"Disconnect From Server"])
+	if ([menuItem action] == @selector(disconnectFromServer))
 		return ([_connectionArrayController serverConnection] != nil && [[_connectionArrayController serverConnection] isConnected]);
 	
 	if ([[menuItem title] isEqualToString:@"Leave Game"] || [[menuItem title] isEqualToString:@"End Game"])
@@ -83,6 +83,7 @@
 - (void)connectToServer:(NSString *)hostOrIPAddress port:(int)port withLocalDisplayName:(NSString *)localDisplayName sender:(id)sender;
 {
 	[_connectionArrayController connectToServer:hostOrIPAddress port:port for:self];
+	[[_connectionArrayController serverConnection] registerAssociatedObject:self];
 	_localPlayerName = [localDisplayName copy];
 }
 
@@ -92,6 +93,8 @@
 	[_welcomeWindowController closeWelcomeWindow];
 	[_welcomeWindowController release];
 	_welcomeWindowController = nil;
+	if (_lobbyWindowController == nil)
+		_lobbyWindowController = [[AQLobbyWindowController alloc] initWithAcquireController:self];
 	[[_connectionArrayController serverConnection] registerAssociatedObject:_lobbyWindowController];
 	[_lobbyWindowController resetLobbyMessages];
 	[_lobbyWindowController updateWindowTitle];
@@ -135,10 +138,19 @@
 
 - (void)leaveGame;
 {
+	if ([[_gameArrayController activeGame] isLocalGame]) {
+		[[_gameArrayController activeGame] closeGameWindow];
+		[_gameArrayController removeGame:[_gameArrayController activeGame]];
+		if (_welcomeWindowController == nil)
+			_welcomeWindowController = [[AQWelcomeWindowController alloc] initWithAcquireController:self];
+		[_welcomeWindowController bringWelcomeWindowToFront:nil];
+		
+		return;
+	}
+	
 	[[_gameArrayController activeGame] closeGameWindow];
 	[[_connectionArrayController serverConnection] deregisterAssociatedObject:[_gameArrayController activeGame]];
 	[[_connectionArrayController serverConnection] leaveGame];
-	[_gameArrayController removeGame:[_gameArrayController activeGame]];
 	
 	if (_lobbyWindowController == nil)
 		_lobbyWindowController = [[AQLobbyWindowController alloc] initWithAcquireController:self];
@@ -151,6 +163,10 @@
 - (void)disconnectFromServer;
 {
 	[[_connectionArrayController serverConnection] disconnectFromServer];
+}
+
+- (void)disconnectedFromServer:(BOOL)connectionWasLost;
+{
 	if (_gameArrayController != nil)
 		[_gameArrayController removeGame:[_gameArrayController activeGame]];
 	
@@ -162,6 +178,8 @@
 		_welcomeWindowController = [[AQWelcomeWindowController alloc] initWithAcquireController:self];
 	
 	[_welcomeWindowController bringWelcomeWindowToFront:nil];
+	if (connectionWasLost)
+		[_welcomeWindowController lostServerConnection];
 }
 
 - (void)connection:(AQConnectionController *)connection willDisconnectWithError:(NSError *)err;
@@ -222,6 +240,11 @@
 		return;
 	
 	[[_gameArrayController activeGame] showGameWindow];
+}
+
+- (void)outgoingLobbyMessage:(NSString *)message;
+{
+	[[_connectionArrayController serverConnection] outgoingLobbyMessage:message];
 }
 @end
 

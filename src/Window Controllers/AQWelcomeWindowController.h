@@ -24,6 +24,7 @@
 	IBOutlet NSButton		*_startLocalGameButton;
 	
 	BOOL _quitOnNextWindowClose;
+	BOOL _displayNameInUseErrorShown;
 }
 
 - (id)initWithAcquireController:(id)acquireController;
@@ -60,4 +61,5 @@
 - (void)networkGameConnectionFailed;
 - (void)displayNameAlreadyInUse;
 - (void)duplicateLocalPlayerNamesEntered;
+- (void)lostServerConnection;
 @end

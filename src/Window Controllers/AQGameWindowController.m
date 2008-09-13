@@ -47,6 +47,7 @@
 	[_scoreboardTableView setDataSource:self];
 	
 	_tileUnplayedColor = [(CCDColoredButtonCell *)[_boardMatrix cellAtRow:0 column:0] buttonColor];
+	_justAnnouncedLocalPlayersTurn = NO;
 	
 	[self hidePurchaseSharesButton];
 	[self hideEndCurrentTurnButton];
@@ -210,6 +211,8 @@
 	[[_gameChatTextView textStorage] appendAttributedString:attributedGameMessage];
 	
 	[_gameChatTextView scrollRangeToVisible:NSMakeRange([[_gameChatTextView string] length], 0)];
+	
+	_justAnnouncedLocalPlayersTurn = NO;
 }
 
 - (IBAction)sendGameMessage:(id)sender;
@@ -298,6 +301,19 @@
 	[congratulateWinnerAlert beginSheetModalForWindow:_gameWindow modalDelegate:nil didEndSelector:nil contextInfo:nil];
 }
 
+- (void)announceLocalPlayersTurn;
+{
+	[NSApp requestUserAttention:NSInformationalRequest];
+	
+	if (_justAnnouncedLocalPlayersTurn) {
+		_justAnnouncedLocalPlayersTurn = NO;
+		return;
+	}
+	
+	[self incomingGameMessage:@"** It's your turn. Play a tile!"];
+	_justAnnouncedLocalPlayersTurn = YES;
+}
+
 
 // NSTableDataSource informal protocol
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView;
@@ -311,7 +327,7 @@
 		return @"";
 	
 	if ([[aTableColumn identifier] isEqualToString:@"playerName"])
-		if ([_game activePlayerIndex] == rowIndex)
+		if ([_game isOn] && [_game activePlayerIndex] == rowIndex)
 			return [NSString stringWithFormat:@"• %@", [[_game playerAtIndex:rowIndex] name]];
 		else
 			return [[_game playerAtIndex:rowIndex] name];

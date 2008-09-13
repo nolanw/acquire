@@ -10,6 +10,7 @@
 
 @interface AQConnectionController (Private)
 - (id)_firstAssociatedObjectThatRespondsToSelector:(SEL)selector;
+- (NSArray *)_associatedObjectsThatRespondToSelector:(SEL)selector;
 - (BOOL)_objectIsAssociated:(id)objectToCheck;
 
 // Netacquire directive handling
@@ -254,6 +255,11 @@
 
 - (void)onSocketDidDisconnect:(AsyncSocket *)socket;
 {
+	NSEnumerator *associatedObjectEnumerator = [[self _associatedObjectsThatRespondToSelector:@selector(disconnectedFromServer:)] objectEnumerator];
+	id curObject;
+	while (curObject = [associatedObjectEnumerator nextObject])
+		[curObject disconnectedFromServer:YES];
+	
 	[(AQConnectionArrayController *)_arrayController connectionClosed:self];
 }
 
@@ -288,6 +294,18 @@
 			return curAssociatedObject;
 	
 	return nil;
+}
+
+- (NSArray *)_associatedObjectsThatRespondToSelector:(SEL)selector;
+{
+	NSMutableArray *ret = [NSMutableArray arrayWithCapacity:5];
+	NSEnumerator *associatedObjectEnumerator = [_associatedObjects objectEnumerator];
+	id curAssociatedObject;
+	while (curAssociatedObject = [associatedObjectEnumerator nextObject])
+		if ([curAssociatedObject respondsToSelector:selector])
+			[ret addObject:curAssociatedObject];
+	
+	return ret;
 }
 
 - (BOOL)_objectIsAssociated:(id)objectToCheck;
@@ -492,6 +510,10 @@
 		[[self _firstAssociatedObjectThatRespondsToSelector:@selector(disableBoardAndTileRack)] disableBoardAndTileRack];
 	}
 	
+	if ([messageText characterAtIndex:1] == '*' || [messageText characterAtIndex:1] == '>') {
+		[[self _firstAssociatedObjectThatRespondsToSelector:@selector(incomingGameLogEntry:)] incomingGameLogEntry:[[[gameMessageDirective parameters] objectAtIndex:0] substringWithRange:NSMakeRange(1, [[[gameMessageDirective parameters] objectAtIndex:0] length] - 2)]];
+		return;
+	}
 	id associatedObject = [self _firstAssociatedObjectThatRespondsToSelector:@selector(incomingGameMessage:)];
 	[associatedObject incomingGameMessage:[[[gameMessageDirective parameters] objectAtIndex:0] substringWithRange:NSMakeRange(1, [[[gameMessageDirective parameters] objectAtIndex:0] length] - 2)]];
 }
