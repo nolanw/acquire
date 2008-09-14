@@ -61,6 +61,8 @@
 - (void)highlightTilesOnBoard:(NSArray *)tilesToHighlight;
 - (void)congratulateWinnersByName:(NSArray *)winners;
 - (void)announceLocalPlayersTurn;
+- (void)enteringTestMode;
+- (void)exitingTestMode;
 
 // NSTableDataSource informal protocol
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView;

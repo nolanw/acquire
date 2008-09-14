@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>TODO</string>
+	<string>src/Game Classes/AQGame.m</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -64,9 +64,7 @@
 			<key>filename</key>
 			<string>TODO</string>
 			<key>lastUsed</key>
-			<date>2008-09-12T05:33:29Z</date>
-			<key>selected</key>
-			<true/>
+			<date>2008-09-14T08:05:48Z</date>
 		</dict>
 	</array>
 	<key>fileHierarchyDrawerWidth</key>
@@ -78,84 +76,42 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>74</integer>
+				<integer>12</integer>
 				<key>line</key>
-				<integer>25</integer>
+				<integer>0</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
-		</dict>
-		<key>src/Game Classes/AQGame.h</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>47</integer>
-				<key>line</key>
-				<integer>109</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>71</integer>
 		</dict>
 		<key>src/Game Classes/AQGame.m</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>22</integer>
+				<integer>2</integer>
 				<key>line</key>
-				<integer>924</integer>
+				<integer>875</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>881</integer>
-		</dict>
-		<key>src/Main Controllers/AQAcquireController.h</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>37</integer>
-				<key>line</key>
-				<integer>39</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>105</integer>
-			<key>firstVisibleLine</key>
-			<integer>1</integer>
+			<integer>835</integer>
 		</dict>
 		<key>src/Main Controllers/AQAcquireController.m</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>60</integer>
+				<integer>1</integer>
 				<key>line</key>
-				<integer>75</integer>
+				<integer>90</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>54</integer>
-		</dict>
-		<key>src/Main Controllers/AQGameArrayController.m</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>151</integer>
-				<key>line</key>
-				<integer>48</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>30</integer>
+			<integer>63</integer>
 		</dict>
 		<key>src/Network Classes/AQConnectionController.m</key>
 		<dict>
@@ -164,42 +120,39 @@
 				<key>column</key>
 				<integer>1</integer>
 				<key>line</key>
-				<integer>780</integer>
+				<integer>521</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
-			<integer>0</integer>
+			<integer>91</integer>
 			<key>firstVisibleLine</key>
-			<integer>758</integer>
+			<integer>504</integer>
 		</dict>
-		<key>src/Window Controllers/AQLobbyWindowController.m</key>
+		<key>src/Window Controllers/AQGameWindowController.m</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>80</integer>
+				<integer>0</integer>
 				<key>line</key>
-				<integer>193</integer>
+				<integer>199</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>158</integer>
+			<integer>179</integer>
 		</dict>
 	</dict>
 	<key>openDocuments</key>
 	<array>
 		<string>TODO</string>
-		<string>src/Window Controllers/AQLobbyWindowController.m</string>
-		<string>src/Main Controllers/AQAcquireController.h</string>
-		<string>src/Network Classes/AQConnectionController.m</string>
+		<string>src/Window Controllers/AQGameWindowController.m</string>
 		<string>src/Main Controllers/AQAcquireController.m</string>
-		<string>src/Main Controllers/AQGameArrayController.m</string>
-		<string>src/Game Classes/AQGame.h</string>
 		<string>src/Game Classes/AQGame.m</string>
+		<string>src/Network Classes/AQConnectionController.m</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{282, 4}, {853, 874}}</string>
+	<string>{{0, 4}, {853, 874}}</string>
 </dict>
 </plist>

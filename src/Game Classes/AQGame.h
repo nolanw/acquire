@@ -112,6 +112,8 @@
 - (void)determineAndCongratulateWinner;
 - (BOOL)isReadyToStart;
 - (void)setIsReadyToStart:(BOOL)isReadyToStart;
+- (void)enteringTestMode;
+- (void)exitingTestMode;
 @end
 
 @interface AQGame (LocalGame)

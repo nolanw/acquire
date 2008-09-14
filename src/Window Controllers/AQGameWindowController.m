@@ -278,7 +278,7 @@
 {
 	NSAlert *congratulateWinnerAlert = [[[NSAlert alloc] init] autorelease];
 	if ([_game isNetworkGame] && ![winners containsObject:[_game localPlayer]])
-		[congratulateWinnerAlert addButtonWithTitle:@"Fiddlesticks."];
+		[congratulateWinnerAlert addButtonWithTitle:@"Fiddlesticks"];
 	else
 		[congratulateWinnerAlert addButtonWithTitle:@"Congratulations!"];
 	
@@ -305,13 +305,33 @@
 {
 	[NSApp requestUserAttention:NSInformationalRequest];
 	
-	if (_justAnnouncedLocalPlayersTurn) {
-		_justAnnouncedLocalPlayersTurn = NO;
+	if (_justAnnouncedLocalPlayersTurn)
 		return;
-	}
 	
 	[self incomingGameMessage:@"** It's your turn. Play a tile!"];
 	_justAnnouncedLocalPlayersTurn = YES;
+}
+
+- (void)enteringTestMode;
+{
+	NSAlert *enteringTestModeAlert = [[[NSAlert alloc] init] autorelease];
+	[enteringTestModeAlert addButtonWithTitle:@"Sounds like fun!"];
+	[enteringTestModeAlert setMessageText:NSLocalizedStringFromTable(@"Entering test mode.", @"Acquire", @"Alert box title saying that we are entering test mode.")];
+	[enteringTestModeAlert setInformativeText:NSLocalizedStringFromTable(@"The game creator has enabled test mode. Tiles are no longer randomly drawn, but are instead selected by the creator.", @"Acquire", @"Explain that the game's creator has enabled test mode, so tiles are no longer randomly drawn.")];
+	[enteringTestModeAlert setAlertStyle:NSWarningAlertStyle];
+
+	[enteringTestModeAlert beginSheetModalForWindow:_gameWindow modalDelegate:nil didEndSelector:nil contextInfo:nil];
+}
+
+- (void)exitingTestMode;
+{
+	NSAlert *exitingTestModeAlert = [[[NSAlert alloc] init] autorelease];
+	[exitingTestModeAlert addButtonWithTitle:@"Entropy increased!"];
+	[exitingTestModeAlert setMessageText:NSLocalizedStringFromTable(@"Exiting test mode.", @"Acquire", @"Alert box title saying that we are exiting test mode.")];
+	[exitingTestModeAlert setInformativeText:NSLocalizedStringFromTable(@"The game creator has disabled test mode. Tiles are now randomly drawn.", @"Acquire", @"Explain that the game's creator has disabled test mode, so tiles are now randomly drawn.")];
+	[exitingTestModeAlert setAlertStyle:NSWarningAlertStyle];
+
+	[exitingTestModeAlert beginSheetModalForWindow:_gameWindow modalDelegate:nil didEndSelector:nil contextInfo:nil];
 }
 
 

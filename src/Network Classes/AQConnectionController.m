@@ -596,18 +596,36 @@
 
 - (void)_receivedMDirective:(AQNetacquireDirective *)messageDirective;
 {
+
 	if ([[messageDirective parameters] count] != 1)
 		return;
 	
-	if ([[[[messageDirective parameters] objectAtIndex:0] substringToIndex:26] isEqualToString:@"\"E;Duplicate user Nickname"]) {
+	NSString *message = [[messageDirective parameters] objectAtIndex:0];
+	
+	if ([[message substringToIndex:26] isEqualToString:@"\"E;Duplicate user Nickname"]) {
 		id associatedObject = [self _firstAssociatedObjectThatRespondsToSelector:@selector(displayNameAlreadyInUse)];
 		if (associatedObject != nil)
 			[associatedObject displayNameAlreadyInUse];
 		else
 			NSLog(@"%s desired nickname already in use on server and not dealt with", _cmd);
-	} else if ([[[[messageDirective parameters] objectAtIndex:0] substringToIndex:30] isEqualToString:@"\"E;Invalid game number entered"])
-		NSLog(@"%s an invalid game number was entered and not dealt with", _cmd);
 		
+		return;
+	}
+	
+	if ([[message substringToIndex:30] isEqualToString:@"\"E;Invalid game number entered"]) {
+		NSLog(@"%s an invalid game number was entered and not dealt with", _cmd);
+		return;
+	}
+	
+	if ([[message substringToIndex:23] isEqualToString:@"\"W;Test mode turned on."]) {
+		[[self _firstAssociatedObjectThatRespondsToSelector:@selector(enteringTestMode)] enteringTestMode];
+		return;
+	}
+	
+	if ([[message substringToIndex:24] isEqualToString:@"\"W;Test mode turned off."]) {
+		[[self _firstAssociatedObjectThatRespondsToSelector:@selector(exitingTestMode)] exitingTestMode];
+		return;
+	}
 }
 
 - (void)_receivedPIDirective:(AQNetacquireDirective *)pingDirective;
@@ -620,6 +638,7 @@
 
 - (void)_receivedSBDirective:(AQNetacquireDirective *)setBoardStatusDirective;
 {
+	NSLog(@"%s called", _cmd);
 	if ([[setBoardStatusDirective parameters] count] != 2)
 		return;
 
@@ -831,6 +850,7 @@
 
 - (void)_sendPTDirectiveWithIndex:(int)index;
 {
+	NSLog(@"%s called", _cmd);
 	AQNetacquireDirective *directive = [[[AQNetacquireDirective alloc] init] autorelease];
 	[directive setDirectiveCode:@"PT"];
 	[directive addParameter:[NSString stringWithFormat:@"%d", index]];

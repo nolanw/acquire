@@ -283,6 +283,11 @@
 		[_associatedConnection playTileAtRackIndex:([[self activePlayer] rackIndexOfTileNamed:tileClickedString] + 1)];
 		_tilePlayedThisTurn = YES;
 		
+		if (![self gameCanEnd]) {
+			[_gameWindowController hideEndCurrentTurnButton];
+			[_gameWindowController hideEndGameButton];
+		}
+		
 		return;
 	}
 	
@@ -682,10 +687,8 @@
 		_tilePlayedThisTurn = NO;
 		[_gameWindowController highlightTilesOnBoard:[[self activePlayer] tiles]];
 		
-		if ([self gameCanEnd]) {
-			[_gameWindowController showEndCurrentTurnButton];
+		if ([self gameCanEnd])
 			[_gameWindowController showEndGameButton];
-		}
 		
 		[_gameWindowController announceLocalPlayersTurn];
 	} else {
@@ -714,12 +717,17 @@
 
 - (void)boardTileAtNetacquireID:(int)netacquireID isNetacquireChainID:(int)netacquireChainID;
 {
-	AQTile *tile = [_board tileFromNetacquireID:netacquireID];
-	[self boardTile:tile isNetacquireChainID:netacquireChainID];
+	[self boardTile:[_board tileFromNetacquireID:netacquireID] isNetacquireChainID:netacquireChainID];
 }
 
 - (void)rackTileAtIndex:(int)index isNetacquireID:(int)netacquireID netacquireChainID:(int)netacquireChainID;
 {
+	if (netacquireChainID == 8421504) {
+		[[self localPlayer] playedTileNamed:[[_board tileFromNetacquireID:netacquireID] description]];
+		[_gameWindowController updateTileRack:[[self localPlayer] tiles]];
+		return;
+	}
+	
 	++_localPlayerTilesDrawn;
 	[[self localPlayer] drewTile:[_board tileFromNetacquireID:netacquireID] atRackIndex:index];
 	[_gameWindowController updateTileRack:[[self localPlayer] tiles]];
@@ -842,6 +850,7 @@
 
 - (void)getPurchaseWithGameEndFlag:(int)gameEndFlag cash:(int)cash;
 {
+	[_gameWindowController tilesChanged:[[self localPlayer] tiles]];
 	[[self localPlayer] setCash:cash];
 	[self _showPurchaseSharesSheetWithHotels:[self _hotelsWithPurchaseableShares]];
 }
@@ -865,8 +874,6 @@
 		if ([curHotel netacquireID] == chainID)
 			return curHotel;
 	}
-	
-	NSLog(@"%s No hotel has Netacquire chain ID %d.", _cmd, chainID);
 	
 	return nil;
 }
@@ -918,6 +925,16 @@
 - (void)setIsReadyToStart:(BOOL)isReadyToStart;
 {
 	_isReadyToStart = isReadyToStart;
+}
+
+- (void)enteringTestMode;
+{
+	[_gameWindowController enteringTestMode];
+}
+
+- (void)exitingTestMode;
+{
+	[_gameWindowController exitingTestMode];
 }
 @end
 
