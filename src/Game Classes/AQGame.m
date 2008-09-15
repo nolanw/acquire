@@ -705,12 +705,15 @@
 		[_gameWindowController updateTileRack:[[self activePlayer] tiles]];
 	}
 	
-	AQTileState tileState = [self tileStateFromChainID:netacquireChainID];
-	if (tileState == AQTileInHotel) {
+	AQTileState newTileState = [self tileStateFromChainID:netacquireChainID];
+	if ([tile state] == AQTileInHotel && [tile hotel] != [self hotelFromChainID:netacquireChainID])
+		[[tile hotel] removeTilesFromBoard];
+	
+	if (newTileState == AQTileInHotel) {
 		[[self hotelFromChainID:netacquireChainID] addTile:tile];
 	}
 	else
-		[tile setState:tileState];
+		[tile setState:newTileState];
 	
 	[_gameWindowController tilesChanged:[NSArray arrayWithObject:tile]];
 }

@@ -31,9 +31,9 @@ Desired rearrangements
 Known bugs
 ---------
 - Network game: Sometimes able to buy five shares.
-- Network game: Just-merged hotel still shows up on the purchase sheet.
 
 
 Fixed bugs
 ----------
 - Network game: Check for unplayable tiles and disable/discard them.
+- Network game: Just-merged hotel still shows up on the purchase sheet.

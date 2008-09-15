@@ -167,8 +167,10 @@
 
 - (void)disconnectedFromServer:(BOOL)connectionWasLost;
 {
-	if (_gameArrayController != nil)
+	if (_gameArrayController != nil) {
+		[[_gameArrayController activeGame] closeGameWindow];
 		[_gameArrayController removeGame:[_gameArrayController activeGame]];
+	}
 	
 	[_lobbyWindowController closeLobbyWindow];
 	[_lobbyWindowController release];

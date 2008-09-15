@@ -638,7 +638,6 @@
 
 - (void)_receivedSBDirective:(AQNetacquireDirective *)setBoardStatusDirective;
 {
-	NSLog(@"%s called", _cmd);
 	if ([[setBoardStatusDirective parameters] count] != 2)
 		return;
 
@@ -850,7 +849,6 @@
 
 - (void)_sendPTDirectiveWithIndex:(int)index;
 {
-	NSLog(@"%s called", _cmd);
 	AQNetacquireDirective *directive = [[[AQNetacquireDirective alloc] init] autorelease];
 	[directive setDirectiveCode:@"PT"];
 	[directive addParameter:[NSString stringWithFormat:@"%d", index]];

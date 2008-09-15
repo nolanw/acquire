@@ -119,6 +119,9 @@
 
 - (void)removeTilesFromBoard;
 {
+	if ([_tilesInHotel count] == 0)
+		return;
+	
 	[_tilesInHotel removeAllObjects];
 }
 
