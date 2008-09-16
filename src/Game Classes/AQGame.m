@@ -276,6 +276,9 @@
 	if (_tilePlayedThisTurn)
 		return;
 	
+	[_gameWindowController tilesChanged:[[self activePlayer] tiles]];
+	[_gameWindowController disableTileRack];
+	
 	AQTile *clickedTile = [_board tileOnBoardByString:tileClickedString];
 	
 	if ([self isNetworkGame]) {
@@ -296,7 +299,6 @@
 		return;
 	}
 	
-
 	if ([self playedTileCreatesNewHotel:clickedTile]) {
 		NSArray *hotelsNotOnBoard = [self hotelsNotOnBoard];
 		if ([hotelsNotOnBoard count] == 0)
@@ -328,8 +330,6 @@
 
 
 #pragma mark Game actions
-
-
 - (void)endCurrentTurn;
 {
 	if ([self isNetworkGame]) {
@@ -352,6 +352,7 @@
 	[_gameWindowController reloadScoreboard];
 	[_gameWindowController updateTileRack:[[self activePlayer] tiles]];
 	[_gameWindowController highlightTilesOnBoard:[[self activePlayer] tiles]];
+	[_gameWindowController enableTileRack];
 	[_gameWindowController incomingGameLogEntry:[NSString stringWithFormat:@"* It's %@'s turn.", [[self activePlayer] name]]];
 	
 	_tilePlayedThisTurn = NO;
@@ -669,22 +670,6 @@
 	return (_associatedConnection == nil);
 }
 
-- (void)startGame;
-{
-	if ([self isLocalGame]) {
-		[self determineStartingOrder];
-		
-		[_gameWindowController incomingGameLogEntry:[NSString stringWithFormat:@"* It's %@'s turn.", [[self activePlayer] name]]];
-		
-		[_gameWindowController reloadScoreboard];
-		
-		[self drawTilesForEveryone];
-		
-		[_gameWindowController updateTileRack:[[self activePlayer] tiles]];
-		[_gameWindowController highlightTilesOnBoard:[[self activePlayer] tiles]];
-	}
-}
-
 
 #pragma mark Pre-game fun
 - (void)determineStartingOrder;
@@ -726,6 +711,24 @@
 
 
 #pragma mark Game actions
+- (void)startGame;
+{
+	if (![self isLocalGame])
+		return;
+	
+	[self determineStartingOrder];
+	
+	[_gameWindowController incomingGameLogEntry:[NSString stringWithFormat:@"* It's %@'s turn.", [[self activePlayer] name]]];
+	
+	[_gameWindowController reloadScoreboard];
+	
+	[self drawTilesForEveryone];
+	
+	[_gameWindowController updateTileRack:[[self activePlayer] tiles]];
+	[_gameWindowController enableTileRack];
+	[_gameWindowController highlightTilesOnBoard:[[self activePlayer] tiles]];
+}
+
 - (void)payPlayersForSharesInHotels:(NSArray *)hotelsToPay;
 {
 	NSArray *hotels = [NSArray arrayWithArray:hotelsToPay];
@@ -1008,7 +1011,7 @@
 
 - (void)showAllocateMergingHotelSharesSheetForHotelWithNetacquireID:(int)mergingHotelNetacquireID survivingHotelNetacquireID:(int)survivingHotelNetacquireID;
 {
-	[self _showAllocateMergingHotelSharesSheetForMergingHotel:[self hotelWithNetacquireID:mergingHotelNetacquireID] survivingHotel:[self hotelWithNetacquireID:survivingHotelNetacquireID] player:[self localPlayer] sharePrice:[[self hotelWithNetacquireID:mergingHotelNetacquireID] sharePrice]];
+	[self _showAllocateMergingHotelSharesSheetForMergingHotel:[self hotelWithNetacquireID:mergingHotelNetacquireID] survivingHotel:[self hotelWithNetacquireID:survivingHotelNetacquireID] player:[self localPlayer] sharePrice:0];
 }
 
 - (void)mergerSharesSold:(int)sharesSold sharesTraded:(int)sharesTraded;
@@ -1119,7 +1122,7 @@
 	_localPlayerName = [localPlayerName copy];
 }
 
-- (void)setActivePlayerName:(NSString *)activePlayerName;
+- (void)setActivePlayerName:(NSString *)activePlayerName isPurchasing:(BOOL)isPurchasing;
 {
 	int i;
 	for (i = 0; i < [_players count]; ++i) {
@@ -1130,18 +1133,24 @@
 		}
 	}
 	
-	if ([self activePlayer] == [self localPlayer]) {
+	if ([self activePlayer] == [self localPlayer] && [self activePlayer] != nil) {
 		_tilePlayedThisTurn = NO;
-		[_gameWindowController highlightTilesOnBoard:[[self activePlayer] tiles]];
 		
 		if ([self gameCanEnd])
 			[_gameWindowController showEndGameButton];
+		
+		if (!isPurchasing) {
+			[_gameWindowController highlightTilesOnBoard:[[self localPlayer] tiles]];
+			[_gameWindowController enableTileRack];
+		}
 		
 		[_gameWindowController announceLocalPlayersTurn];
 	} else {
 		[_gameWindowController tilesChanged:[[self activePlayer] tiles]];
 		[_gameWindowController hideEndCurrentTurnButton];
 		[_gameWindowController hideEndGameButton];
+		[_gameWindowController highlightTilesOnBoard:[[self localPlayer] tiles]];
+		[_gameWindowController disableTileRack];
 	}
 }
 
@@ -1332,7 +1341,7 @@
 
 - (void)_showAllocateMergingHotelSharesSheetForMergingHotel:(AQHotel *)mergingHotel survivingHotel:(AQHotel *)survivingHotel player:(AQPlayer *)player sharePrice:(int)sharePrice;
 {
-	[_gameWindowController showAllocateMergingHotelSharesSheetForMergingHotel:mergingHotel survivingHotel:survivingHotel player:player sharePrice:sharePrice];
+	[_gameWindowController showAllocateMergingHotelSharesSheetForMergingHotel:mergingHotel survivingHotel:survivingHotel player:player sharePrice:(int)sharePrice];
 }
 
 - (void)_showPurchaseSharesSheetWithHotels:(NSArray *)hotels;

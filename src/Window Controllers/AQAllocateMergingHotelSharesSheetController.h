@@ -11,7 +11,6 @@
 	IBOutlet NSWindow		*_allocateMergingHotelSharesSheet;
 	IBOutlet NSTextField	*_playerNameTextField;
 	IBOutlet NSTextField	*_mergingHotelNameTextField;
-	IBOutlet NSTextField	*_mergingHotelSharePriceTextField;
 	IBOutlet NSTextField	*_survivingHotelNameTextField;
 	IBOutlet NSTextField	*_sharesSoldTextField;
 	IBOutlet NSStepper		*_sharesSoldStepper;

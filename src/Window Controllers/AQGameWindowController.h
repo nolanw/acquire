@@ -38,6 +38,9 @@
 - (id)initWithGame:(id)game;
 - (void)dealloc;
 
+// NSObject (NSNibAwakening)
+- (void)awakeFromNib;
+
 - (IBAction)showPurchaseSharesSheet:(id)sender;
 - (void)showPurchaseSharesButton;
 - (void)hidePurchaseSharesButton;
@@ -48,6 +51,8 @@
 - (void)showEndGameButton;
 - (void)hideEndGameButton;
 - (void)disableBoardAndTileRack;
+- (void)enableTileRack;
+- (void)disableTileRack;
 - (void)updateFirstResponderAndKeyEquivalents;
 - (void)purchaseSharesSheetDismissed;
 

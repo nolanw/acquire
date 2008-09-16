@@ -107,13 +107,6 @@
 }
 
 
-// NSObject (NSNibAwakening)
-- (void)awakeFromNib;
-{
-	
-}
-
-
 // NSTabView delegate selectors
 - (BOOL)tabView:(NSTabView *)tabView shouldSelectTabViewItem:(NSTabViewItem *)tabViewItem;
 {

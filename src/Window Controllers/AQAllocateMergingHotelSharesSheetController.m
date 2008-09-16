@@ -119,10 +119,9 @@
 
 - (void)showAllocateMergingHotelSharesSheet:(NSWindow *)window forMergingHotel:(AQHotel *)mergingHotel survivingHotel:(AQHotel *)survivingHotel player:(AQPlayer *)player sharePrice:(int)sharePrice;
 {
-	if (window == nil || mergingHotel == nil || survivingHotel == nil || player == nil) {
-		NSLog(@"%s nil argument encountered.", _cmd);
+	if (window == nil || mergingHotel == nil || survivingHotel == nil || player == nil)
 		return;
-	}
+	
 	_sharesKeptInMergingHotel = (double)[player numberOfSharesOfHotelNamed:[mergingHotel name]];
 	_sharesSold = 0.0;
 	_sharesTraded = 0.0;
@@ -140,7 +139,6 @@
 	
 	[_playerNameTextField setStringValue:[player name]];
 	[_mergingHotelNameTextField setStringValue:[mergingHotel name]];
-	[_mergingHotelSharePriceTextField setStringValue:[NSString stringWithFormat:@"$%d", [mergingHotel sharePrice]]];
 	[_survivingHotelNameTextField setStringValue:[survivingHotel name]];
 	[_sharesSoldTextField takeIntValueFrom:_sharesSoldStepper];
 	[_sharesSoldStepper setMinValue:0.0];

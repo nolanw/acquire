@@ -99,13 +99,13 @@
 
 // Accessors/setters
 - (BOOL)isLocalGame;
-- (void)startGame;
 
 // Pre-game fun
 - (void)determineStartingOrder;
 - (void)drawTilesForEveryone;
 
 // Game actions
+- (void)startGame;
 - (void)payPlayersForSharesInHotels:(NSArray *)hotels;
 
 // Turn actions
@@ -153,7 +153,7 @@
 - (AQPlayer *)localPlayer;
 - (NSString *)localPlayerName;
 - (void)setLocalPlayerName:(NSString *)localPlayerName;
-- (void)setActivePlayerName:(NSString *)activePlayerName;
+- (void)setActivePlayerName:(NSString *)activePlayerName isPurchasing:(BOOL)isPurchasing;
 - (void)playerAtIndex:(int)playerIndex isNamed:(NSString *)name;
 - (void)playerAtIndex:(int)playerIndex hasCash:(int)cash;
 - (void)playerAtIndex:(int)playerIndex hasSacksonShares:(int)sacksonShares;

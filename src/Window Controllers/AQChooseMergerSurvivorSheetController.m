@@ -68,10 +68,9 @@
 		}
 	}
 	
-	if (survivingHotel == nil) {
-		NSLog(@"%s couldn't match the surviving hotel's name with a merging hotel", _cmd);
+	if (survivingHotel == nil)
 		return;
-	}
+	
 	[_gameWindowController hotelSurvives:survivingHotel mergingHotels:_mergingHotels mergeTile:_mergeTile];
 }
 

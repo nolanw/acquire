@@ -498,8 +498,11 @@
 	}
 	
 	if ([messageText characterAtIndex:1] == '*' && [messageText length] > 13 && [[messageText substringToIndex:14] isEqualToString:@"\"*Waiting for "]) {
-		id associatedObject = [self _firstAssociatedObjectThatRespondsToSelector:@selector(setActivePlayerName:)];
-		[associatedObject setActivePlayerName:[messageText substringWithRange:NSMakeRange(14, [messageText length] - 29)]];
+		id associatedObject = [self _firstAssociatedObjectThatRespondsToSelector:@selector(setActivePlayerName:isPurchasing:)];
+		if ([messageText rangeOfString:@"play tile" options:NSBackwardsSearch].location != NSNotFound)
+			[associatedObject setActivePlayerName:[messageText substringWithRange:NSMakeRange(14, [messageText length] - 29)] isPurchasing:NO];
+		else if ([messageText rangeOfString:@"make purchase" options:NSBackwardsSearch].location != NSNotFound)
+			[associatedObject setActivePlayerName:[messageText substringWithRange:NSMakeRange(14, [messageText length] - 33)] isPurchasing:YES];
 	}
 	
 	if ([messageText characterAtIndex:1] == '*' && [messageText length] > 19 && [[messageText substringWithRange:NSMakeRange(1, ([messageText length] - 2))] isEqualToString:@"*>>>>GAME OVER<<<<"]) {
@@ -606,14 +609,7 @@
 		id associatedObject = [self _firstAssociatedObjectThatRespondsToSelector:@selector(displayNameAlreadyInUse)];
 		if (associatedObject != nil)
 			[associatedObject displayNameAlreadyInUse];
-		else
-			NSLog(@"%s desired nickname already in use on server and not dealt with", _cmd);
 		
-		return;
-	}
-	
-	if ([[message substringToIndex:30] isEqualToString:@"\"E;Invalid game number entered"]) {
-		NSLog(@"%s an invalid game number was entered and not dealt with", _cmd);
 		return;
 	}
 	
@@ -647,10 +643,8 @@
 
 - (void)_receivedSPDirective:(AQNetacquireDirective *)startPlayerDirective;
 {
-	if ([[startPlayerDirective parameters] count] == 0) {
-		NSLog(@"%s version string was empty!", _cmd);
+	if ([[startPlayerDirective parameters] count] == 0)
 		return;
-	}
 	
 	NSRange versionInfoRange = NSMakeRange(0, [[startPlayerDirective parameters] count] - 1);
 	id associatedObject = [self _firstAssociatedObjectThatRespondsToSelector:@selector(localPlayerName)];
@@ -757,8 +751,6 @@
 		
 		return;
 	}
-	
-	// NSLog(@"%s %@", _cmd, setValueDirective);
 }
 
 

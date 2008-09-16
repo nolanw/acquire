@@ -69,6 +69,14 @@
 }
 
 
+// NSObject (NSNibAwakening)
+- (void)awakeFromNib;
+{
+	[self updateFirstResponderAndKeyEquivalents];
+	[self disableTileRack];
+}
+
+
 - (IBAction)showPurchaseSharesSheet:(id)sender;
 {	
 	[_purchaseSharesSheetController showPurchaseSharesSheet:_gameWindow];
@@ -132,6 +140,16 @@
 - (void)disableBoardAndTileRack;
 {
 	[_boardMatrix setEnabled:NO];
+	[self disableTileRack];
+}
+
+- (void)enableTileRack;
+{
+	[_tileRackMatrix setEnabled:YES];
+}
+
+- (void)disableTileRack;
+{
 	[_tileRackMatrix setEnabled:NO];
 }
 
@@ -163,6 +181,8 @@
 		[_endGameButton setKeyEquivalent:@"\r"];
 		return;
 	}
+	
+	[_gameWindow makeFirstResponder:_gameChatAndLogTabView];
 }
 
 - (void)purchaseSharesSheetDismissed;
@@ -248,10 +268,8 @@
 		curTile = [tiles objectAtIndex:i];
 		if (curTile == [NSNull null]) {
 			[[_tileRackMatrix cellAtRow:0 column:i] setTransparent:YES];
-			[[_tileRackMatrix cellAtRow:0 column:i] setEnabled:NO];
 			[[_tileRackMatrix cellAtRow:0 column:i] setTitle:@""];
 		} else {
-			[[_tileRackMatrix cellAtRow:0 column:i] setEnabled:YES];
 			[[_tileRackMatrix cellAtRow:0 column:i] setTransparent:NO];
 			[[_tileRackMatrix cellAtRow:0 column:i] setTitle:[curTile description]];
 		}
@@ -259,13 +277,15 @@
 	
 	for (; i < 6; ++i) {
 		[[_tileRackMatrix cellAtRow:0 column:i] setTransparent:YES];
-		[[_tileRackMatrix cellAtRow:0 column:i] setEnabled:NO];
 		[[_tileRackMatrix cellAtRow:0 column:i] setTitle:@""];
 	}
 }
 
 - (void)highlightTilesOnBoard:(NSArray *)tilesToHighlight;
 {
+	if (tilesToHighlight == nil || [tilesToHighlight count] == 0)
+		return;
+	
 	NSEnumerator *tilesToHighlightEnumerator = [tilesToHighlight objectEnumerator];
 	id curTile;
 	while (curTile = [tilesToHighlightEnumerator nextObject]) {
