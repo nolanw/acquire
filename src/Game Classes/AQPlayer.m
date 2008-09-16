@@ -4,12 +4,18 @@
 
 #import "AQPlayer.h"
 
-@interface AQPlayer (Private)
-- (int)_rowIntFromString:(NSString *)row;
-- (NSString *)_rowStringFromInt:(int)row;
-@end
-
+#pragma mark -
 @implementation AQPlayer
+#pragma mark Implementation
+// Class methods
++ (AQPlayer *)playerWithName:(NSString *)playerName;
+{
+	return [[[self alloc] initWithName:playerName] autorelease];
+}
+
+
+// Instance methods
+// init/dealloc
 - (id)initWithName:(NSString *)newName;
 {
     if (![super init])
@@ -21,11 +27,6 @@
 	_tiles = [[NSMutableArray alloc] initWithObjects:[NSNull null], [NSNull null], [NSNull null], [NSNull null], [NSNull null], [NSNull null], nil];
 
     return self;
-}
-
-+ (AQPlayer *)playerWithName:(NSString *)playerName;
-{
-	return [[[self alloc] initWithName:playerName] autorelease];
 }
 
 - (void)dealloc;
@@ -79,10 +80,10 @@
 	NSEnumerator *tileEnum = [_tiles objectEnumerator];
 	id curTile;
 	while (curTile = [tileEnum nextObject]) {
-		if (curTile != [NSNull null] && [[curTile description] isEqualToString:tileName]) {
+		if (curTile != [NSNull null] && [[curTile description] isEqualToString:tileName])
 			return YES;
-		}
 	}
+	
 	return NO;
 }
 
@@ -95,16 +96,6 @@
 			break;
 		}
 	}
-}
-
-- (void)drewTile:(AQTile *)tile;
-{
-	if ([_tiles indexOfObject:[NSNull null]] == NSNotFound) {
-		NSLog(@"%s player drew a tile when they already had six; this tile has been removed from the game", _cmd);
-		return;
-	}
-	
-	[_tiles replaceObjectAtIndex:[_tiles indexOfObject:[NSNull null]] withObject:tile];
 }
 
 - (NSArray *)tiles;
@@ -135,11 +126,10 @@
     if (![hotelsWithShares containsObject:hotelName])
 		return NO;
 	
-	if ([_sharesByHotelName objectForKey:hotelName] == nil) {
+	if ([_sharesByHotelName objectForKey:hotelName] == nil)
 	    return NO;
-	} else {
-	    return YES;
-	}
+	
+    return YES;
 }
 
 - (int)numberOfSharesOfHotelNamed:(NSString *)hotelName;
@@ -155,9 +145,8 @@
     if ([self hasSharesOfHotelNamed:hotelName]) {
         int newNumShares = numShares + [(NSNumber *) [_sharesByHotelName objectForKey:hotelName] intValue];
         [_sharesByHotelName setObject: [NSNumber numberWithInt:newNumShares] forKey:hotelName];
-    } else {
+    } else
         [_sharesByHotelName setObject: [NSNumber numberWithInt:numShares] forKey:hotelName];
-    }
 }
 
 - (void)subtractSharesOfHotelNamed:(NSString *)hotelName numberOfShares:(int)numShares;
@@ -167,26 +156,39 @@
 	
 	int newNumShares = [(NSNumber *)[_sharesByHotelName objectForKey:hotelName] intValue] - numShares;
 
-	if (newNumShares < 1) {
+	if (newNumShares < 1)
 	    [_sharesByHotelName removeObjectForKey:hotelName];
-	} else {
+	else
 	    [_sharesByHotelName setObject:[NSNumber numberWithInt:newNumShares] forKey:hotelName];
-	}
 }
 
 - (NSEnumerator *)namesOfHotelsInWhichAShareIsOwnedEnumerator;
 {
 	return [_sharesByHotelName keyEnumerator];
 }
+@end
 
+#pragma mark -
+@implementation AQPlayer (LocalGame)
+#pragma mark LocalGame implementation
+// Tiles
+- (void)drewTile:(AQTile *)tile;
+{
+	if ([_tiles indexOfObject:[NSNull null]] == NSNotFound)
+		return;
+	
+	[_tiles replaceObjectAtIndex:[_tiles indexOfObject:[NSNull null]] withObject:tile];
+}
+@end
 
-// Netacquire selectors
+#pragma mark -
+@implementation AQPlayer (NetworkGame)
+#pragma mark NetworkGame implementation
+// Tiles
 - (void)drewTile:(AQTile *)tile atRackIndex:(int)rackIndex;
 {
-	if (tile == nil) {
-		NSLog(@"%s tried to draw nil tile", _cmd);
+	if (tile == nil)
 		return;
-	}
 	
 	[_tiles replaceObjectAtIndex:(rackIndex - 1) withObject:tile];
 }
@@ -202,56 +204,5 @@
 	}
     
     return -1;
-}
-@end
-
-@implementation AQPlayer (Private)
-- (int)_rowIntFromString:(NSString *)row;
-{
-	unichar rowChar = [row characterAtIndex:0];
-	if (rowChar == 'A')
-		return 0;
-	if (rowChar == 'B')
-		return 1;
-	if (rowChar == 'C')
-		return 2;
-	if (rowChar == 'D')
-		return 3;
-	if (rowChar == 'E')
-		return 4;
-	if (rowChar == 'F')
-		return 5;
-	if (rowChar == 'G')
-		return 6;
-	if (rowChar == 'H')
-		return 7;
-	if (rowChar == 'I')
-		return 8;
-
-	return -1;
-}
-
-- (NSString *)_rowStringFromInt:(int)row;
-{
-	if (row == 0)
-		return @"A";
-	if (row == 1)
-		return @"B";
-	if (row == 2)
-		return @"C";
-	if (row == 3)
-		return @"D";
-	if (row == 4)
-		return @"E";
-	if (row == 5)
-		return @"F";
-	if (row == 6)
-		return @"G";
-	if (row == 7)
-		return @"H";
-	if (row == 8)
-		return @"I";
-	
-	return nil;
 }
 @end

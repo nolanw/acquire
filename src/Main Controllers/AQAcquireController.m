@@ -241,7 +241,7 @@
 	if ([_gameArrayController activeGame] == nil)
 		return;
 	
-	[[_gameArrayController activeGame] showGameWindow];
+	[[_gameArrayController activeGame] bringGameWindowToFront];
 }
 
 - (void)outgoingLobbyMessage:(NSString *)message;

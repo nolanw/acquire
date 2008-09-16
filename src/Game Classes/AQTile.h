@@ -11,16 +11,26 @@ typedef enum _AQTileState {
     AQTileInHotel			// Tile is on board and in a hotel
 } AQTileState;
 
-@interface AQTile : NSObject {
+#pragma mark -
+@interface AQTile : NSObject
+#pragma mark Interface
+{
 	int			_col;
 	NSString	*_row;
 	AQTileState	_state;
 	id			_hotel;
 }
 
+// Class methods
++ (int)rowIntFromString:(NSString *)rowString;
++ (NSString *)rowStringFromInt:(int)rowInt;
+
+// Instance methods
+// init/dealloc
 - (id)initWithColumn:(int)newCol row:(NSString *)newRow;
 - (void)dealloc;
 
+// NSObject
 - (NSString *)description;
 
 // Accessors/setters
@@ -34,4 +44,16 @@ typedef enum _AQTileState {
 
 // Equality
 - (BOOL)isEqualToTile:(AQTile *)otherTile;
+@end
+
+#pragma mark -
+@interface AQTile (NetworkGame)
+#pragma mark NetworkGame interface
+// Class methods
++ (int)netacquireIDFromTile:(AQTile *)tile;
++ (int)columnFromNetacquireID:(int)netacquireID;
++ (NSString *)rowFromNetacquireID:(int)netacquireID;
+
+// Accessors/setters
+- (int)netacquireID;
 @end

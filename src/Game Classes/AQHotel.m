@@ -4,36 +4,11 @@
 
 #import "AQHotel.h"
 
+#pragma mark -
 @implementation AQHotel
-- (id)initWithName:(NSString *)name tier:(int)tier color:(NSColor *)color;
-{
-	if (![super init])
-		return nil;
-	
-	_name = [name copy];
-	_oldName = _name;
-	_color = [color retain];
-	_tilesInHotel = [[NSMutableArray alloc] init];
-	_sharesInBank = 25;
-	_tier = tier;
-	_netacquireID = -1;
-
-	return self;
-}
-
-- (id)initWithName:(NSString *)name tier:(int)tier color:(NSColor *)color oldName:(NSString *)oldName netacquireID:(int)netacquireID;
-{
-	if (![super init])
-		return nil;
-	
-	[self initWithName:name tier:tier color:color];
-	_oldName = [oldName copy];
-	_netacquireID = netacquireID;
-	
-	return self;
-}
-
-
+#pragma mark Implementation
+// Class methods
+// Standard hotel creators
 + (AQHotel *)sacksonHotel;
 {
 	return [[[self alloc] initWithName:@"Sackson" tier:0 color:[NSColor colorWithCalibratedRed:1.0 green:0.0 blue:0.0 alpha:1.0] oldName:@"Luxor" netacquireID:255] autorelease];
@@ -59,17 +34,18 @@
 	return [[[self alloc] initWithName:@"Hydra" tier:1 color:[NSColor colorWithCalibratedRed:1.0 green:0.5 blue:0.0 alpha:1.0] oldName:@"Worldwide" netacquireID:16512] autorelease];
 }
 
-+ (AQHotel *)phoenixHotel;
-{
-	return [[[self alloc] initWithName:@"Phoenix" tier:2 color:[NSColor colorWithCalibratedRed:1.0 green:0.25 blue:1.0 alpha:1.0] oldName:@"Continental" netacquireID:16711935] autorelease];
-}
-
 + (AQHotel *)quantumHotel;
 {
 	return [[[self alloc] initWithName:@"Quantum" tier:2 color:[NSColor colorWithCalibratedRed:0.0 green:1.0 blue:1.0 alpha:1.0] oldName:@"Imperial" netacquireID:16776960] autorelease];
 }
 
++ (AQHotel *)phoenixHotel;
+{
+	return [[[self alloc] initWithName:@"Phoenix" tier:2 color:[NSColor colorWithCalibratedRed:1.0 green:0.25 blue:1.0 alpha:1.0] oldName:@"Continental" netacquireID:16711935] autorelease];
+}
 
+
+// Special colors
 + (NSColor *)tileNotInHotelColor;
 {
 	return [NSColor colorWithCalibratedRed:0.5 green:0.5 blue:0.5 alpha:1.0];
@@ -86,6 +62,8 @@
 }
 
 
+// Instance methods
+// init/dealloc
 - (void)dealloc;
 {
 	[_name release];
@@ -99,7 +77,7 @@
 }
 
 
-// Identifying characteristics
+// Physical characteristics
 - (NSString *)name;
 {
 	return _name;
@@ -158,12 +136,16 @@
 {
 	NSEnumerator *tileEnumerator = [tileArray objectEnumerator];
 	id curTile;
-	while (curTile = [tileEnumerator nextObject])
+	while (curTile = [tileEnumerator nextObject]) {
+		if ([_tilesInHotel containsObject:curTile])
+			continue;
+		
 		[self addTile:curTile];
+	}
 }
 
 
-// Money and shares
+// Money, shares and bonuses
 - (int)sharesInBank;
 {
 	return _sharesInBank;
@@ -226,9 +208,47 @@
 	
 	return ([self sharePrice] * 5);
 }
+@end
+
+#pragma mark -
+@implementation AQHotel (LocalGame)
+#pragma mark LocalGame implementation
+// init/dealloc
+- (id)initWithName:(NSString *)name tier:(int)tier color:(NSColor *)color;
+{
+	if (![super init])
+		return nil;
+	
+	_name = [name copy];
+	_oldName = [_name copy];
+	_color = [color retain];
+	_tilesInHotel = [[NSMutableArray alloc] initWithCapacity:50];
+	_sharesInBank = 25;
+	_tier = tier;
+	_netacquireID = -1;
+
+	return self;
+}
+@end
+
+#pragma mark -
+@implementation AQHotel (NetworkGame)
+#pragma mark NetworkGame implementation
+// init/dealloc
+- (id)initWithName:(NSString *)name tier:(int)tier color:(NSColor *)color oldName:(NSString *)oldName netacquireID:(int)netacquireID;
+{
+	if (![super init])
+		return nil;
+	
+	[self initWithName:name tier:tier color:color];
+	_oldName = [oldName copy];
+	_netacquireID = netacquireID;
+	
+	return self;
+}
 
 
-// Netacquire selectors
+// Accessors/setters
 - (int)netacquireID;
 {
 	return _netacquireID;
@@ -237,12 +257,5 @@
 - (void)setNetacquireID:(int)netacquireID;
 {
 	_netacquireID = netacquireID;
-}
-
-
-// Equality
-- (BOOL)isEqualToHotel:(AQHotel *)hotel;
-{
-	return [_name isEqualToString:[hotel name]];
 }
 @end

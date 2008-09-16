@@ -5,7 +5,10 @@
 
 #import "AQTile.h"
 
-@interface AQBoard : NSObject {
+#pragma mark -
+@interface AQBoard : NSObject
+#pragma mark Interface
+{
 	NSArray         *_tileMatrix;   // The actual board of tiles
 	NSMutableArray  *_tileBag;      // The bag of tiles to draw from
     NSArray         *_rowNames;     // Handy array mapping rowAsInt to rowName
@@ -14,18 +17,18 @@
 - (id)init;
 - (void)dealloc;
 
-// Row letter <-> integer conversion (A = 0th row, B = 1st row, ..., I = 8th row)
-- (int)rowIntFromString:(NSString *)row;
-- (NSString *)rowStringFromInt:(int)row;
-
 // Tile accessors
 - (AQTile *)tileOnBoardAtColumn:(int)col row:(NSString *)row;
-- (AQTile *)tileOnBoardByString:(NSString *)tile;
+- (AQTile *)tileOnBoardByString:(NSString *)tileString;
 - (AQTile *)tileFromTileBag;
 
 // Lists of tiles
 - (NSArray *)tilesOrthogonalToTile:(AQTile *)tile;
+@end
 
-// Netacquire selectors
+#pragma mark -
+@interface AQBoard (NetworkGame)
+#pragma mark NetworkGame interface
+// Accessors
 - (AQTile *)tileFromNetacquireID:(int)netacquireID;
 @end

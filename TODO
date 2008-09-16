@@ -26,14 +26,13 @@ Desired rearrangements
 ----------------------
 - Instead of sheets calling different methods depending on local/network game, ensure they call the same method, which itself does what's needed.
 - Divide classes into common, LocalGame and NetworkGame sections.
+- Eliminate need for passthru selectors where reasonable.
+
+- Classes I've rearranged:
+	- AQBoard, AQGame, AQHotel, AQPlayer, AQTile
 
 
 Known bugs
 ---------
 - Network game: Sometimes able to buy five shares.
-
-
-Fixed bugs
-----------
-- Network game: Check for unplayable tiles and disable/discard them.
-- Network game: Just-merged hotel still shows up on the purchase sheet.
+	- Was reported exactly once, a long time ago; not sure if it's still an issue.
