@@ -389,6 +389,10 @@
 	if ([self isNetworkGame]) {
 		[self purchaseShares:_finalTurnSharesPurchased ofHotelsNamed:_finalTurnHotelNames endGame:YES sender:self];
 		
+		// Netacquire won't give us the final score by the time we want to show it, so we'll calculate it ourselves.
+		[self payShareholderBonusesForHotels:[self hotelsOnBoard]];
+		[self payPlayersForSharesInHotels:[self hotelsOnBoard]];
+		
 		[_gameWindowController hidePurchaseSharesButton];
 		[_gameWindowController hideEndCurrentTurnButton];
 		[_gameWindowController hideEndGameButton];
@@ -970,6 +974,10 @@
 #pragma mark Game actions
 - (void)determineAndCongratulateWinner;
 {
+	if (_winnerCongratulated)
+		return;
+	
+	_winnerCongratulated = YES;
 	_isOn = NO;
 	[_gameWindowController congratulateWinnersByName:[self winningPlayers]];
 	
@@ -1191,8 +1199,12 @@
 
 - (void)playerAtIndex:(int)playerIndex hasSacksonShares:(int)sacksonShares;
 {
-	int diff = sacksonShares - [[_players objectAtIndex:playerIndex] numberOfSharesOfHotelNamed:@"Sackson"];
-	[[_players objectAtIndex:playerIndex] addSharesOfHotelNamed:@"Sackson" numberOfShares:diff];
+	AQPlayer *player = [_players objectAtIndex:playerIndex];
+	if (player == nil)
+		return;
+	
+	int diff = sacksonShares - [player numberOfSharesOfHotelNamed:@"Sackson"];
+	[player addSharesOfHotelNamed:@"Sackson" numberOfShares:diff];
 	[[self hotelNamed:@"Sackson"] removeSharesFromBank:diff];
 	
 	[_gameWindowController reloadScoreboard];
@@ -1200,8 +1212,12 @@
 
 - (void)playerAtIndex:(int)playerIndex hasZetaShares:(int)zetaShares;
 {
-	int diff = zetaShares - [[_players objectAtIndex:playerIndex] numberOfSharesOfHotelNamed:@"Zeta"];
-	[[_players objectAtIndex:playerIndex] addSharesOfHotelNamed:@"Zeta" numberOfShares:diff];
+	AQPlayer *player = [_players objectAtIndex:playerIndex];
+	if (player == nil)
+		return;
+	
+	int diff = zetaShares - [player numberOfSharesOfHotelNamed:@"Zeta"];
+	[player addSharesOfHotelNamed:@"Zeta" numberOfShares:diff];
 	[[self hotelNamed:@"Zeta"] removeSharesFromBank:diff];
 	
 	[_gameWindowController reloadScoreboard];
@@ -1209,8 +1225,12 @@
 
 - (void)playerAtIndex:(int)playerIndex hasAmericaShares:(int)americaShares;
 {
-	int diff = americaShares - [[_players objectAtIndex:playerIndex] numberOfSharesOfHotelNamed:@"America"];
-	[[_players objectAtIndex:playerIndex] addSharesOfHotelNamed:@"America" numberOfShares:diff];
+	AQPlayer *player = [_players objectAtIndex:playerIndex];
+	if (player == nil)
+		return;
+	
+	int diff = americaShares - [player numberOfSharesOfHotelNamed:@"America"];
+	[player addSharesOfHotelNamed:@"America" numberOfShares:diff];
 	[[self hotelNamed:@"America"] removeSharesFromBank:diff];
 	
 	[_gameWindowController reloadScoreboard];
@@ -1218,8 +1238,12 @@
 
 - (void)playerAtIndex:(int)playerIndex hasFusionShares:(int)fusionShares;
 {
-	int diff = fusionShares - [[_players objectAtIndex:playerIndex] numberOfSharesOfHotelNamed:@"Fusion"];
-	[[_players objectAtIndex:playerIndex] addSharesOfHotelNamed:@"Fusion" numberOfShares:diff];
+	AQPlayer *player = [_players objectAtIndex:playerIndex];
+	if (player == nil)
+		return;
+	
+	int diff = fusionShares - [player numberOfSharesOfHotelNamed:@"Fusion"];
+	[player addSharesOfHotelNamed:@"Fusion" numberOfShares:diff];
 	[[self hotelNamed:@"Fusion"] removeSharesFromBank:diff];
 	
 	[_gameWindowController reloadScoreboard];
@@ -1227,8 +1251,12 @@
 
 - (void)playerAtIndex:(int)playerIndex hasHydraShares:(int)hydraShares;
 {
-	int diff = hydraShares - [[_players objectAtIndex:playerIndex] numberOfSharesOfHotelNamed:@"Hydra"];
-	[[_players objectAtIndex:playerIndex] addSharesOfHotelNamed:@"Hydra" numberOfShares:diff];
+	AQPlayer *player = [_players objectAtIndex:playerIndex];
+	if (player == nil)
+		return;
+	
+	int diff = hydraShares - [player numberOfSharesOfHotelNamed:@"Hydra"];
+	[player addSharesOfHotelNamed:@"Hydra" numberOfShares:diff];
 	[[self hotelNamed:@"Hydra"] removeSharesFromBank:diff];
 	
 	[_gameWindowController reloadScoreboard];
@@ -1236,8 +1264,12 @@
 
 - (void)playerAtIndex:(int)playerIndex hasQuantumShares:(int)quantumShares;
 {
-	int diff = quantumShares - [[_players objectAtIndex:playerIndex] numberOfSharesOfHotelNamed:@"Quantum"];
-	[[_players objectAtIndex:playerIndex] addSharesOfHotelNamed:@"Quantum" numberOfShares:diff];
+	AQPlayer *player = [_players objectAtIndex:playerIndex];
+	if (player == nil)
+		return;
+	
+	int diff = quantumShares - [player numberOfSharesOfHotelNamed:@"Quantum"];
+	[player addSharesOfHotelNamed:@"Quantum" numberOfShares:diff];
 	[[self hotelNamed:@"Quantum"] removeSharesFromBank:diff];
 	
 	[_gameWindowController reloadScoreboard];
@@ -1245,8 +1277,12 @@
 
 - (void)playerAtIndex:(int)playerIndex hasPhoenixShares:(int)phoenixShares;
 {
-	int diff = phoenixShares - [[_players objectAtIndex:playerIndex] numberOfSharesOfHotelNamed:@"Phoenix"];
-	[[_players objectAtIndex:playerIndex] addSharesOfHotelNamed:@"Phoenix" numberOfShares:diff];
+	AQPlayer *player = [_players objectAtIndex:playerIndex];
+	if (player == nil)
+		return;
+	
+	int diff = phoenixShares - [player numberOfSharesOfHotelNamed:@"Phoenix"];
+	[player addSharesOfHotelNamed:@"Phoenix" numberOfShares:diff];
 	[[self hotelNamed:@"Phoenix"] removeSharesFromBank:diff];
 	
 	[_gameWindowController reloadScoreboard];
@@ -1294,6 +1330,7 @@
 	_isReadyToStart = NO;
 	_isOn = NO;
 	_localPlayerTilesDrawn = 0;
+	_winnerCongratulated = NO;
 
 	return self;
 }

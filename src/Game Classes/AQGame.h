@@ -32,6 +32,7 @@
 	BOOL			_isOn;
 	int				_localPlayerTilesDrawn;
 	BOOL			_isInTestMode;
+	BOOL			_winnerCongratulated;
 }
 
 // init/dealloc

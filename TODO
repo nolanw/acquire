@@ -21,6 +21,8 @@ New features
 	- Make 'Create Game' button a permanent fixture on the top.
 - Generate appcast.xml and appropriate release notes page when building a Release.
 - Show value of shares being sold during merger.
+- Add a 'Bank' line to the scoreboard.
+- Show unplayable tiles on the board.
 
 
 Desired rearrangements
@@ -32,20 +34,12 @@ Desired rearrangements
 - Classes I've rearranged:
 	- AQBoard, AQGame, AQHotel, AQPlayer, AQTile
 
-
-New features
-------------
-- Network game: better indicated local player's turn.
-
 Known bugs
 ---------
-- Network game: scoreboard doesn't always seem to update after a merger.
 - Network game: sending messages involving quotation marks often crashes Netacquire.
 - Network game: Netacquire sometimes appends directives to game chat messages, making the chunk of directives unparseable.
 
 Fixed bugs
 ----------
-- The game board no longer gets focus, which led to annoying keyboarding goofiness.
-- Network game: fixed determination of whose turn it is.
-- Network game: highlighted tiles aren't dehighlighted when the purchase sheet doesn't come up.
-- Network game: Allocate shares sheet shows "for $0".
+- Network game: game winner no longer congratulated before final hotel sell-off counted.
+- Network game: "Allocate your shares" sheet lets you trade even when hotel doesn't have enough shares in bank.

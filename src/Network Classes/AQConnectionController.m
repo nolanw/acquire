@@ -505,7 +505,7 @@
 			[associatedObject setActivePlayerName:[messageText substringWithRange:NSMakeRange(14, [messageText length] - 33)] isPurchasing:YES];
 	}
 	
-	if ([messageText characterAtIndex:1] == '*' && [messageText length] > 19 && [[messageText substringWithRange:NSMakeRange(1, ([messageText length] - 2))] isEqualToString:@"*>>>>GAME OVER<<<<"]) {
+	if ([messageText characterAtIndex:1] == '*' && [messageText length] > 19 && [[messageText substringWithRange:NSMakeRange(([messageText length] - 20), 19)] isEqualToString:@"has ended the game."]) {
 		[[self _firstAssociatedObjectThatRespondsToSelector:@selector(determineAndCongratulateWinner)] determineAndCongratulateWinner];
 	}
 	
@@ -599,27 +599,43 @@
 
 - (void)_receivedMDirective:(AQNetacquireDirective *)messageDirective;
 {
-
 	if ([[messageDirective parameters] count] != 1)
 		return;
 	
 	NSString *message = [[messageDirective parameters] objectAtIndex:0];
 	
-	if ([[message substringToIndex:26] isEqualToString:@"\"E;Duplicate user Nickname"]) {
-		id associatedObject = [self _firstAssociatedObjectThatRespondsToSelector:@selector(displayNameAlreadyInUse)];
-		if (associatedObject != nil)
-			[associatedObject displayNameAlreadyInUse];
-		
+	if ([message length] < 17)
+		return;
+	
+	if ([[message substringToIndex:17] isEqualToString:@"\"W;Test Mode Used"]) {
+		[[self _firstAssociatedObjectThatRespondsToSelector:@selector(enteringTestMode)] enteringTestMode];
 		return;
 	}
+	
+	if ([message length] < 23)
+		return;
 	
 	if ([[message substringToIndex:23] isEqualToString:@"\"W;Test mode turned on."]) {
 		[[self _firstAssociatedObjectThatRespondsToSelector:@selector(enteringTestMode)] enteringTestMode];
 		return;
 	}
 	
+	if ([message length] < 24)
+		return;
+	
 	if ([[message substringToIndex:24] isEqualToString:@"\"W;Test mode turned off."]) {
 		[[self _firstAssociatedObjectThatRespondsToSelector:@selector(exitingTestMode)] exitingTestMode];
+		return;
+	}
+	
+	if ([message length] < 26)
+		return;
+	
+	if ([[message substringToIndex:26] isEqualToString:@"\"E;Duplicate user Nickname"]) {
+		id associatedObject = [self _firstAssociatedObjectThatRespondsToSelector:@selector(displayNameAlreadyInUse)];
+		if (associatedObject != nil)
+			[associatedObject displayNameAlreadyInUse];
+		
 		return;
 	}
 }
@@ -693,50 +709,49 @@
 	
 	if (netacquireTableIndex >= 33 && netacquireTableIndex <= 80) {
 		// Shares in a hotel
-		if ([netacquireCaption length] <= 0)
-			return;
+		int shares = [netacquireCaption length] == 0 ? 0 : [netacquireCaption intValue];
 		
 		id associatedObject;
 		
 		if (netacquireTableIndex >= 33 && netacquireTableIndex <= 38) {
 			associatedObject = [self _firstAssociatedObjectThatRespondsToSelector:@selector(playerAtIndex:hasSacksonShares:)];
-			[associatedObject playerAtIndex:(netacquireTableIndex - 33) hasSacksonShares:[netacquireCaption intValue]];
+			[associatedObject playerAtIndex:(netacquireTableIndex - 33) hasSacksonShares:shares];
 			return;			
 		}
 		
 		if (netacquireTableIndex >= 40 && netacquireTableIndex <= 45) {
 			associatedObject = [self _firstAssociatedObjectThatRespondsToSelector:@selector(playerAtIndex:hasZetaShares:)];
-			[associatedObject playerAtIndex:(netacquireTableIndex - 40) hasZetaShares:[netacquireCaption intValue]];
+			[associatedObject playerAtIndex:(netacquireTableIndex - 40) hasZetaShares:shares];
 			return;			
 		}
 		
 		if (netacquireTableIndex >= 47 && netacquireTableIndex <= 52) {
 			associatedObject = [self _firstAssociatedObjectThatRespondsToSelector:@selector(playerAtIndex:hasAmericaShares:)];
-			[associatedObject playerAtIndex:(netacquireTableIndex - 47) hasAmericaShares:[netacquireCaption intValue]];
+			[associatedObject playerAtIndex:(netacquireTableIndex - 47) hasAmericaShares:shares];
 			return;			
 		}
 		
 		if (netacquireTableIndex >= 54 && netacquireTableIndex <= 59) {
 			associatedObject = [self _firstAssociatedObjectThatRespondsToSelector:@selector(playerAtIndex:hasFusionShares:)];
-			[associatedObject playerAtIndex:(netacquireTableIndex - 54) hasFusionShares:[netacquireCaption intValue]];
+			[associatedObject playerAtIndex:(netacquireTableIndex - 54) hasFusionShares:shares];
 			return;			
 		}
 		
 		if (netacquireTableIndex >= 61 && netacquireTableIndex <= 66) {
 			associatedObject = [self _firstAssociatedObjectThatRespondsToSelector:@selector(playerAtIndex:hasHydraShares:)];
-			[associatedObject playerAtIndex:(netacquireTableIndex - 61) hasHydraShares:[netacquireCaption intValue]];
+			[associatedObject playerAtIndex:(netacquireTableIndex - 61) hasHydraShares:shares];
 			return;			
 		}
 		
 		if (netacquireTableIndex >= 68 && netacquireTableIndex <= 73) {
 			associatedObject = [self _firstAssociatedObjectThatRespondsToSelector:@selector(playerAtIndex:hasQuantumShares:)];
-			[associatedObject playerAtIndex:(netacquireTableIndex - 68) hasQuantumShares:[netacquireCaption intValue]];
+			[associatedObject playerAtIndex:(netacquireTableIndex - 68) hasQuantumShares:shares];
 			return;			
 		}
 		
 		if (netacquireTableIndex >= 75 && netacquireTableIndex <= 80) {
 			associatedObject = [self _firstAssociatedObjectThatRespondsToSelector:@selector(playerAtIndex:hasPhoenixShares:)];
-			[associatedObject playerAtIndex:(netacquireTableIndex - 75) hasPhoenixShares:[netacquireCaption intValue]];
+			[associatedObject playerAtIndex:(netacquireTableIndex - 75) hasPhoenixShares:shares];
 			return;			
 		}
 	}

@@ -310,10 +310,10 @@
 		NSMutableString *listOfWinners = [NSMutableString stringWithString:[[winners objectAtIndex:0] name]];
 		int i;
 		for (i = 1; i < ([winners count] - 1); ++i) {
-			[listOfWinners appendString:[NSString stringWithFormat:@", %@", [winners objectAtIndex:i]]];
+			[listOfWinners appendString:[NSString stringWithFormat:@", %@", [[winners objectAtIndex:i] name]]];
 		}
 		[listOfWinners appendString:@" and "];
-		[listOfWinners appendString:[winners lastObject]];
+		[listOfWinners appendString:[[winners lastObject] name]];
 		[congratulateWinnerAlert setInformativeText:[NSString stringWithFormat:@"%@ %@", listOfWinners, NSLocalizedStringFromTable(@"have won the game!", @"Acquire", @"Text saying multiple people have won the game.")]];
 	}
 	[congratulateWinnerAlert setAlertStyle:NSInformationalAlertStyle];
@@ -358,56 +358,75 @@
 // NSTableDataSource informal protocol
 - (NSInteger)numberOfRowsInTableView:(NSTableView *)aTableView;
 {
-	return [_game numberOfPlayers];
+	return 7;
 }
 
 - (id)tableView:(NSTableView *)aTableView objectValueForTableColumn:(NSTableColumn *)aTableColumn row:(NSInteger)rowIndex;
-{	
-	if (rowIndex >= [_game numberOfPlayers])
+{
+	if (rowIndex >= [_game numberOfPlayers] && rowIndex != 6)
 		return @"";
 	
 	if ([[aTableColumn identifier] isEqualToString:@"playerName"])
 		if ([_game isOn] && [_game activePlayerIndex] == rowIndex)
 			return [NSString stringWithFormat:@"• %@", [[_game playerAtIndex:rowIndex] name]];
+		else if (rowIndex == 6)
+			return @"Bank";
 		else
 			return [[_game playerAtIndex:rowIndex] name];
 	else if ([[aTableColumn identifier] isEqualToString:@"sharesOfSackson"])
-		if ([[_game playerAtIndex:rowIndex] numberOfSharesOfHotelNamed:@"Sackson"] == 0)
+		if (rowIndex == 6)
+			return [NSString stringWithFormat:@"%d", [[_game hotelNamed:@"Sackson"] sharesInBank]];
+		else if ([[_game playerAtIndex:rowIndex] numberOfSharesOfHotelNamed:@"Sackson"] == 0)
 			return @"";
 		else
 			return [NSString stringWithFormat:@"%d", [[_game playerAtIndex:rowIndex] numberOfSharesOfHotelNamed:@"Sackson"]];
 	else if ([[aTableColumn identifier] isEqualToString:@"sharesOfZeta"])
-		if ([[_game playerAtIndex:rowIndex] numberOfSharesOfHotelNamed:@"Zeta"] == 0)
+		if (rowIndex == 6)
+			return [NSString stringWithFormat:@"%d", [[_game hotelNamed:@"Zeta"] sharesInBank]];
+		else if ([[_game playerAtIndex:rowIndex] numberOfSharesOfHotelNamed:@"Zeta"] == 0)
 			return @"";
 		else
 			return [NSString stringWithFormat:@"%d", [[_game playerAtIndex:rowIndex] numberOfSharesOfHotelNamed:@"Zeta"]];
 	else if ([[aTableColumn identifier] isEqualToString:@"sharesOfAmerica"])
-		if ([[_game playerAtIndex:rowIndex] numberOfSharesOfHotelNamed:@"America"] == 0)
+		if (rowIndex == 6)
+			return [NSString stringWithFormat:@"%d", [[_game hotelNamed:@"America"] sharesInBank]];
+		else if ([[_game playerAtIndex:rowIndex] numberOfSharesOfHotelNamed:@"America"] == 0)
 			return @"";
 		else
 			return [NSString stringWithFormat:@"%d", [[_game playerAtIndex:rowIndex] numberOfSharesOfHotelNamed:@"America"]];
 	else if ([[aTableColumn identifier] isEqualToString:@"sharesOfFusion"])
-		if ([[_game playerAtIndex:rowIndex] numberOfSharesOfHotelNamed:@"Fusion"] == 0)
+		if (rowIndex == 6)
+			return [NSString stringWithFormat:@"%d", [[_game hotelNamed:@"Fusion"] sharesInBank]];
+		else if ([[_game playerAtIndex:rowIndex] numberOfSharesOfHotelNamed:@"Fusion"] == 0)
 			return @"";
 		else
 			return [NSString stringWithFormat:@"%d", [[_game playerAtIndex:rowIndex] numberOfSharesOfHotelNamed:@"Fusion"]];
 	else if ([[aTableColumn identifier] isEqualToString:@"sharesOfHydra"])
-		if ([[_game playerAtIndex:rowIndex] numberOfSharesOfHotelNamed:@"Hydra"] == 0)
+		if (rowIndex == 6)
+			return [NSString stringWithFormat:@"%d", [[_game hotelNamed:@"Hydra"] sharesInBank]];
+		else if ([[_game playerAtIndex:rowIndex] numberOfSharesOfHotelNamed:@"Hydra"] == 0)
 			return @"";
 		else
 			return [NSString stringWithFormat:@"%d", [[_game playerAtIndex:rowIndex] numberOfSharesOfHotelNamed:@"Hydra"]];
 	else if ([[aTableColumn identifier] isEqualToString:@"sharesOfPhoenix"])
-		if ([[_game playerAtIndex:rowIndex] numberOfSharesOfHotelNamed:@"Phoenix"] == 0)
+		if (rowIndex == 6)
+			return [NSString stringWithFormat:@"%d", [[_game hotelNamed:@"Phoenix"] sharesInBank]];
+		else if ([[_game playerAtIndex:rowIndex] numberOfSharesOfHotelNamed:@"Phoenix"] == 0)
 			return @"";
 		else
 			return [NSString stringWithFormat:@"%d", [[_game playerAtIndex:rowIndex] numberOfSharesOfHotelNamed:@"Phoenix"]];
 	else if ([[aTableColumn identifier] isEqualToString:@"sharesOfQuantum"])
-		if ([[_game playerAtIndex:rowIndex] numberOfSharesOfHotelNamed:@"Quantum"] == 0)
+		if (rowIndex == 6)
+			return [NSString stringWithFormat:@"%d", [[_game hotelNamed:@"Quantum"] sharesInBank]];
+		else if ([[_game playerAtIndex:rowIndex] numberOfSharesOfHotelNamed:@"Quantum"] == 0)
 			return @"";
 		else
 			return [NSString stringWithFormat:@"%d", [[_game playerAtIndex:rowIndex] numberOfSharesOfHotelNamed:@"Quantum"]];
 	else if ([[aTableColumn identifier] isEqualToString:@"cash"])
-		return [NSString stringWithFormat:@"$%d", [[_game playerAtIndex:rowIndex] cash]];
+		if (rowIndex == 6)
+			return @"∞";
+		else
+			return [NSString stringWithFormat:@"$%d", [[_game playerAtIndex:rowIndex] cash]];
 	
 	return @"";
 }

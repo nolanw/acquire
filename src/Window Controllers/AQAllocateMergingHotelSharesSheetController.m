@@ -95,6 +95,10 @@
 			[self _updateTextFieldsAndSteppers];
 			return;
 		}
+		if ((int)newValue > [_survivingHotel sharesInBank]) {
+			[self _updateTextFieldsAndSteppers];
+			return;
+		}
 		_sharesTraded += 1.0;
 		if (_sharesKeptInMergingHotel >= 2.0)
 			_sharesKeptInMergingHotel -= 2.0;
