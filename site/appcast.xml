@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle"  xmlns:dc="http://purl.org/dc/elements/1.1/">
+   <channel>
+      <title>Acquire's Changelog</title>
+      <link>http://acquire.nwaite.com/appcast.xml</link>
+      <description>Most recent changes with links to updates.</description>
+      <language>en</language>
+			<item>
+				<title>Version 0.9.4 (minor bugfix release)</title>
+				<sparkle:releaseNotesLink>
+					http://acquire.nwaite.com/release/Acquire_0.9.4.html
+				</sparkle:releaseNotesLink>
+				<pubDate>Sat, 20 Sep 2008 04:15:00 -0400</pubDate>
+				<enclosure sparkle:dsaSignature="MCwCFEjCFyOuGKLzDDnBkiJsn5wigbMuAhR6HExCM3UGPVRp02KZcUOlnDtfyA==" url="http://acquire.nwaite.com/release/Acquire_0.9.4.zip" sparkle:version="0.9.4" length="1025908" type="application/octet-stream"/>
+			</item>
+   </channel>
+</rss>

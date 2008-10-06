@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>src/Window Controllers/AQGameWindowController.m</string>
+	<string>src/Game Classes/AQGame.m</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -64,7 +64,7 @@
 			<key>filename</key>
 			<string>TODO</string>
 			<key>lastUsed</key>
-			<date>2008-09-20T07:55:28Z</date>
+			<date>2008-10-05T13:17:04Z</date>
 		</dict>
 	</array>
 	<key>fileHierarchyDrawerWidth</key>
@@ -78,77 +78,94 @@
 				<key>column</key>
 				<integer>0</integer>
 				<key>line</key>
-				<integer>45</integer>
+				<integer>39</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>2</integer>
+			<integer>3</integer>
 		</dict>
 		<key>src/Game Classes/AQGame.m</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
+				<integer>34</integer>
+				<key>line</key>
+				<integer>1029</integer>
+			</dict>
+			<key>columnSelection</key>
+			<false/>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>1012</integer>
+			<key>selectFrom</key>
+			<dict>
+				<key>column</key>
+				<integer>8</integer>
+				<key>line</key>
+				<integer>1029</integer>
+			</dict>
+			<key>selectTo</key>
+			<dict>
+				<key>column</key>
+				<integer>34</integer>
+				<key>line</key>
+				<integer>1029</integer>
+			</dict>
+		</dict>
+		<key>src/Network Classes/AQConnectionController.h</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
 				<integer>0</integer>
 				<key>line</key>
-				<integer>1378</integer>
+				<integer>42</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>1349</integer>
+			<integer>12</integer>
 		</dict>
 		<key>src/Network Classes/AQConnectionController.m</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>0</integer>
+				<integer>32</integer>
 				<key>line</key>
-				<integer>599</integer>
+				<integer>529</integer>
 			</dict>
+			<key>columnSelection</key>
+			<false/>
 			<key>firstVisibleColumn</key>
-			<integer>0</integer>
+			<integer>88</integer>
 			<key>firstVisibleLine</key>
-			<integer>462</integer>
-		</dict>
-		<key>src/Window Controllers/AQAllocateMergingHotelSharesSheetController.m</key>
-		<dict>
-			<key>caret</key>
+			<integer>516</integer>
+			<key>selectFrom</key>
 			<dict>
 				<key>column</key>
-				<integer>24</integer>
+				<integer>19</integer>
 				<key>line</key>
-				<integer>97</integer>
+				<integer>529</integer>
 			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>71</integer>
-		</dict>
-		<key>src/Window Controllers/AQGameWindowController.m</key>
-		<dict>
-			<key>caret</key>
+			<key>selectTo</key>
 			<dict>
 				<key>column</key>
-				<integer>9</integer>
+				<integer>45</integer>
 				<key>line</key>
-				<integer>360</integer>
+				<integer>529</integer>
 			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>208</integer>
-			<key>firstVisibleLine</key>
-			<integer>350</integer>
 		</dict>
 	</dict>
 	<key>openDocuments</key>
 	<array>
 		<string>TODO</string>
+		<string>src/Network Classes/AQConnectionController.h</string>
 		<string>src/Network Classes/AQConnectionController.m</string>
 		<string>src/Game Classes/AQGame.m</string>
-		<string>src/Window Controllers/AQAllocateMergingHotelSharesSheetController.m</string>
-		<string>src/Window Controllers/AQGameWindowController.m</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>

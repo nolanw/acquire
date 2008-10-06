@@ -1,8 +1,7 @@
 New features
 ------------
-- Implement network play.
-	- Let user create a new game.
 - Allow for both new and old hotel names (user-configurable?).
+	- Switch hotel colors too.
 - Make scoreboard columns' backgrounds relate to their hotels.
 - Provide a legend of hotels and their colors.
 - Design and implement a proper game logging class (which the Game Log in the Game Window class can access).
@@ -21,7 +20,6 @@ New features
 	- Make 'Create Game' button a permanent fixture on the top.
 - Generate appcast.xml and appropriate release notes page when building a Release.
 - Show value of shares being sold during merger.
-- Add a 'Bank' line to the scoreboard.
 - Show unplayable tiles on the board.
 
 
@@ -39,7 +37,10 @@ Known bugs
 - Network game: sending messages involving quotation marks often crashes Netacquire.
 - Network game: Netacquire sometimes appends directives to game chat messages, making the chunk of directives unparseable.
 
-Fixed bugs
-----------
-- Network game: game winner no longer congratulated before final hotel sell-off counted.
-- Network game: "Allocate your shares" sheet lets you trade even when hotel doesn't have enough shares in bank.
+
+** New for release 0.9.5 **
+
+Features added
+--------------
+- AsyncSocket updated to 4.3.5.
+- Sparkle updated to 1.5b6.
