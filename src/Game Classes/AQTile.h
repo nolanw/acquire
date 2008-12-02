@@ -27,7 +27,7 @@ typedef enum _AQTileState {
 
 // Instance methods
 // init/dealloc
-- (id)initWithColumn:(int)newCol row:(NSString *)newRow;
+- (id)initWithRow:(NSString *)newRow column:(int)newCol;
 - (void)dealloc;
 
 // NSObject

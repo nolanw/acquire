@@ -10,16 +10,24 @@
 #import "AQGameArrayController.h"
 
 #pragma mark -
+
 @interface AQGame (Private)
 #pragma mark Private interface
-// init/dealloc
+
+#pragma mark 
+#pragma mark init/dealloc
+
 - (id)_initGameWithArrayController:(id)arrayController;
 
-// Game window
+#pragma mark 
+#pragma mark UI
+
 - (void)_updateGameWindow;
 - (void)_tilePlayed:(AQTile *)tile;
 
-// Sheets
+#pragma mark 
+#pragma mark Sheet showings
+
 - (void)_showPurchaseSharesSheetWithHotels:(NSArray *)hotels;
 - (void)_showCreateNewHotelSheetWithHotels:(NSArray *)hotels tile:(AQTile *)tile;
 - (void)_showChooseMergerSurvivorSheetWithMergingHotels:(NSArray *)mergingHotels potentialSurvivors:(NSArray *)potentialSurvivors mergeTile:(AQTile *)mergeTile;
@@ -27,10 +35,13 @@
 @end
 
 #pragma mark -
+
 @implementation AQGame
 #pragma mark Implementation
 
+#pragma mark 
 #pragma mark init/dealloc
+
 - (void)dealloc;
 {
 	[_arrayController release];
@@ -43,7 +54,9 @@
 	[super dealloc];
 }
 
-#pragma mark Players
+#pragma mark 
+#pragma mark Player accessors/setters
+
 - (int)numberOfPlayers;
 {
 	return [_players count];
@@ -101,9 +114,10 @@
 	[_gameWindowController reloadScoreboard];
 }
 
+#pragma mark 
+#pragma mark Hotel accessors/setters
 
-#pragma mark Hotels
-- (NSArray *)initialHotelsArray;
++ (NSArray *)initialHotelsArray;
 {
 	return [NSArray arrayWithObjects:[AQHotel sacksonHotel], [AQHotel zetaHotel], [AQHotel americaHotel], [AQHotel fusionHotel], [AQHotel hydraHotel], [AQHotel quantumHotel], [AQHotel phoenixHotel], nil];
 }
@@ -255,8 +269,9 @@
 	return hotelsWithPurchaseableShares;
 }
 
-
+#pragma mark 
 #pragma mark UI
+
 - (void)loadGameWindow;
 {
 	if (_gameWindowController == nil)
@@ -328,8 +343,9 @@
 	[self showPurchaseSharesSheetIfNeededOrAdvanceTurn];
 }
 
-
+#pragma mark 
 #pragma mark Game actions
+
 - (void)endCurrentTurn;
 {
 	if ([self isNetworkGame]) {
@@ -449,8 +465,9 @@
 	return playersWithMostCash;
 }
 
-
+#pragma mark 
 #pragma mark Turn actions
+
 - (BOOL)tileIsUnplayable:(AQTile *)tile;
 {
 	NSArray *adjacentHotels = [self hotelsAdjacentToTile:tile];
@@ -613,8 +630,9 @@
 	[_gameWindowController reloadScoreboard];
 }
 
-
+#pragma mark 
 #pragma mark Passthrus
+
 - (NSColor *)tileNotInHotelColor;
 {
 	return [AQHotel tileNotInHotelColor];
@@ -652,10 +670,13 @@
 @end
 
 #pragma mark -
+
 @implementation AQGame (LocalGame)
 #pragma mark LocalGame implementation
 
+#pragma mark 
 #pragma mark init/dealloc
+
 - (id)initLocalGameWithArrayController:(id)arrayController;
 {
 	if (![self _initGameWithArrayController:arrayController])
@@ -667,15 +688,17 @@
 	return self;
 }
 
-
+#pragma mark 
 #pragma mark Accessors/setters
+
 - (BOOL)isLocalGame;
 {
 	return (_associatedConnection == nil);
 }
 
-
+#pragma mark 
 #pragma mark Pre-game fun
+
 - (void)determineStartingOrder;
 {
 	NSMutableArray *startingTiles = [NSMutableArray arrayWithCapacity:[self numberOfPlayers]];
@@ -713,8 +736,9 @@
 			[curPlayer drewTile:[_board tileFromTileBag]];
 }
 
-
+#pragma mark 
 #pragma mark Game actions
+
 - (void)startGame;
 {
 	if (![self isLocalGame])
@@ -755,8 +779,9 @@
 	[_gameWindowController reloadScoreboard];
 }
 
-
+#pragma mark 
 #pragma mark Turn actions
+
 - (void)mergerHappeningAtTile:(AQTile *)tile;
 {
 	if ([self tileIsUnplayable:tile])
@@ -933,10 +958,13 @@
 @end
 
 #pragma mark -
+
 @implementation AQGame (NetworkGame)
 #pragma mark NetworkGame implementation
 
+#pragma mark 
 #pragma mark init/dealloc
+
 - (id)initNetworkGameWithArrayController:(id)arrayController associatedConnection:(AQConnectionController *)associatedConnection;
 {
 	if (![self _initGameWithArrayController:arrayController])
@@ -948,8 +976,9 @@
 	return self;
 }
 
-
+#pragma mark 
 #pragma mark Accessors/setters
+
 - (BOOL)isNetworkGame;
 {
 	return (_associatedConnection != nil);
@@ -970,8 +999,9 @@
 	return _isOn;
 }
 
-
+#pragma mark 
 #pragma mark Game actions
+
 - (void)determineAndCongratulateWinner;
 {
 	if (_winnerCongratulated)
@@ -998,8 +1028,9 @@
 	[self _updateGameWindow];
 }
 
-
+#pragma mark 
 #pragma mark Turn actions
+
 - (void)showCreateNewHotelSheet;
 {
 	[self _showCreateNewHotelSheetWithHotels:[self hotelsNotOnBoard] tile:nil];
@@ -1034,8 +1065,9 @@
 	[self _showPurchaseSharesSheetWithHotels:[self hotelsWithPurchaseableShares]];
 }
 
+#pragma mark 
+#pragma mark Board accessors/setters
 
-#pragma mark Board
 - (void)boardTile:(AQTile *)tile isNetacquireChainID:(int)netacquireChainID;
 {
 	if ([[self activePlayer] hasTileNamed:[tile description]]) {
@@ -1072,8 +1104,9 @@
 	return AQTileUnplayed;
 }
 
+#pragma mark 
+#pragma mark Hotel accessors/setters
 
-#pragma mark Hotels
 - (void)getChainFromHotelIndexes:(NSArray *)hotelIndexes;
 {
 	NSMutableArray *hotels = [NSMutableArray arrayWithCapacity:[hotelIndexes count]];
@@ -1109,8 +1142,9 @@
 	return nil;
 }
 
+#pragma mark 
+#pragma mark Player accessors/setters
 
-#pragma mark Players
 - (AQPlayer *)localPlayer;
 {
 	if (_localPlayerName == nil)
@@ -1288,8 +1322,9 @@
 	[_gameWindowController reloadScoreboard];
 }
 
-
+#pragma mark 
 #pragma mark Passthrus
+
 - (void)incomingGameMessage:(NSString *)gameMessage;
 {
 	[_gameWindowController incomingGameMessage:gameMessage];
@@ -1307,10 +1342,13 @@
 @end
 
 #pragma mark -
+
 @implementation AQGame (Private)
 #pragma mark Private implementation
 
+#pragma mark 
 #pragma mark init/dealloc
+
 // This init method gets called by both init methods in the LocalGame and NetworkGame categories.
 - (id)_initGameWithArrayController:(id)arrayController;
 {
@@ -1321,7 +1359,7 @@
 	_gameWindowController = nil;
 	
 	_board = [[AQBoard alloc] init];
-	_hotels = [[self initialHotelsArray] retain];
+	_hotels = [[AQGame initialHotelsArray] retain];
 	_players = [[NSMutableArray arrayWithCapacity:6] retain];
 	_localPlayerName = nil;
 	_tilePlayedThisTurn = NO;
@@ -1335,8 +1373,9 @@
 	return self;
 }
 
+#pragma mark 
+#pragma mark UI
 
-#pragma mark Game window
 - (void)_updateGameWindow;
 {
 	if ([self isNetworkGame]) {
@@ -1364,8 +1403,9 @@
 	[_gameWindowController updateTileRack:[[self activePlayer] tiles]];
 }
 
+#pragma mark 
+#pragma mark Sheet showings
 
-#pragma mark Sheets
 - (void)_showCreateNewHotelSheetWithHotels:(NSArray *)hotels tile:(AQTile *)tile;
 {
 	[_gameWindowController showCreateNewHotelSheetWithHotels:hotels atTile:tile];

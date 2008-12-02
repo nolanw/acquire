@@ -59,7 +59,7 @@
 
 // Instance methods
 // init/dealloc
-- (id)initWithColumn:(int)newCol row:(NSString *)newRow;
+- (id)initWithRow:(NSString *)newRow column:(int)newCol;
 {
 	if (![super init])
 		return nil;
@@ -138,16 +138,22 @@
 // Class methods
 + (int)netacquireIDFromTile:(AQTile *)tile;
 {
+	NSAssert(tile, @"tile was nil");
+	
 	return ([tile column] * 9) - (8 - [tile rowInt]);
 }
 
 + (int)columnFromNetacquireID:(int)netacquireID;
 {
+	NSAssert((netacquireID >= 1 || netacquireID <= 108), @"invalid netacquireID");
+	
 	return ((netacquireID - 1) / 9) + 1;
 }
 
 + (NSString *)rowFromNetacquireID:(int)netacquireID;
 {
+	NSAssert((netacquireID >= 1 || netacquireID <= 108), @"invalid netacquireID");
+	
 	return [AQTile rowStringFromInt:((netacquireID - 1) % 9)];
 }
 

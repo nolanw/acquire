@@ -3,19 +3,24 @@
 //
 // Created June 26, 2008 by nwaite
 
+#pragma mark -
 @interface AQNetacquireDirective : NSObject
+#pragma mark Interface
 {
 	NSString 		*_directiveCode;
 	NSMutableArray 	*_parameters;
 	NSData 			*_protocolData;
 }
 
-- (id)init;
-- (id)initWithData:(NSData *)data;
-- (id)initWithString:(NSString *)string;
+// Class methods
 + (id)directiveWithData:(NSData *)data;
 + (id)directiveWithString:(NSString *)string;
 + (id)directiveWithCode:(NSString *)code parameters:(NSString *)firstParameter, ...;
+
+// init/dealloc
+- (id)init;
+- (id)initWithData:(NSData *)data;
+- (id)initWithString:(NSString *)string;
 - (void)dealloc;
 
 // Accessors/setters/etc.

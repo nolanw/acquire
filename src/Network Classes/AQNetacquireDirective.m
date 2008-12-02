@@ -4,7 +4,11 @@
 
 #import "AQNetacquireDirective.h"
 
+#pragma mark -
+
 @interface AQNetacquireDirective (Private)
+#pragma mark Private interface
+
 - (void)_setDirectiveCodeWithoutUpdate:(NSString *)directiveCode;
 - (void)_setParametersWithoutUpdate:(NSArray *)parameters;
 
@@ -15,36 +19,9 @@
 - (void)_updateUsingDirectiveCodeAndParameters;
 @end
 
+#pragma mark -
 @implementation AQNetacquireDirective
-- (id)init;
-{
-	if (![super init])
-		return nil;
-	
-	_directiveCode = nil;
-	_parameters = [[NSMutableArray alloc] initWithCapacity:5];
-	_protocolData = nil;
-
-	return self;
-}
-
-- (id)initWithData:(NSData *)data;
-{
-	[self init];
-	
-	[self setProtocolData:data];
-	
-	return self;
-}
-
-- (id)initWithString:(NSString *)string;
-{
-	[self init];
-	
-	[self setProtocolData:[string dataUsingEncoding:NSASCIIStringEncoding]];
-	
-	return self;
-}
+#pragma mark Implementation
 
 + (id)directiveWithData:(NSData *)data;
 {
@@ -71,6 +48,40 @@
 	}
 	
 	return newDirective;
+}
+
+
+// init/dealloc
+- (id)init;
+{
+	if (![super init])
+		return nil;
+	
+	_directiveCode = nil;
+	_parameters = [[NSMutableArray alloc] initWithCapacity:5];
+	_protocolData = nil;
+
+	return self;
+}
+
+- (id)initWithData:(NSData *)data;
+{
+    if (![self init])
+        return nil;
+	
+	[self setProtocolData:data];
+	
+	return self;
+}
+
+- (id)initWithString:(NSString *)string;
+{
+    if (![self init])
+        return nil;
+	
+	[self setProtocolData:[string dataUsingEncoding:NSASCIIStringEncoding]];
+	
+	return self;
 }
 
 - (void)dealloc;
@@ -154,7 +165,11 @@
 }
 @end
 
+#pragma mark -
+
 @implementation AQNetacquireDirective (Private)
+#pragma mark Private implementation
+
 - (void)_setDirectiveCodeWithoutUpdate:(NSString *)directiveCode;
 {
 	[_directiveCode release];

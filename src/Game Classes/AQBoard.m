@@ -5,14 +5,21 @@
 #import "AQBoard.h"
 
 #pragma mark -
+
 @interface AQBoard (Private)
 #pragma mark Private interface
+
 - (void)_createTileMatrixAndFillTileBag;
 @end
 
 #pragma mark -
+
 @implementation AQBoard
 #pragma mark Implementation
+
+#pragma mark 
+#pragma mark init/dealloc
+
 - (id)init;
 {
     if (![super init])
@@ -36,8 +43,9 @@
 	[super dealloc];
 }
 
+#pragma mark 
+#pragma mark Tile accessors
 
-// Tile accessors
 - (AQTile *)tileOnBoardAtColumn:(int)col row:(NSString *)row;
 {
     int rowNameAsInt = [AQTile rowIntFromString:row];
@@ -68,8 +76,9 @@
     return randomTile;
 }
 
+#pragma mark 
+#pragma mark Lists of tiles
 
-// Lists of tiles
 - (NSArray *)tilesOrthogonalToTile:(AQTile *)tile;
 {
 	NSMutableArray *ret = [NSMutableArray arrayWithCapacity:4];
@@ -94,9 +103,13 @@
 @end
 
 #pragma mark -
+
 @implementation AQBoard (NetworkGame)
 #pragma mark NetworkGame implementation
-// Accessors
+
+#pragma mark 
+#pragma mark Accessors
+
 - (AQTile *)tileFromNetacquireID:(int)netacquireID;
 {	
 	return [self tileOnBoardAtColumn:[AQTile columnFromNetacquireID:netacquireID] row:[AQTile rowFromNetacquireID:netacquireID]];
@@ -104,8 +117,10 @@
 @end
 
 #pragma mark -
+
 @implementation AQBoard (Private)
 #pragma mark Private implementation
+
 - (void)_createTileMatrixAndFillTileBag;
 {
     NSMutableArray  *columns = [NSMutableArray array];
@@ -118,7 +133,7 @@
 		currentRow = [NSMutableArray array];
 		
 		for (currentRowAsInt = 0; currentRowAsInt < 9; ++currentRowAsInt) {
-			currentTile = [[AQTile alloc] initWithColumn:currentColumnAsInt row:[AQTile rowStringFromInt:currentRowAsInt]];
+			currentTile = [[AQTile alloc] initWithRow:[AQTile rowStringFromInt:currentRowAsInt] column:currentColumnAsInt];
 			[currentRow addObject:currentTile];
 			[_tileBag addObject:currentTile];
 		}

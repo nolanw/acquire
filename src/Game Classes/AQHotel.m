@@ -5,6 +5,7 @@
 #import "AQHotel.h"
 
 #pragma mark -
+
 @implementation AQHotel
 #pragma mark Implementation
 // Class methods

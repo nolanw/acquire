@@ -30,12 +30,12 @@ Desired rearrangements
 - Eliminate need for passthru selectors where reasonable.
 
 - Classes I've rearranged:
-	- AQBoard, AQGame, AQHotel, AQPlayer, AQTile
+	- AQBoard, AQGame, AQHotel, AQPlayer, AQTile, AQNetacquireDirective, AQConnectionController
 
 Known bugs
 ---------
 - Network game: sending messages involving quotation marks often crashes Netacquire.
-- Network game: Netacquire sometimes appends directives to game chat messages, making the chunk of directives unparseable.
+- Network game: Netacquire sometimes appends directives to game chat messages, making the chunk of directives unparseable. Rather than crash, those directives show up in the message view.
 
 
 ** New for release 0.9.5 **
