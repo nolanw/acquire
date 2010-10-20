@@ -193,6 +193,7 @@
 		}
 		
 		[[self activePlayer] addSharesOfHotelNamed:[hotelNames objectAtIndex:i] numberOfShares:[[sharesPurchased objectAtIndex:i] intValue]];
+        [[self hotelNamed:[hotelNames objectAtIndex:i]] removeSharesFromBank:[[sharesPurchased objectAtIndex:i] intValue]];
 		[[self activePlayer] subtractCash:([[sharesPurchased objectAtIndex:i] intValue] * [[self hotelNamed:[hotelNames objectAtIndex:i]] sharePrice])];
 		[purchaseLog appendString:[NSString stringWithFormat:@"\n\t• %d shares of %@ at $%d each.", [[sharesPurchased objectAtIndex:i] intValue], [hotelNames objectAtIndex:i], [[self hotelNamed:[hotelNames objectAtIndex:i]] sharePrice]]];
 	}
@@ -541,6 +542,7 @@
 	}
 	[_gameWindowController tilesChanged:[hotel tiles]];
 	[[self activePlayer] addSharesOfHotelNamed:[hotel name] numberOfShares:1];
+    [hotel removeSharesFromBank:1];
 	[_gameWindowController reloadScoreboard];
 	[self _tilePlayed:tile];
 	[_gameWindowController incomingGameLogEntry:[NSString stringWithFormat:@"* %@ was created.", [hotel name]]];

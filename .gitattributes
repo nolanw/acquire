@@ -1,0 +1,2 @@
+# Treat project files as binary, not text.
+*.pbxproj binary
