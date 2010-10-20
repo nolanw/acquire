@@ -29,6 +29,7 @@
 		F29A825B0DEAA6500060432A /* AQAcquireController.m in Sources */ = {isa = PBXBuildFile; fileRef = F29A82560DEAA6500060432A /* AQAcquireController.m */; };
 		F29A825C0DEAA6500060432A /* AQConnectionArrayController.m in Sources */ = {isa = PBXBuildFile; fileRef = F29A82580DEAA6500060432A /* AQConnectionArrayController.m */; };
 		F29A825D0DEAA6500060432A /* AQGameArrayController.m in Sources */ = {isa = PBXBuildFile; fileRef = F29A825A0DEAA6500060432A /* AQGameArrayController.m */; };
+		F2A7E4B20EE46DA000432D03 /* AQTileTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F2A7E4B10EE46DA000432D03 /* AQTileTests.m */; };
 		F2ABA59A0DEE718A00F58E4B /* AQBoard.m in Sources */ = {isa = PBXBuildFile; fileRef = F2ABA5930DEE718A00F58E4B /* AQBoard.m */; };
 		F2ABA59B0DEE718A00F58E4B /* AQHotel.m in Sources */ = {isa = PBXBuildFile; fileRef = F2ABA5950DEE718A00F58E4B /* AQHotel.m */; };
 		F2ABA59C0DEE718A00F58E4B /* AQPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = F2ABA5970DEE718A00F58E4B /* AQPlayer.m */; };
@@ -44,6 +45,16 @@
 		F2D44CAB0E48274D003B1E91 /* AQAllocateMergingHotelSharesSheetController.m in Sources */ = {isa = PBXBuildFile; fileRef = F2D44CAA0E48274D003B1E91 /* AQAllocateMergingHotelSharesSheetController.m */; };
 		F2EB62A60E1EF87E00FE5E45 /* AQConnectionController.m in Sources */ = {isa = PBXBuildFile; fileRef = F2EB62A50E1EF87E00FE5E45 /* AQConnectionController.m */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		F2A7E4990EE46CAD00432D03 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8D1107260486CEB800E47090;
+			remoteInfo = Acquire;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		F236ED2C0E50AC6600A0B1D0 /* CopyFiles */ = {
@@ -95,6 +106,10 @@
 		F29A82580DEAA6500060432A /* AQConnectionArrayController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AQConnectionArrayController.m; path = "src/Main Controllers/AQConnectionArrayController.m"; sourceTree = "<group>"; };
 		F29A82590DEAA6500060432A /* AQGameArrayController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AQGameArrayController.h; path = "src/Main Controllers/AQGameArrayController.h"; sourceTree = "<group>"; };
 		F29A825A0DEAA6500060432A /* AQGameArrayController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AQGameArrayController.m; path = "src/Main Controllers/AQGameArrayController.m"; sourceTree = "<group>"; };
+		F2A7E4940EE46C9400432D03 /* All Unit Tests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "All Unit Tests.octest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F2A7E4950EE46C9400432D03 /* All Unit Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "All Unit Tests-Info.plist"; sourceTree = "<group>"; };
+		F2A7E4B00EE46DA000432D03 /* AQTileTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AQTileTests.h; path = "src/Unit Tests/AQTileTests.h"; sourceTree = "<group>"; };
+		F2A7E4B10EE46DA000432D03 /* AQTileTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AQTileTests.m; path = "src/Unit Tests/AQTileTests.m"; sourceTree = "<group>"; };
 		F2ABA5920DEE718A00F58E4B /* AQBoard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AQBoard.h; sourceTree = "<group>"; };
 		F2ABA5930DEE718A00F58E4B /* AQBoard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AQBoard.m; sourceTree = "<group>"; };
 		F2ABA5940DEE718A00F58E4B /* AQHotel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AQHotel.h; sourceTree = "<group>"; };
@@ -133,12 +148,20 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		F2A7E4910EE46C9400432D03 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				F2A7E4AD0EE46D5B00432D03 /* Unit Tests */,
 				F224F28E0DEBC2320004978C /* Main Controllers */,
 				F2ABA5AA0DEE72F300F58E4B /* Window Controllers */,
 				F2ABA5910DEE718A00F58E4B /* Game Classes */,
@@ -170,6 +193,7 @@
 			isa = PBXGroup;
 			children = (
 				8D1107320486CEB800E47090 /* Acquire.app */,
+				F2A7E4940EE46C9400432D03 /* All Unit Tests.octest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -182,6 +206,7 @@
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
+				F2A7E4950EE46C9400432D03 /* All Unit Tests-Info.plist */,
 			);
 			name = Acquire;
 			sourceTree = "<group>";
@@ -275,6 +300,15 @@
 			path = "src/Network Classes";
 			sourceTree = "<group>";
 		};
+		F2A7E4AD0EE46D5B00432D03 /* Unit Tests */ = {
+			isa = PBXGroup;
+			children = (
+				F2A7E4B00EE46DA000432D03 /* AQTileTests.h */,
+				F2A7E4B10EE46DA000432D03 /* AQTileTests.m */,
+			);
+			name = "Unit Tests";
+			sourceTree = "<group>";
+		};
 		F2ABA5910DEE718A00F58E4B /* Game Classes */ = {
 			isa = PBXGroup;
 			children = (
@@ -344,6 +378,25 @@
 			productReference = 8D1107320486CEB800E47090 /* Acquire.app */;
 			productType = "com.apple.product-type.application";
 		};
+		F2A7E4930EE46C9400432D03 /* All Unit Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F2A7E4980EE46C9500432D03 /* Build configuration list for PBXNativeTarget "All Unit Tests" */;
+			buildPhases = (
+				F2A7E48F0EE46C9400432D03 /* Resources */,
+				F2A7E4900EE46C9400432D03 /* Sources */,
+				F2A7E4910EE46C9400432D03 /* Frameworks */,
+				F2A7E4920EE46C9400432D03 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				F2A7E49A0EE46CAD00432D03 /* PBXTargetDependency */,
+			);
+			name = "All Unit Tests";
+			productName = "All Unit Tests";
+			productReference = F2A7E4940EE46C9400432D03 /* All Unit Tests.octest */;
+			productType = "com.apple.product-type.bundle";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -357,6 +410,7 @@
 			projectRoot = "";
 			targets = (
 				8D1107260486CEB800E47090 /* Acquire */,
+				F2A7E4930EE46C9400432D03 /* All Unit Tests */,
 			);
 		};
 /* End PBXProject section */
@@ -380,7 +434,30 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		F2A7E48F0EE46C9400432D03 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		F2A7E4920EE46C9400432D03 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Run the unit tests in this test bundle.\n\"${SYSTEM_DEVELOPER_DIR}/Tools/RunUnitTests\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		8D11072C0486CEB800E47090 /* Sources */ = {
@@ -412,7 +489,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		F2A7E4900EE46C9400432D03 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F2A7E4B20EE46DA000432D03 /* AQTileTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		F2A7E49A0EE46CAD00432D03 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8D1107260486CEB800E47090 /* Acquire */;
+			targetProxy = F2A7E4990EE46CAD00432D03 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		089C165CFE840E0CC02AAC07 /* InfoPlist.strings */ = {
@@ -568,6 +661,60 @@
 			};
 			name = Release;
 		};
+		F2A7E4960EE46C9500432D03 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(BUILT_PRODUCTS_DIR)/Acquire.app/Contents/MacOS/Acquire";
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = "$(DEVELOPER_LIBRARY_DIR)/Frameworks";
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/Cocoa.framework/Headers/Cocoa.h";
+				INFOPLIST_FILE = "All Unit Tests-Info.plist";
+				INSTALL_PATH = "$(USER_LIBRARY_DIR)/Bundles";
+				OTHER_LDFLAGS = (
+					"-framework",
+					Cocoa,
+					"-framework",
+					SenTestingKit,
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = "All Unit Tests";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Acquire.app/Contents/MacOS/Acquire";
+				WRAPPER_EXTENSION = octest;
+			};
+			name = Debug;
+		};
+		F2A7E4970EE46C9500432D03 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = "$(DEVELOPER_LIBRARY_DIR)/Frameworks";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/Cocoa.framework/Headers/Cocoa.h";
+				INFOPLIST_FILE = "All Unit Tests-Info.plist";
+				INSTALL_PATH = "$(USER_LIBRARY_DIR)/Bundles";
+				OTHER_LDFLAGS = (
+					"-framework",
+					Cocoa,
+					"-framework",
+					SenTestingKit,
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = "All Unit Tests";
+				WRAPPER_EXTENSION = octest;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -585,6 +732,15 @@
 			buildConfigurations = (
 				C01FCF4F08A954540054247B /* Debug */,
 				C01FCF5008A954540054247B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F2A7E4980EE46C9500432D03 /* Build configuration list for PBXNativeTarget "All Unit Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F2A7E4960EE46C9500432D03 /* Debug */,
+				F2A7E4970EE46C9500432D03 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

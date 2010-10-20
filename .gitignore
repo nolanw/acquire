@@ -1,13 +1,16 @@
-# annoying Finder stuff
+# OS X crap
 .DS_Store
+profile
 
-# ignore build files/compiler output/junk/Xcode crap
-build
+# Xcode crap
 *.swp
 *~.nib
+build/*
 *.pbxuser
 *.perspective
 *.perspectivev3
+*.mode1v3
+*.mode2v3
 
-# textmate garbage
-*.tmproj
+# Textmate crap
+*.tm_build_errors

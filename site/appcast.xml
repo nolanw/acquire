@@ -6,12 +6,12 @@
       <description>Most recent changes with links to updates.</description>
       <language>en</language>
 			<item>
-				<title>Version 0.9.4 (minor bugfix release)</title>
+				<title>Version 0.9.5 (minor bugfix release)</title>
 				<sparkle:releaseNotesLink>
-					http://acquire.nwaite.com/release/Acquire_0.9.4.html
+					http://acquire.nwaite.com/release/Acquire_0.9.5.html
 				</sparkle:releaseNotesLink>
-				<pubDate>Sat, 20 Sep 2008 04:15:00 -0400</pubDate>
-				<enclosure sparkle:dsaSignature="MCwCFEjCFyOuGKLzDDnBkiJsn5wigbMuAhR6HExCM3UGPVRp02KZcUOlnDtfyA==" url="http://acquire.nwaite.com/release/Acquire_0.9.4.zip" sparkle:version="0.9.4" length="1025908" type="application/octet-stream"/>
+				<pubDate>Fri, 06 Mar 2009 03:50:00 -0500</pubDate>
+				<enclosure sparkle:dsaSignature="MCwCFG5F6b13fa8o0Sn0fQ+tOHU/foOFAhRbfkQFKizoARsEzYpI9KXn2nwxsw==" url="http://acquire.nwaite.com/release/Acquire_0.9.5.zip" sparkle:version="0.9.5" length="1077602" type="application/octet-stream"/>
 			</item>
    </channel>
 </rss>
