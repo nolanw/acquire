@@ -142,8 +142,8 @@
 	_sharePrice = sharePrice;
 	
 	[_playerNameTextField setStringValue:[player name]];
-	[_mergingHotelNameTextField setStringValue:[mergingHotel name]];
-	[_survivingHotelNameTextField setStringValue:[survivingHotel name]];
+	[_mergingHotelNameTextField setStringValue:[mergingHotel oldName]];
+	[_survivingHotelNameTextField setStringValue:[survivingHotel oldName]];
 	[_sharesSoldTextField takeIntValueFrom:_sharesSoldStepper];
 	[_sharesSoldStepper setMinValue:0.0];
 	[_sharesSoldStepper setMaxValue:_sharesKeptInMergingHotel];

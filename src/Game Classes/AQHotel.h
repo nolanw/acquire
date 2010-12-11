@@ -43,6 +43,7 @@
 
 // Physical characteristics
 - (NSString *)name;
+- (NSString *)oldName;
 - (NSColor *)color;
 
 // Tiles and board
@@ -68,14 +69,14 @@
 @interface AQHotel (LocalGame)
 #pragma mark LocalGame interface
 // init/dealloc
-- (id)initWithName:(NSString *)name tier:(int)tier color:(NSColor *)color;
+- (id)initWithName:(NSString *)name oldName:(NSString *)oldName tier:(int)tier color:(NSColor *)color;
 @end
 
 #pragma mark -
 @interface AQHotel (NetworkGame)
 #pragma mark NetworkGame interface
 // init/dealloc
-- (id)initWithName:(NSString *)name tier:(int)tier color:(NSColor *)color oldName:(NSString *)oldName netacquireID:(int)netacquireID;
+- (id)initWithName:(NSString *)name oldName:(NSString *)oldName tier:(int)tier color:(NSColor *)color oldName:(NSString *)oldName netacquireID:(int)netacquireID;
 
 // Accessors/setters
 - (int)netacquireID;

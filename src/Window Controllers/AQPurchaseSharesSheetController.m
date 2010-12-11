@@ -62,7 +62,7 @@
 	NSMutableArray *sharesPurchased = [NSMutableArray arrayWithCapacity:7];
 	int i;
 	for (i = 0; i < [_hotelNamesMatrix numberOfRows]; ++i) {
-		[hotelNames addObject:[[_hotels objectAtIndex:i] name]];
+		[hotelNames addObject:[[_hotels objectAtIndex:i] oldName]];
 		[sharesPurchased addObject:[NSNumber numberWithInt:[[_shareNumbersAndSteppersMatrix cellAtRow:i column:0] intValue]]];
 	}
 	
@@ -119,7 +119,7 @@
     
     int i;
 	for (i = 0; i < [hotels count]; ++i) {
-		[[_hotelNamesMatrix cellAtRow:i column:0] setStringValue:[[hotels objectAtIndex:i] name]];
+		[[_hotelNamesMatrix cellAtRow:i column:0] setStringValue:[[hotels objectAtIndex:i] oldName]];
 		[[_hotelNamesMatrix cellAtRow:i column:0] setAlignment:NSRightTextAlignment];
 	}
 	

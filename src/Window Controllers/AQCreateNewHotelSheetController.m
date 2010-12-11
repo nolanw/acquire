@@ -79,7 +79,7 @@
     
     int i;
 	for (i = 0; i < [hotels count]; ++i)
-		[[_hotelNamesMatrix cellAtRow:i column:0] setTitle:[[hotels objectAtIndex:i] name]];
+		[[_hotelNamesMatrix cellAtRow:i column:0] setTitle:[[hotels objectAtIndex:i] oldName]];
 	
 	[_hotelNamesMatrix sizeToCells];
 	

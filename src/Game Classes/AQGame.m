@@ -132,6 +132,8 @@
 	while (curHotel = [hotelEnumerator nextObject])
 		if ([[curHotel name] isEqualToString:hotelName])
 			return curHotel;
+    else if ([[curHotel oldName] isEqualToString:hotelName])
+      return curHotel;
 	
 	return nil;
 }
@@ -143,6 +145,7 @@
 
 - (void)purchaseShares:(NSArray *)sharesPurchased ofHotelsNamed:(NSArray *)hotelNames endGame:(BOOL)endGame sender:(id)sender;
 {
+  NSArray *oldHotelNames = [NSArray arrayWithObjects:@"Luxor", @"Tower", @"America", @"Fusion", @"Worldwide", @"Continental", @"Imperial", nil];
 	if ([self isNetworkGame]) {
 		if (!endGame && [self gameCanEnd] && [sender isKindOfClass:[NSButton class]]) {
 			_finalTurnSharesPurchased = [[NSArray arrayWithArray:sharesPurchased] retain];
@@ -195,7 +198,7 @@
 		[[self activePlayer] addSharesOfHotelNamed:[hotelNames objectAtIndex:i] numberOfShares:[[sharesPurchased objectAtIndex:i] intValue]];
         [[self hotelNamed:[hotelNames objectAtIndex:i]] removeSharesFromBank:[[sharesPurchased objectAtIndex:i] intValue]];
 		[[self activePlayer] subtractCash:([[sharesPurchased objectAtIndex:i] intValue] * [[self hotelNamed:[hotelNames objectAtIndex:i]] sharePrice])];
-		[purchaseLog appendString:[NSString stringWithFormat:@"\n\t• %d shares of %@ at $%d each.", [[sharesPurchased objectAtIndex:i] intValue], [hotelNames objectAtIndex:i], [[self hotelNamed:[hotelNames objectAtIndex:i]] sharePrice]]];
+		[purchaseLog appendString:[NSString stringWithFormat:@"\n\t• %d shares of %@ at $%d each.", [[sharesPurchased objectAtIndex:i] intValue], [oldHotelNames objectAtIndex:i], [[self hotelNamed:[hotelNames objectAtIndex:i]] sharePrice]]];
 	}
 	
 	[_gameWindowController reloadScoreboard];
@@ -545,7 +548,7 @@
     [hotel removeSharesFromBank:1];
 	[_gameWindowController reloadScoreboard];
 	[self _tilePlayed:tile];
-	[_gameWindowController incomingGameLogEntry:[NSString stringWithFormat:@"* %@ was created.", [hotel name]]];
+	[_gameWindowController incomingGameLogEntry:[NSString stringWithFormat:@"* %@ was created.", [hotel oldName]]];
 	[self showPurchaseSharesSheetIfNeededOrAdvanceTurn];
 }
 
@@ -563,7 +566,7 @@
 	
 	[self _tilePlayed:mergeTile];
 	[_gameWindowController incomingGameLogEntry:@"* Hotel merger occuring!"];
-	[_gameWindowController incomingGameLogEntry:[NSString stringWithFormat:@"* %@ is the surviving hotel.", [hotel name]]];
+	[_gameWindowController incomingGameLogEntry:[NSString stringWithFormat:@"* %@ is the surviving hotel.", [hotel oldName]]];
 	
 	NSMutableArray *disappearingHotels = [NSMutableArray arrayWithArray:mergingHotels];
 	[disappearingHotels removeObject:hotel];
@@ -616,7 +619,7 @@
 	[hotel addSharesToBank:numberOfShares];
 	
 	NSString *plural = (numberOfShares > 1) ? [NSString stringWithString:@"s"] : [NSString stringWithString:@""];
-	[_gameWindowController incomingGameLogEntry:[NSString stringWithFormat:@"* %@ sold %d share%@ of %@ for $%d", [player name], numberOfShares, plural, [hotel name], (sharePrice * numberOfShares)]];
+	[_gameWindowController incomingGameLogEntry:[NSString stringWithFormat:@"* %@ sold %d share%@ of %@ for $%d", [player name], numberOfShares, plural, [hotel oldName], (sharePrice * numberOfShares)]];
 	
 	[_gameWindowController reloadScoreboard];
 }
@@ -627,7 +630,7 @@
 	[toHotel removeSharesFromBank:(numberOfShares / 2)];
 	[player addSharesOfHotelNamed:[toHotel name] numberOfShares:(numberOfShares / 2)];
 	
-	[_gameWindowController incomingGameLogEntry:[NSString stringWithFormat:@"* %@ traded %d shares of %@ for %d shares of %@", [player name], numberOfShares, [fromHotel name], (numberOfShares / 2), [toHotel name]]];
+	[_gameWindowController incomingGameLogEntry:[NSString stringWithFormat:@"* %@ traded %d shares of %@ for %d shares of %@", [player name], numberOfShares, [fromHotel oldName], (numberOfShares / 2), [toHotel oldName]]];
 	
 	[_gameWindowController reloadScoreboard];
 }
@@ -774,7 +777,7 @@
 			int cashAdded = ([curPlayer numberOfSharesOfHotelNamed:[curHotel name]] * [curHotel sharePrice]);
 			[curPlayer addCash:cashAdded];
 			NSString *plural = ([curPlayer numberOfSharesOfHotelNamed:[curHotel name]] > 1) ? [NSString stringWithString:@"S"] : [NSString stringWithString:@""];
-			[_gameWindowController incomingGameLogEntry:[NSString stringWithFormat:@"* %@ got $%d for %d share%@ of %@", [curPlayer name], cashAdded, [curPlayer numberOfSharesOfHotelNamed:[curHotel name]], plural, [curHotel name]]];
+			[_gameWindowController incomingGameLogEntry:[NSString stringWithFormat:@"* %@ got $%d for %d share%@ of %@", [curPlayer name], cashAdded, [curPlayer numberOfSharesOfHotelNamed:[curHotel name]], plural, [curHotel oldName]]];
 		}
 	}
 	
@@ -882,14 +885,14 @@
 			id curMajorityShareholder;
 			while (curMajorityShareholder = [majorityShareholderEnumerator nextObject]) {
 				[curMajorityShareholder addCash:cashPerPlayer];
-				[_gameWindowController incomingGameLogEntry:[NSString stringWithFormat:@"* %@ gets $%d as tied majority shareholder of %@", [curMajorityShareholder name], cashPerPlayer, [curHotel name]]];
+				[_gameWindowController incomingGameLogEntry:[NSString stringWithFormat:@"* %@ gets $%d as tied majority shareholder of %@", [curMajorityShareholder name], cashPerPlayer, [curHotel oldName]]];
 			}
 		} else if (minorityShareholders == nil) {
 			[[majorityShareholders objectAtIndex:0] addCash:([curHotel sharePrice] * 15)];
-			[_gameWindowController incomingGameLogEntry:[NSString stringWithFormat:@"* %@ gets $%d as sole shareholder of %@", [[majorityShareholders objectAtIndex:0] name], ([curHotel sharePrice] * 15), [curHotel name]]];
+			[_gameWindowController incomingGameLogEntry:[NSString stringWithFormat:@"* %@ gets $%d as sole shareholder of %@", [[majorityShareholders objectAtIndex:0] name], ([curHotel sharePrice] * 15), [curHotel oldName]]];
 		} else {
 			[[majorityShareholders objectAtIndex:0] addCash:([curHotel sharePrice] * 10)];
-			[_gameWindowController incomingGameLogEntry:[NSString stringWithFormat:@"* %@ gets $%d as majority shareholder of %@", [[majorityShareholders objectAtIndex:0] name], ([curHotel sharePrice] * 10), [curHotel name]]];
+			[_gameWindowController incomingGameLogEntry:[NSString stringWithFormat:@"* %@ gets $%d as majority shareholder of %@", [[majorityShareholders objectAtIndex:0] name], ([curHotel sharePrice] * 10), [curHotel oldName]]];
 		
 			int cashPerPlayer = ([curHotel sharePrice] * 5);
 			cashPerPlayer /= [minorityShareholders count];
@@ -899,7 +902,7 @@
 			id curMinorityShareholder;
 			while (curMinorityShareholder = [minorityShareholderEnumerator nextObject]) {
 				[curMinorityShareholder addCash:cashPerPlayer];
-				[_gameWindowController incomingGameLogEntry:[NSString stringWithFormat:@"* %@ gets $%d as minority shareholder of %@", [curMinorityShareholder name], cashPerPlayer, [curHotel name]]];
+				[_gameWindowController incomingGameLogEntry:[NSString stringWithFormat:@"* %@ gets $%d as minority shareholder of %@", [curMinorityShareholder name], cashPerPlayer, [curHotel oldName]]];
 			}
 		}
 	}

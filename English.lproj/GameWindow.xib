@@ -12,7 +12,7 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="2"/>
+			<integer value="143"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -810,7 +810,7 @@
 													<object class="NSTableHeaderCell" key="NSHeaderCell">
 														<int key="NSCellFlags">75628096</int>
 														<int key="NSCellFlags2">134219776</int>
-														<string key="NSContents">S</string>
+														<string key="NSContents">L</string>
 														<reference key="NSSupport" ref="26"/>
 														<object class="NSColor" key="NSBackgroundColor" id="59969526">
 															<int key="NSColorSpace">6</int>
@@ -839,7 +839,7 @@
 													<object class="NSTableHeaderCell" key="NSHeaderCell">
 														<int key="NSCellFlags">75628096</int>
 														<int key="NSCellFlags2">134219776</int>
-														<string key="NSContents">Z</string>
+														<string key="NSContents">T</string>
 														<reference key="NSSupport" ref="26"/>
 														<reference key="NSBackgroundColor" ref="59969526"/>
 														<reference key="NSTextColor" ref="798507376"/>
@@ -911,7 +911,7 @@
 													<object class="NSTableHeaderCell" key="NSHeaderCell">
 														<int key="NSCellFlags">75628096</int>
 														<int key="NSCellFlags2">134219776</int>
-														<string key="NSContents">H</string>
+														<string key="NSContents">W</string>
 														<reference key="NSSupport" ref="26"/>
 														<reference key="NSBackgroundColor" ref="59969526"/>
 														<reference key="NSTextColor" ref="798507376"/>
@@ -935,7 +935,7 @@
 													<object class="NSTableHeaderCell" key="NSHeaderCell">
 														<int key="NSCellFlags">75628096</int>
 														<int key="NSCellFlags2">134219776</int>
-														<string key="NSContents">Q</string>
+														<string key="NSContents">C</string>
 														<reference key="NSSupport" ref="26"/>
 														<reference key="NSBackgroundColor" ref="59969526"/>
 														<reference key="NSTextColor" ref="798507376"/>
@@ -959,7 +959,7 @@
 													<object class="NSTableHeaderCell" key="NSHeaderCell">
 														<int key="NSCellFlags">75628096</int>
 														<int key="NSCellFlags2">134219776</int>
-														<string key="NSContents">P</string>
+														<string key="NSContents">I</string>
 														<reference key="NSSupport" ref="26"/>
 														<reference key="NSBackgroundColor" ref="59969526"/>
 														<reference key="NSTextColor" ref="798507376"/>
@@ -3902,9 +3902,9 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{333, 281}, {1000, 564}}</string>
+					<string>{{116, 257}, {1000, 564}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{333, 281}, {1000, 564}}</string>
+					<string>{{116, 257}, {1000, 564}}</string>
 					<integer value="0"/>
 					<string>{{76, 128}, {1000, 564}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -4785,7 +4785,7 @@
 			<integer value="3000" key="NS.object.0"/>
 		</object>
 		<bool key="IBDocument.PluginDeclaredDependenciesTrackSystemTargetVersion">YES</bool>
-		<string key="IBDocument.LastKnownRelativeProjectPath">../../Acquire.xcodeproj</string>
+		<string key="IBDocument.LastKnownRelativeProjectPath">../Acquire.xcodeproj</string>
 		<int key="IBDocument.defaultPropertyAccessControl">3</int>
 	</data>
 </archive>

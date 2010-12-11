@@ -62,7 +62,7 @@
 	NSEnumerator *hotelEnumerator = [_mergingHotels objectEnumerator];
 	id curHotel;
 	while (curHotel = [hotelEnumerator nextObject]) {
-		if ([[(AQHotel *)curHotel name] isEqualToString:[[_hotelNamesMatrix selectedCell] title]]) {
+		if ([[(AQHotel *)curHotel oldName] isEqualToString:[[_hotelNamesMatrix selectedCell] title]]) {
 			survivingHotel = curHotel;
 			break;
 		}
@@ -97,7 +97,7 @@
     
     int i;
 	for (i = 0; i < [potentialSurvivors count]; ++i)
-		[[_hotelNamesMatrix cellAtRow:i column:0] setTitle:[[potentialSurvivors objectAtIndex:i] name]];
+		[[_hotelNamesMatrix cellAtRow:i column:0] setTitle:[[potentialSurvivors objectAtIndex:i] oldName]];
 	
 	[_hotelNamesMatrix sizeToCells];
 	
