@@ -76,7 +76,7 @@
 @interface AQHotel (NetworkGame)
 #pragma mark NetworkGame interface
 // init/dealloc
-- (id)initWithName:(NSString *)name oldName:(NSString *)oldName tier:(int)tier color:(NSColor *)color oldName:(NSString *)oldName netacquireID:(int)netacquireID;
+- (id)initWithName:(NSString *)name oldName:(NSString *)oldName tier:(int)tier color:(NSColor *)color netacquireID:(int)netacquireID;
 
 // Accessors/setters
 - (int)netacquireID;

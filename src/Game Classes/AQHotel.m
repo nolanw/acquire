@@ -12,37 +12,37 @@
 // Standard hotel creators
 + (AQHotel *)sacksonHotel;
 {
-	return [[[self alloc] initWithName:@"Sackson" oldName:@"Luxor" tier:0 color:[NSColor colorWithCalibratedRed:1.0 green:0.0 blue:0.0 alpha:1.0] oldName:@"Luxor" netacquireID:255] autorelease];
+	return [[[self alloc] initWithName:@"Sackson" oldName:@"Luxor" tier:0 color:[NSColor colorWithCalibratedRed:1.0 green:0.0 blue:0.0 alpha:1.0] netacquireID:255] autorelease];
 }
 
 + (AQHotel *)zetaHotel;
 {
-	return [[[self alloc] initWithName:@"Zeta" oldName:@"Tower" tier:0 color:[NSColor colorWithCalibratedRed:1.0 green:0.75 blue:0.0 alpha:1.0] oldName:@"Tower" netacquireID:65535] autorelease];
+	return [[[self alloc] initWithName:@"Zeta" oldName:@"Tower" tier:0 color:[NSColor colorWithCalibratedRed:1.0 green:0.75 blue:0.0 alpha:1.0] netacquireID:65535] autorelease];
 }
 
 + (AQHotel *)americaHotel;
 {
-	return [[[self alloc] initWithName:@"America" oldName:@"America" tier:1 color:[NSColor colorWithCalibratedRed:0.0 green:0.0 blue:1.0 alpha:1.0] oldName:@"America" netacquireID:16711680] autorelease];
+	return [[[self alloc] initWithName:@"America" oldName:@"America" tier:1 color:[NSColor colorWithCalibratedRed:0.0 green:0.0 blue:1.0 alpha:1.0] netacquireID:16711680] autorelease];
 }
 
 + (AQHotel *)fusionHotel;
 {
-	return [[[self alloc] initWithName:@"Fusion" oldName:@"Fusion" tier:1 color:[NSColor colorWithCalibratedRed:0.0 green:1.0 blue:0.0 alpha:1.0] oldName:@"Fusion" netacquireID:65280] autorelease];
+	return [[[self alloc] initWithName:@"Fusion" oldName:@"Fusion" tier:1 color:[NSColor colorWithCalibratedRed:0.0 green:1.0 blue:0.0 alpha:1.0] netacquireID:65280] autorelease];
 }
 
 + (AQHotel *)hydraHotel;
 {
-	return [[[self alloc] initWithName:@"Hydra" oldName:@"Worldwide" tier:1 color:[NSColor colorWithCalibratedRed:1.0 green:0.5 blue:0.0 alpha:1.0] oldName:@"Worldwide" netacquireID:16512] autorelease];
+	return [[[self alloc] initWithName:@"Hydra" oldName:@"Worldwide" tier:1 color:[NSColor colorWithCalibratedRed:1.0 green:0.5 blue:0.0 alpha:1.0] netacquireID:16512] autorelease];
 }
 
 + (AQHotel *)quantumHotel;
 {
-	return [[[self alloc] initWithName:@"Quantum" oldName:@"Continental" tier:2 color:[NSColor colorWithCalibratedRed:0.0 green:1.0 blue:1.0 alpha:1.0] oldName:@"Imperial" netacquireID:16776960] autorelease];
+	return [[[self alloc] initWithName:@"Quantum" oldName:@"Continental" tier:2 color:[NSColor colorWithCalibratedRed:0.0 green:1.0 blue:1.0 alpha:1.0] netacquireID:16776960] autorelease];
 }
 
 + (AQHotel *)phoenixHotel;
 {
-	return [[[self alloc] initWithName:@"Phoenix" oldName:@"Imperial" tier:2 color:[NSColor colorWithCalibratedRed:1.0 green:0.25 blue:1.0 alpha:1.0] oldName:@"Continental" netacquireID:16711935] autorelease];
+	return [[[self alloc] initWithName:@"Phoenix" oldName:@"Imperial" tier:2 color:[NSColor colorWithCalibratedRed:1.0 green:0.25 blue:1.0 alpha:1.0] netacquireID:16711935] autorelease];
 }
 
 
@@ -241,7 +241,7 @@
 @implementation AQHotel (NetworkGame)
 #pragma mark NetworkGame implementation
 // init/dealloc
-- (id)initWithName:(NSString *)name oldName:(NSString *)oldName tier:(int)tier color:(NSColor *)color oldName:(NSString *)oldName netacquireID:(int)netacquireID;
+- (id)initWithName:(NSString *)name oldName:(NSString *)oldName tier:(int)tier color:(NSColor *)color netacquireID:(int)netacquireID;
 {
 	if (![super init])
 		return nil;
