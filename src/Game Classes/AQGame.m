@@ -228,7 +228,7 @@
 	NSArray *orthogonalTiles = [_board tilesOrthogonalToTile:tile];
 	NSMutableArray *adjacentHotels = [NSMutableArray arrayWithCapacity:4];
 	NSEnumerator *adjacentTileEnumerator = [orthogonalTiles objectEnumerator];
-	id curOrthogonalTile;
+	AQTile *curOrthogonalTile;
 	while (curOrthogonalTile = [adjacentTileEnumerator nextObject])
 		if ([curOrthogonalTile state] == AQTileInHotel && ![adjacentHotels containsObject:[curOrthogonalTile hotel]])
 			[adjacentHotels addObject:[curOrthogonalTile hotel]];
@@ -333,7 +333,7 @@
 		[[self playedTileAddsToAHotel:clickedTile] addTile:clickedTile];
 		NSArray *orthogonalTiles = [_board tilesOrthogonalToTile:clickedTile];
 		NSEnumerator *orthogonalTilesEnumerator = [orthogonalTiles objectEnumerator];
-		id curOrthogonalTile;
+		AQTile *curOrthogonalTile;
 		while (curOrthogonalTile = [orthogonalTilesEnumerator nextObject])
 			if ([curOrthogonalTile state] == AQTileNotInHotel)
 				[[self playedTileAddsToAHotel:clickedTile] addTile:curOrthogonalTile];
@@ -499,7 +499,7 @@
 	NSArray *orthogonalTiles = [_board tilesOrthogonalToTile:playedTile];
 	BOOL isATileNotInHotel = NO;
 	NSEnumerator *adjacentTileEnumerator = [orthogonalTiles objectEnumerator];
-	id curOrthogonalTile;
+	AQTile *curOrthogonalTile;
 	while (curOrthogonalTile = [adjacentTileEnumerator nextObject]) {
 		if ([curOrthogonalTile state] == AQTileNotInHotel)
 			isATileNotInHotel = YES;
@@ -510,7 +510,7 @@
 	return isATileNotInHotel;
 }
 
-- (void)createHotelNamed:(NSString *)hotelName atTile:(id)tile;
+- (void)createHotelNamed:(NSString *)hotelName atTile:(AQTile *)tile;
 {
 	if ([self isNetworkGame]) {
 		[_associatedConnection choseHotelToCreate:[[self hotelNamed:hotelName] netacquireID]];
@@ -520,14 +520,13 @@
 	if (tile == nil || ![tile isKindOfClass:[AQTile class]])
 		return;
 	
-	tile = (AQTile *)tile;
 	AQHotel *hotel = [self hotelNamed:hotelName];
 	
 	NSMutableArray *tilesToAddToHotel = [NSMutableArray arrayWithCapacity:10];
 	[tile setState:AQTileNotInHotel];
 	[tilesToAddToHotel addObject:tile];
 
-	id curTileToAdd;
+	AQTile *curTileToAdd;
 	int i;
 	for (i = 0; i < [tilesToAddToHotel count]; ++i) {
 		curTileToAdd = [tilesToAddToHotel objectAtIndex:i];
@@ -601,7 +600,7 @@
 	}
 	[hotel addTile:mergeTile];
 	NSEnumerator *orthogonalMergeTilesEnumerator = [[_board tilesOrthogonalToTile:mergeTile] objectEnumerator];
-	id curTile;
+	AQTile *curTile;
 	while (curTile = [orthogonalMergeTilesEnumerator nextObject])
 		if ([curTile state] == AQTileNotInHotel)
 			[hotel addTile:curTile];
@@ -712,7 +711,7 @@
 	while (curPlayer = [playerEnumerator nextObject]) {
 		[startingTiles addObject:[_board tileFromTileBag]];
 		[_gameWindowController incomingGameLogEntry:[NSString stringWithFormat:@"* %@ drew initial tile %@.", [curPlayer name], [startingTiles lastObject]]];
-		[[startingTiles lastObject] setState:AQTileNotInHotel];
+		[(AQTile *)[startingTiles lastObject] setState:AQTileNotInHotel];
 	}
 	[_gameWindowController tilesChanged:startingTiles];
 	
@@ -795,7 +794,7 @@
 	NSMutableArray *hotelsInvolvedWithMerger = [NSMutableArray arrayWithCapacity:4];
 	NSArray *tilesOrthogonalToMergerTile = [_board tilesOrthogonalToTile:tile];
 	NSEnumerator *orthogonalTilesEnumerator = [tilesOrthogonalToMergerTile objectEnumerator];
-	id curOrthogonalTile;
+	AQTile *curOrthogonalTile;
 	while (curOrthogonalTile = [orthogonalTilesEnumerator nextObject])
 		if ([curOrthogonalTile state] == AQTileInHotel)
 			if (![hotelsInvolvedWithMerger containsObject:[curOrthogonalTile hotel]])

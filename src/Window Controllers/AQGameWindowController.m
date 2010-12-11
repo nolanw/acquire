@@ -203,9 +203,9 @@
 - (void)tilesChanged:(NSArray *)changedTiles;
 {
 	NSEnumerator *changedTileEnumerator = [changedTiles objectEnumerator];
-	id curChangedTile;
+	AQTile *curChangedTile;
 	while (curChangedTile = [changedTileEnumerator nextObject]) {
-		if (curChangedTile == [NSNull null])
+    if ([curChangedTile isEqual:[NSNull null]])
 			continue;
 		
 		if ([curChangedTile state] == AQTileNotInHotel)
