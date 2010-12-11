@@ -221,50 +221,16 @@
 - (NSString *)_directiveCodeFromProtocolData;
 {
 	NSString *dataAsString = [[[NSString alloc] initWithData:_protocolData encoding:NSASCIIStringEncoding] autorelease];
-	
-	if ([dataAsString length] < 2)
-		return dataAsString;
-
-	unichar secondChar = [dataAsString characterAtIndex:1];
-	
-	if (secondChar == ';')
-		return [dataAsString substringToIndex:1];
-	
-	return [dataAsString substringToIndex:2];
+  return [dataAsString stringByMatching:@"([A-Z]{1,2});" capture:1];
 }
 
 - (NSArray *)_parametersFromProtocolData;
 {
 	NSString *dataAsString = [[[NSString alloc] initWithData:_protocolData encoding:NSASCIIStringEncoding] autorelease];
-	
-	NSRange parameterStringRange = [dataAsString rangeOfString:@";"];
-	NSRange endOfDirectiveRange = [dataAsString rangeOfString:@";:"];
-	if (parameterStringRange.location == NSNotFound || (endOfDirectiveRange.location - parameterStringRange.location) <= 1)
-		return [NSArray array];
-	
-	NSRange parameterStringEndRange = [dataAsString rangeOfString:@";" options:NSBackwardsSearch];
-	++(parameterStringRange.location);
-	parameterStringRange.length = parameterStringEndRange.location - parameterStringRange.location;
-	if (parameterStringRange.length <= 0)
-		return [NSArray array];
-	
-	NSString *parameterString = [dataAsString substringWithRange:parameterStringRange];
-	
-	if ([parameterString characterAtIndex:0] == '"')
-		return [NSArray arrayWithObject:parameterString];
-	
-	NSMutableArray *parameters = [NSMutableArray arrayWithCapacity:5];
-	while ([parameterString length] > 0) {
-		NSRange nextCommaRange = [parameterString rangeOfString:@","];
-		if (nextCommaRange.location == NSNotFound) {
-			[parameters addObject:parameterString];
-			break;
-		}
-		
-		[parameters addObject:[parameterString substringWithRange:NSMakeRange(0, nextCommaRange.location)]];
-		parameterString = [parameterString substringFromIndex:(nextCommaRange.location + 1)];
-	}
-	
+  NSRange chopRange = NSMakeRange(2, [dataAsString length] - 2);
+  NSString *chopped = [dataAsString substringWithRange:chopRange];
+  NSString *regex = @"\"([^\"]|\"\")*\"|[^\",;:]+";
+  NSArray *parameters = [chopped componentsMatchedByRegex:regex];
 	return parameters;
 }
 
