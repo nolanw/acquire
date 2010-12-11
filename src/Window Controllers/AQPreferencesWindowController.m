@@ -26,7 +26,8 @@
 {
 	if (_preferencesWindow == nil) {
 		if (![NSBundle loadNibNamed:@"PreferencesWindow" owner:self]) {
-			NSLog(@"%s failed loading PreferencesWindow.nib", _cmd);
+			NSLog(@"%@ failed loading PreferencesWindow.nib", 
+			                                              NSStringFromSelector(_cmd));
 			return;
 		}
 	}

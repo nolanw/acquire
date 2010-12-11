@@ -27,7 +27,7 @@
 	
 	if (_welcomeWindow == nil) {
 		if (![NSBundle loadNibNamed:@"WelcomeWindow" owner:self]) {
-			NSLog(@"%s failed to load WelcomeWindow.nib", _cmd);
+			NSLog(@"%@ failed to load WelcomeWindow.nib", NSStringFromSelector(_cmd));
 			return nil;
 		}
 	}

@@ -15,7 +15,7 @@
 	
 	if (!_lobbyWindow) {
 		if (![NSBundle loadNibNamed:@"LobbyWindow" owner:self]) {
-			NSLog(@"%s failed to load LobbyWindow.nib", _cmd);
+			NSLog(@"%@ failed to load LobbyWindow.nib", NSStringFromSelector(_cmd));
 			return nil;
 		}
 		

@@ -26,7 +26,7 @@
 	
 	if (_gameWindow == nil) {
 		if (![NSBundle loadNibNamed:@"GameWindow" owner:self]) {
-			NSLog(@"%s failed to load GameWindow.nib", _cmd);
+			NSLog(@"%@ failed to load GameWindow.nib", NSStringFromSelector(_cmd));
 			return nil;
 		}
 		

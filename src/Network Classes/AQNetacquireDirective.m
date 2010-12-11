@@ -42,7 +42,7 @@
 	if (firstParameter) {
 		[newDirective addParameter:firstParameter];
 		va_start(parameterList, firstParameter);
-		while (curParameter = va_arg(parameterList, NSString *))
+		while ((curParameter = va_arg(parameterList, NSString *)))
 			[newDirective addParameter:curParameter];
 		va_end(parameterList);
 	}
