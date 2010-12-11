@@ -14,3 +14,4 @@ build/*
 
 # Textmate crap
 *.tm_build_errors
+sparkle/dsa_priv.pem
