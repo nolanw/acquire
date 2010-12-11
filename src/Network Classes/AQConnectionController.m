@@ -522,8 +522,12 @@
 		[[self _firstAssociatedObjectThatRespondsToSelector:@selector(incomingGameLogEntry:)] incomingGameLogEntry:[[[gameMessageDirective parameters] objectAtIndex:0] substringWithRange:NSMakeRange(1, [[[gameMessageDirective parameters] objectAtIndex:0] length] - 2)]];
 		return;
 	}
+  NSRange chopRange = NSMakeRange(1, [messageText length] - 2);
+  NSString *unquoted = [messageText substringWithRange:chopRange];
+  NSString *unescaped = [unquoted stringByReplacingOccurrencesOfRegex:@"\"\""
+                                                           withString:@"\""];
 	id associatedObject = [self _firstAssociatedObjectThatRespondsToSelector:@selector(incomingGameMessage:)];
-	[associatedObject incomingGameMessage:[[[gameMessageDirective parameters] objectAtIndex:0] substringWithRange:NSMakeRange(1, [[[gameMessageDirective parameters] objectAtIndex:0] length] - 2)]];
+	[associatedObject incomingGameMessage:unescaped];
 }
 
 - (void)_receivedGPDirective:(AQNetacquireDirective *)getPurchaseDirective;
