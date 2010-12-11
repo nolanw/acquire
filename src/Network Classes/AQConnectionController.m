@@ -48,6 +48,7 @@
 - (void)_sendDirectiveWithCode:(NSString *)directiveCode;
 - (void)_sendBMDirectiveToLobbyWithMessage:(NSString *)message;
 - (void)_sendBMDirectiveToGameRoomWithMessage:(NSString *)message;
+- (void)_broadcastMessage:(NSString *)message to:(NSString *)destination;
 - (void)_sendCSDirectiveWithChainID:(int)chainID selectionType:(int)selectionType;
 - (void)_sendJGDirectiveWithGameNumber:(int)gameNumber;
 - (void)_sendMDDirectiveWithSharesSold:(int)sharesSold sharesTraded:(int)sharesTraded;
@@ -547,7 +548,11 @@
 		return;
 	}
 	
-	[self _incomingLobbyMessage:[messageText substringWithRange:NSMakeRange(1, [messageText length] - 2)]];
+  NSRange chopRange = NSMakeRange(1, [messageText length] - 2);
+  NSString *unquoted = [messageText substringWithRange:chopRange];
+  NSString *unescaped = [unquoted stringByReplacingOccurrencesOfRegex:@"\"\""
+                                                           withString:@"\""];
+	[self _incomingLobbyMessage:unescaped];
 }
 
 - (void)_receivedFirstLMDirectives:(AQNetacquireDirective *)bunchOfLMDirectives;
@@ -794,22 +799,27 @@
 - (void)_sendBMDirectiveToLobbyWithMessage:(NSString *)message;
 {
     NSAssert(message != nil, @"Passed in nil object.");
-    
-	AQNetacquireDirective *directive = [[[AQNetacquireDirective alloc] init] autorelease];
-	[directive setDirectiveCode:@"BM"];
-	[directive addParameter:@"Lobby"];
-	[directive addParameter:[NSString stringWithFormat:@"\"%@\"", message]];
-	[self _sendDirectiveData:[directive protocolData]];
+  
+  [self _broadcastMessage:message to:@"Lobby"];
 }
 
 - (void)_sendBMDirectiveToGameRoomWithMessage:(NSString *)message;
 {
     NSAssert(message != nil, @"Passed in nil object.");
     
-	AQNetacquireDirective *directive = [[[AQNetacquireDirective alloc] init] autorelease];
+  [self _broadcastMessage:message to:@"Game Room"];
+}
+
+- (void)_broadcastMessage:(NSString *)message to:(NSString *)destination
+{
+  NSAssert(message && destination, @"Passed in nil object.");
+  
+  NSString *escaped = [message stringByReplacingOccurrencesOfRegex:@"\""
+                                                        withString:@"\"\""];
+  AQNetacquireDirective *directive = [[[AQNetacquireDirective alloc] init] autorelease];
 	[directive setDirectiveCode:@"BM"];
-	[directive addParameter:@"Game Room"];
-	[directive addParameter:[NSString stringWithFormat:@"\"%@\"", message]];
+	[directive addParameter:destination];
+	[directive addParameter:[NSString stringWithFormat:@"\"%@\"", escaped]];
 	[self _sendDirectiveData:[directive protocolData]];
 }
 
