@@ -3,6 +3,7 @@
 // Created June 26, 2008 by nwaite
 
 #import "AQNetacquireDirective.h"
+#import "RegexKitLite.h"
 
 #pragma mark -
 
@@ -48,6 +49,28 @@
 	}
 	
 	return newDirective;
+}
+
++ (NSArray *)directivesWithData:(NSData *)data
+{
+  NSString *string = [[NSString alloc] initWithData:data
+                                            encoding:NSUTF8StringEncoding];
+  [string autorelease];
+  // With words:
+  //   - One or two uppercase letters.
+  //   - Followed by a semicolon.
+  //   - Followed by any number of 
+  //       - quoted parameters with escaped quotes, or
+  //       - unquoted parameters with no quotes, commas, colons, or semicolons.
+  //   - Followed by a semicolon and then a colon.
+  NSString *regex = @"[A-Z]{1,2};(((\"([^\"]|\"\")*\"|[^\",;:]+),?)*);:";
+  NSArray *strings = [string componentsMatchedByRegex:regex];
+  NSMutableArray *directives = [NSMutableArray array];
+  NSEnumerator *stringEnumerator = [strings objectEnumerator];
+  NSString *cur;
+  while ((cur = [stringEnumerator nextObject]))
+    [directives addObject:[AQNetacquireDirective directiveWithString:cur]];
+  return directives;
 }
 
 

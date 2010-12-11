@@ -20,6 +20,7 @@
 	BOOL	    	_handshakeComplete;
 	BOOL	    	_haveSeenFirstLMDirectives;
 	id		    	_objectRequestingGameListUpdate;
+  NSMutableArray *_updatingGameList;
 	BOOL		    _creatingGame;
 	NSMutableArray	*_associatedObjects;
 }

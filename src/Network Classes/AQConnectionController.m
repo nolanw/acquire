@@ -7,6 +7,7 @@
 #import "AQAcquireController.h"
 #import "AQNetacquireDirective.h"
 #import "AQGame.h"
+#import "RegexKitLite.h"
 
 #pragma mark -
 
@@ -25,15 +26,12 @@
 
 - (void)_receivedDirective:(AQNetacquireDirective *)directive;
 - (void)_handleDirective:(AQNetacquireDirective *)directive;
-- (void)_parseMultipleDirectives:(AQNetacquireDirective *)bunchOfDirectives;
 - (void)_receivedATDirective:(AQNetacquireDirective *)activateTileDirective;
 - (void)_receivedGCDirective:(AQNetacquireDirective *)getChainDirective;
 - (void)_receivedGDDirective:(AQNetacquireDirective *)getDispositionDirective;
 - (void)_receivedGMDirective:(AQNetacquireDirective *)gameMessageDirective;
-- (void)_receivedGMDirective:(AQNetacquireDirective *)gameMessageDirective isFirstPass:(BOOL)isFirstPass;
 - (void)_receivedGPDirective:(AQNetacquireDirective *)getPurchaseDirective;
 - (void)_receivedLMDirective:(AQNetacquireDirective *)lobbyMessageDirective;
-- (void)_receivedLMDirective:(AQNetacquireDirective *)lobbyMessageDirective isFirstPass:(BOOL)isFirstPass;
 - (void)_receivedFirstLMDirectives:(AQNetacquireDirective *)bunchOfLMDirectives;
 - (void)_receivedGameListDirective:(AQNetacquireDirective *)gameListDirective;
 - (void)_receivedMDirective:(AQNetacquireDirective *)messageDirective;
@@ -308,7 +306,11 @@
 
 - (void)onSocket:(AsyncSocket *)socket didReadData:(NSData *)data withTag:(long)tag;
 {
-	[self _receivedDirective:[AQNetacquireDirective directiveWithData:data]];
+  NSArray *directives = [AQNetacquireDirective directivesWithData:data];
+  NSEnumerator *directiveEnumerator = [directives objectEnumerator];
+  AQNetacquireDirective *curDirective;
+  while ((curDirective = [directiveEnumerator nextObject]))
+    [self _receivedDirective:curDirective];
 	[_socket readDataWithTimeout:-1 tag:0];
 }
 
@@ -375,7 +377,7 @@
     
 	if ([[directive directiveCode] isEqualToString:@"LM"]) {
 		if (_haveSeenFirstLMDirectives)
-			[self _receivedLMDirective:directive isFirstPass:YES];
+			[self _receivedLMDirective:directive];
 		else
 			[self _receivedFirstLMDirectives:directive];
 		
@@ -387,7 +389,7 @@
 		return;
 	}
 	
-	[self _parseMultipleDirectives:directive];
+	[self _handleDirective:directive];
 }
 
 - (void)_handleDirective:(AQNetacquireDirective *)directive;
@@ -406,13 +408,13 @@
 		[self _receivedGDDirective:directive];
 	
 	else if ([directiveCode isEqualToString:@"GM"])
-		[self _receivedGMDirective:directive isFirstPass:NO];
+		[self _receivedGMDirective:directive];
 	
 	else if ([directiveCode isEqualToString:@"GP"])
 		[self _receivedGPDirective:directive];
 	
 	else if ([directiveCode isEqualToString:@"LM"])
-		[self _receivedLMDirective:directive isFirstPass:NO];
+		[self _receivedLMDirective:directive];
 	
 	else if ([directiveCode isEqualToString:@"M"])
 		[self _receivedMDirective:directive];
@@ -431,32 +433,6 @@
 	
 	else if ([directiveCode isEqualToString:@"SV"])
 		[self _receivedSVDirective:directive];
-}
-
-- (void)_parseMultipleDirectives:(AQNetacquireDirective *)bunchOfDirectives;
-{
-    NSAssert(bunchOfDirectives != nil, @"Passed in nil object.");
-    
-	NSString *directives = [[[NSString alloc] initWithData:[bunchOfDirectives protocolData] encoding:NSASCIIStringEncoding] autorelease];
-	NSMutableArray *separatedDirectives = [NSMutableArray arrayWithCapacity:4];
-	
-	NSRange endOfFirstDirective;
-	while ([directives length] > 0) {
-		endOfFirstDirective = [directives rangeOfString:@";:"];
-		if (endOfFirstDirective.location == NSNotFound)
-			break;
-		
-		endOfFirstDirective.length = endOfFirstDirective.location + 2;
-		endOfFirstDirective.location = 0;
-		[separatedDirectives addObject:[AQNetacquireDirective directiveWithString:[directives substringWithRange:endOfFirstDirective]]];
-		
-		directives = [directives substringFromIndex:endOfFirstDirective.length];
-	}
-	
-	NSEnumerator *directivesEnumerator = [separatedDirectives objectEnumerator];
-	id curDirective;
-	while (curDirective = [directivesEnumerator nextObject])
-		[self _handleDirective:curDirective];
 }
 
 - (void)_receivedATDirective:(AQNetacquireDirective *)activateTileDirective;
@@ -519,22 +495,11 @@
 - (void)_receivedGMDirective:(AQNetacquireDirective *)gameMessageDirective;
 {
     NSAssert(gameMessageDirective != nil, @"Passed in nil object.");
-	[self _receivedGMDirective:gameMessageDirective isFirstPass:YES];
-}
-
-- (void)_receivedGMDirective:(AQNetacquireDirective *)gameMessageDirective isFirstPass:(BOOL)isFirstPass;
-{
-    NSAssert(gameMessageDirective != nil, @"Passed in nil object.");
     
 	if ([[gameMessageDirective parameters] count] != 1)
 		return;
 	
 	NSString *messageText = [[gameMessageDirective parameters] objectAtIndex:0];
-	
-	if (isFirstPass && ([messageText characterAtIndex:1] == '*' || [messageText characterAtIndex:1] == '>')) {
-		[self _parseMultipleDirectives:gameMessageDirective];
-		return;
-	}
 	
 	if ([messageText characterAtIndex:1] == '*' && [messageText length] > 13 && [[messageText substringToIndex:14] isEqualToString:@"\"*Waiting for "]) {
 		id associatedObject = [self _firstAssociatedObjectThatRespondsToSelector:@selector(setActivePlayerName:isPurchasing:)];
@@ -575,23 +540,10 @@
 {
     NSAssert(lobbyMessageDirective != nil, @"Passed in nil object.");
     
-	[self _receivedLMDirective:lobbyMessageDirective isFirstPass:YES];
-}
-
-- (void)_receivedLMDirective:(AQNetacquireDirective *)lobbyMessageDirective isFirstPass:(BOOL)isFirstPass;
-{
-    NSAssert(lobbyMessageDirective != nil, @"Passed in nil object.");
-    
 	// The server's response to LG and LU directives come in chunks of LM directives.
 	NSString *messageText = [[lobbyMessageDirective parameters] objectAtIndex:0];
-	if ([messageText length] > 14 && [[messageText substringToIndex:15] isEqualToString:@"\"# Active games"]) {
+  if (_objectRequestingGameListUpdate && [messageText hasPrefix:@"\"#"]) {
 		[self _receivedGameListDirective:lobbyMessageDirective];
-		return;
-	}
-	
-	// Messages starting with an asterisk are server information, so they're safe to parse for multiple directives.
-	if (isFirstPass && ([messageText characterAtIndex:1] == '*' || [messageText characterAtIndex:1] == '>')) {
-		[self _parseMultipleDirectives:lobbyMessageDirective];
 		return;
 	}
 	
@@ -607,7 +559,7 @@
 	_haveSeenFirstLMDirectives = YES;
 	_handshakeComplete = YES;
 	
-	[self _parseMultipleDirectives:bunchOfLMDirectives];
+	[self _handleDirective:bunchOfLMDirectives];
 }
 
 - (void)_receivedGameListDirective:(AQNetacquireDirective *)gameListDirective;
@@ -617,33 +569,23 @@
 	if (_objectRequestingGameListUpdate == nil)
 		return;
 	
+	if (!_updatingGameList)
+    _updatingGameList = [[NSMutableArray alloc] init];
+  
 	NSString *gameListString = [[gameListDirective parameters] objectAtIndex:0];
-	NSMutableArray *gameList = [[[NSMutableArray alloc] initWithCapacity:5] autorelease];
-	NSRange gameListStartRange = NSMakeRange(0, 1);	
-	NSRange gameListEndRange = NSMakeRange(1, 1);
-	while (gameListStartRange.location != gameListEndRange.location) {
-		NSRange gameListStartRange = [gameListString rangeOfString:@";:LM;"];
-		if (gameListStartRange.location == NSNotFound)
-			break;
-		NSRange gameListRange = NSMakeRange(gameListStartRange.location, [gameListString length] - gameListStartRange.location);
-		gameListString = [gameListString substringWithRange:gameListRange];
-		if ([gameListString length] < 13)
-			break;
-	
-		gameListString = [gameListString substringFromIndex:12];
-		NSRange gameNumberStartRange = [gameListString rangeOfString:@"#"];
-		NSRange gameNumberEndRange = [gameListString rangeOfString:@"->"];
-		if (gameNumberStartRange.location == NSNotFound || gameNumberEndRange.location == NSNotFound)
-			break;
-		NSRange gameNumberRange = NSMakeRange(gameNumberStartRange.location + 1, gameNumberEndRange.location - gameNumberStartRange.location - 1);
-		[gameList addObject:[gameListString substringWithRange:gameNumberRange]];
-	}
-	
-	if ([_objectRequestingGameListUpdate respondsToSelector:@selector(updatedGameList:)]) {
-		[_objectRequestingGameListUpdate updatedGameList:gameList];
-	}
-	
-	_objectRequestingGameListUpdate = nil;
+  NSString *regex = @"\"?\\s*->\\s*Game\\s*#([0-9]+)";
+  NSString *gameNumber = [gameListString stringByMatching:regex capture:1];
+  if (gameNumber)
+    [_updatingGameList addObject:gameNumber];
+  else if ([gameListString isMatchedByRegex:@"\"?# End of game list."])
+  {
+  	if ([_objectRequestingGameListUpdate respondsToSelector:@selector(updatedGameList:)]) {
+  		[_objectRequestingGameListUpdate updatedGameList:_updatingGameList];
+  	}
+    [_updatingGameList release];
+    _updatingGameList = nil;
+		_objectRequestingGameListUpdate = nil;
+  }
 }
 
 - (void)_receivedMDirective:(AQNetacquireDirective *)messageDirective;
