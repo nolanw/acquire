@@ -19,7 +19,7 @@
 	<key>CFBundleSignature</key>
 	<string>NWAQ</string>
 	<key>CFBundleVersion</key>
-	<string>0.9.5</string>
+	<string>0.9.6</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
@@ -27,7 +27,7 @@
 	<key>SUExpectsDSASignatureKey</key>
 	<true/>
 	<key>SUFeedURL</key>
-	<string>http://acquire.nwaite.com/appcast.xml</string>
+	<string>http://nolanw.ca/acquire/appcast.xml</string>
 	<key>SUPublicDSAKey</key>
 	<string>-----BEGIN PUBLIC KEY-----
 	MIIDOjCCAi0GByqGSM44BAEwggIgAoIBAQCoBV0xlTY0it5BuZYRc80XRZNXuARE
