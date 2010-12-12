@@ -30,9 +30,6 @@
 			return nil;
 		}
 		
-		[_messageToGameTextField setTarget:self];
-		[_messageToGameTextField setAction:@selector(sendGameMessage:)];
-		
 		int i;
 		for (i = 0; i < 6; ++i) {
 			[[_tileRackMatrix cellAtRow:0 column:i] setTransparent:YES];
@@ -223,36 +220,35 @@
 
 - (void)incomingGameMessage:(NSString *)gameMessage;
 {
-	if ([[_gameChatTextView textStorage] length] > 0)
-		[[_gameChatTextView textStorage] appendAttributedString:[[[NSAttributedString alloc] initWithString:@"\n"] autorelease]];
-
-	NSAttributedString *attributedGameMessage = [[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@", gameMessage]] autorelease];
-	[[_gameChatTextView textStorage] appendAttributedString:attributedGameMessage];
-	
-	[_gameChatTextView scrollRangeToVisible:NSMakeRange([[_gameChatTextView string] length], 0)];
-	
+  [self incomingGameLogEntry:gameMessage];	
 	_justAnnouncedLocalPlayersTurn = NO;
 }
 
 - (IBAction)sendGameMessage:(id)sender;
 {
-	NSString *trimmedGameMessage = [[_messageToGameTextField stringValue] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-	if ([trimmedGameMessage length] == 0)
-		return;
-
+  NSCharacterSet *whitespace = [NSCharacterSet whitespaceCharacterSet];
+  NSString *message = [_messageToGameTextField stringValue];
+	NSString *trimmed = [message stringByTrimmingCharactersInSet:whitespace];
+	if ([trimmed length] > 0)
+		[_game outgoingGameMessage:trimmed];
 	[_messageToGameTextField setStringValue:@""];
-
-	[_game outgoingGameMessage:trimmedGameMessage];
 }
 
 - (void)incomingGameLogEntry:(NSString *)gameLogEntry;
 {
-  NSUInteger oldLength = [[_gameChatTextView textStorage] length];
+  NSTextStorage *storage = [_gameChatTextView textStorage];
+  NSUInteger oldLength = [storage length];
 	if ([[_gameChatTextView textStorage] length] > 0)
-		[[_gameChatTextView textStorage] appendAttributedString:[[[NSAttributedString alloc] initWithString:@"\n"] autorelease]];
-
-	NSAttributedString *attributedGameLogEntry = [[[NSAttributedString alloc] initWithString:gameLogEntry] autorelease];
-	[[_gameChatTextView textStorage] appendAttributedString:attributedGameLogEntry];
+	{
+    NSAttributedString *newline;
+    newline = [[[NSAttributedString alloc] initWithString:@"\n"] autorelease];
+		[storage appendAttributedString:newline];
+	}
+  
+  NSAttributedString *entry;
+  entry = [[NSAttributedString alloc] initWithString:gameLogEntry];
+  [entry autorelease];
+	[storage appendAttributedString:entry];
 	
 	[_gameChatTextView scrollRangeToVisible:NSMakeRange(oldLength + 2, 0)];
 }

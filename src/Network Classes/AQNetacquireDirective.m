@@ -61,7 +61,6 @@
   //       - unquoted parameters with no quotes, commas, colons, or semicolons.
   //   - Followed by a semicolon and then a colon.
   NSString *regex = @"[A-Z]{1,2};(((\"([^\"]|\"\")*\"|[^\",;:]+),?)*);:";
-  NSLog(@"%@ parsing with %@:\n%@", NSStringFromSelector(_cmd), regex, dataString);
   NSArray *strings = [dataString componentsMatchedByRegex:regex];
   NSMutableArray *directives = [NSMutableArray array];
   NSEnumerator *stringEnumerator = [strings objectEnumerator];
