@@ -13,3 +13,9 @@ License
 -------
 
 The [Don't be a Dick Public License](http://philsturgeon.co.uk/code/dbad-license)
+
+
+NetAcquire Protocol Reference
+-----------------------------
+
+It's moved! Check the [downloads section](https://github.com/nolanw/acquire-server/downloads) of the [acquire-server](https://github.com/nolanw/acquire-server/) project.
