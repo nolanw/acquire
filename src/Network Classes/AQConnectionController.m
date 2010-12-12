@@ -79,10 +79,6 @@
 	_associatedObjects = [[NSMutableArray arrayWithObject:sender] retain];
 	_arrayController = [arrayController retain];
 	_error = [NSError alloc];
-	_handshakeComplete = NO;
-	_haveSeenFirstLMDirectives = NO;
-	_objectRequestingGameListUpdate = nil;
-	_creatingGame = NO;
 	_socket = [[AsyncSocket alloc] initWithDelegate:self];
 	
 	if (![_socket connectToHost:host onPort:port error:&_error])
@@ -427,7 +423,7 @@ didConnectToHost:(NSString*)host
 
 - (void)_handleDirective:(AQNetacquireDirective *)directive;
 {
-    NSAssert(directive != nil, @"Passed in nil object.");
+  NSAssert(directive != nil, @"Passed in nil object.");
     
 	NSString *directiveCode = [directive directiveCode];
 	
@@ -724,10 +720,17 @@ didConnectToHost:(NSString*)host
 	if ([[setStateDirective parameters] count] != 1)
 		return;
 	
-	if ([[[setStateDirective parameters] objectAtIndex:0] intValue] == 4) {
+  NSInteger state = [[[setStateDirective parameters] objectAtIndex:0] intValue];
+	if (state == 4)
+	{
 		id associatedObject = [self _firstAssociatedObjectThatRespondsToSelector:@selector(joiningGame:)];
 		[associatedObject joiningGame:_creatingGame];
 		_creatingGame = NO;
+	}
+	else if (state == 5)
+	{
+    id associatedObject = [self _firstAssociatedObjectThatRespondsToSelector:@selector(canStartActiveGame)];
+    [associatedObject canStartActiveGame];
 	}
 }
 

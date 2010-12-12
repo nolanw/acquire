@@ -38,6 +38,7 @@
 - (void)cancelConnectingToServer;
 - (void)joinGame:(int)gameNumber;
 - (void)joiningGame:(BOOL)createdGame;
+- (void)canStartActiveGame;
 - (void)createGame:(id)sender;
 - (void)startActiveGame;
 - (void)leaveGame;

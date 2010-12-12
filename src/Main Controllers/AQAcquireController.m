@@ -125,6 +125,12 @@
 	[activeGame bringGameWindowToFront];
 }
 
+- (void)canStartActiveGame
+{
+  [[_gameArrayController activeGame] setIsReadyToStart:YES];
+  [[NSApp mainMenu] update];
+}
+
 - (void)createGame:(id)sender;
 {
 	[[_connectionArrayController serverConnection] createGame];
@@ -256,15 +262,20 @@
 	NSMenu *serverMenu = [[[NSApp mainMenu] itemWithTitle:@"Server"] submenu];
 	NSMenu *gameMenu = [[[NSApp mainMenu] itemWithTitle:@"Game"] submenu];
 	
-	[[serverMenu itemWithTitle:@"Show Lobby Window"] setTarget:self];
-	[[serverMenu itemWithTitle:@"Show Lobby Window"] setAction:@selector(showLobbyWindow)];
-	[[serverMenu itemWithTitle:@"Disconnect From Server"] setTarget:self];
-	[[serverMenu itemWithTitle:@"Disconnect From Server"] setAction:@selector(disconnectFromServer)];
-	[[gameMenu itemWithTitle:@"Show Game Window"] setTarget:self];
-	[[gameMenu itemWithTitle:@"Show Game Window"] setAction:@selector(showActiveGameWindow)];
-	[[gameMenu itemWithTitle:@"Start Game"] setTarget:self];
-	[[gameMenu itemWithTitle:@"Start Game"] setAction:@selector(startActiveGame)];
-	[[gameMenu itemWithTitle:@"Leave Game"] setTarget:self];
-	[[gameMenu itemWithTitle:@"Leave Game"] setAction:@selector(leaveGame)];
+  NSMenuItem *showLobbyWindow = [serverMenu itemWithTitle:@"Show Lobby Window"];
+	[showLobbyWindow setTarget:self];
+	[showLobbyWindow setAction:@selector(showLobbyWindow)];
+  NSMenuItem *disconnect = [serverMenu itemWithTitle:@"Disconnect From Server"];
+	[disconnect setTarget:self];
+	[disconnect setAction:@selector(disconnectFromServer)];
+  NSMenuItem *showGameWindow = [gameMenu itemWithTitle:@"Show Game Window"];
+	[showGameWindow setTarget:self];
+	[showGameWindow setAction:@selector(showActiveGameWindow)];
+  NSMenuItem *startGame = [gameMenu itemWithTitle:@"Start Game"];
+	[startGame setTarget:self];
+	[startGame setAction:@selector(startActiveGame)];
+  NSMenuItem *leaveGame = [gameMenu itemWithTitle:@"Leave Game"];
+	[leaveGame setTarget:self];
+	[leaveGame setAction:@selector(leaveGame)];
 }
 @end
