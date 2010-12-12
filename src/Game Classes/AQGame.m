@@ -138,12 +138,20 @@
 	return nil;
 }
 
-- (void)purchaseShares:(NSArray *)sharesPurchased ofHotelsNamed:(NSArray *)hotelNames sender:(id)sender;
+- (void)purchaseShares:(NSArray*)sharesPurchased
+         ofHotelsNamed:(NSArray*)hotelNames
+                sender:(id)sender;
 {
-	[self purchaseShares:sharesPurchased ofHotelsNamed:hotelNames endGame:NO sender:sender];
+	[self purchaseShares:sharesPurchased
+         ofHotelsNamed:hotelNames
+               endGame:NO
+                sender:sender];
 }
 
-- (void)purchaseShares:(NSArray *)sharesPurchased ofHotelsNamed:(NSArray *)hotelNames endGame:(BOOL)endGame sender:(id)sender;
+- (void)purchaseShares:(NSArray*)sharesPurchased
+         ofHotelsNamed:(NSArray*)hotelNames
+               endGame:(BOOL)endGame
+                sender:(id)sender;
 {
   NSArray *oldHotelNames = [NSArray arrayWithObjects:@"Luxor", @"Tower", @"America", @"Fusion", @"Worldwide", @"Continental", @"Imperial", nil];
 	if ([self isNetworkGame]) {
@@ -164,7 +172,8 @@
 			BOOL foundIt = NO;
 			int i;
 			for (i = 0; i < [hotelNames count]; ++i) {
-				if ([[hotelNames objectAtIndex:i] isEqualToString:[curHotel name]]) {
+				if ([[hotelNames objectAtIndex:i] isEqualToString:[curHotel oldName]])
+				{
 					[pDirectiveParameters addObject:[sharesPurchased objectAtIndex:i]];
 					foundIt = YES;
 					break;

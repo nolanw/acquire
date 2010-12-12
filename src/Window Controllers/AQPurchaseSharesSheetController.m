@@ -50,9 +50,12 @@
 	[NSApp endSheet:_purchaseSharesSheet returnCode:0];
 }
 
-- (void)didEndSheet:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
+- (void)didEndSheet:(NSWindow*)sheet
+         returnCode:(int)returnCode
+        contextInfo:(void*)contextInfo;
 {
-	if (returnCode == 1) {
+	if (returnCode == 1)
+	{
 		[sheet orderOut:self];
 		[_gameWindowController purchaseSharesSheetDismissed];
 		return;
@@ -61,14 +64,16 @@
 	NSMutableArray *hotelNames = [NSMutableArray arrayWithCapacity:7];
 	NSMutableArray *sharesPurchased = [NSMutableArray arrayWithCapacity:7];
 	int i;
-	for (i = 0; i < [_hotelNamesMatrix numberOfRows]; ++i) {
+	for (i = 0; i < [_hotelNamesMatrix numberOfRows]; ++i)
+	{
 		[hotelNames addObject:[[_hotels objectAtIndex:i] oldName]];
-		[sharesPurchased addObject:[NSNumber numberWithInt:[[_shareNumbersAndSteppersMatrix cellAtRow:i column:0] intValue]]];
+    int s = [[_shareNumbersAndSteppersMatrix cellAtRow:i column:0] intValue];
+		[sharesPurchased addObject:[NSNumber numberWithInt:s]];
 	}
-	
 	[sheet orderOut:self];
-	
-	[(AQGameWindowController *)_gameWindowController purchaseShares:sharesPurchased ofHotelsNamed:hotelNames sender:_purchaseSharesButton];
+	[_gameWindowController purchaseShares:sharesPurchased
+                          ofHotelsNamed:hotelNames
+                                 sender:_purchaseSharesButton];
 }
 
 - (void)stepperChanged:(id)sender;
@@ -101,7 +106,8 @@
 }
 
 
-- (void)resizeAndPopulateMatricesWithHotels:(NSArray *)hotels availableCash:(int)availableCash;
+- (void)resizeAndPopulateMatricesWithHotels:(NSArray*)hotels
+                              availableCash:(int)availableCash;
 {
 	if (!_purchaseSharesSheet)
         [NSBundle loadNibNamed:@"PurchaseSharesSheet" owner:self];
@@ -117,10 +123,13 @@
 	
 	[_hotelNamesMatrix renewRows:[hotels count] columns:1];
     
-    int i;
-	for (i = 0; i < [hotels count]; ++i) {
-		[[_hotelNamesMatrix cellAtRow:i column:0] setStringValue:[[hotels objectAtIndex:i] oldName]];
-		[[_hotelNamesMatrix cellAtRow:i column:0] setAlignment:NSRightTextAlignment];
+  int i;
+	for (i = 0; i < [hotels count]; ++i)
+	{
+    NSTextFieldCell *cell = [_hotelNamesMatrix cellAtRow:i column:0];
+    NSString *hotelName = [[hotels objectAtIndex:i] oldName];
+		[cell setStringValue:hotelName];
+		[cell setAlignment:NSRightTextAlignment];
 	}
 	
 	[_hotelNamesMatrix sizeToCells];
@@ -135,9 +144,12 @@
 
 	NSStepperCell *stepperCell;
 	
-	for (i = 0; i < [hotels count]; ++i) {
-		[[_shareNumbersAndSteppersMatrix cellAtRow:i column:0] setType:NSTextCellType];
-		[[_shareNumbersAndSteppersMatrix cellAtRow:i column:0] setIntValue:0];
+	for (i = 0; i < [hotels count]; ++i)
+	{
+    NSTextFieldCell *cell = [_shareNumbersAndSteppersMatrix cellAtRow:i
+                                                               column:0];
+		[cell setType:NSTextCellType];
+		[cell setIntValue:0];
 		
 		stepperCell = [[[NSStepperCell alloc] init] autorelease];
 		[stepperCell setMaxValue:(double)[[hotels objectAtIndex:i] sharesInBank]];
