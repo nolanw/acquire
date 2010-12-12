@@ -18,9 +18,7 @@
 	IBOutlet NSMatrix		*_boardMatrix;
 	IBOutlet NSMatrix		*_tileRackMatrix;
 	IBOutlet NSTableView	*_scoreboardTableView;
-	IBOutlet NSTabView		*_gameChatAndLogTabView;
 	IBOutlet NSTextView		*_gameChatTextView;
-	IBOutlet NSTextView		*_gameLogTextView;
 	IBOutlet NSTextField	*_messageToGameTextField;
 	IBOutlet NSButton		*_purchaseSharesButton;
 	IBOutlet NSButton		*_endCurrentTurnButton;
@@ -77,7 +75,6 @@
 - (void)closeGameWindow;
 - (void)bringGameWindowToFront;
 - (void)setWindowTitle:(NSString *)windowTitle;
-- (void)removeGameChatTabViewItem;
 
 // Passthrus
 - (void)showPurchaseSharesSheetWithHotels:(NSArray *)hotels availableCash:(int)availableCash;

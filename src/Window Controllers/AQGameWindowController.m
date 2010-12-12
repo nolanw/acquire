@@ -42,7 +42,6 @@
 	}
 	
 	[[_gameChatTextView textStorage] setAttributedString:[[[NSAttributedString alloc] initWithString:@""] autorelease]];
-	[[_gameLogTextView textStorage] setAttributedString:[[[NSAttributedString alloc] initWithString:@""] autorelease]];
 	[self _labelBoard];
 	[_scoreboardTableView setDataSource:self];
 	
@@ -182,7 +181,7 @@
 		return;
 	}
 	
-	[_gameWindow makeFirstResponder:_gameChatAndLogTabView];
+	[_gameWindow makeFirstResponder:_gameChatTextView];
 }
 
 - (void)purchaseSharesSheetDismissed;
@@ -248,13 +247,14 @@
 
 - (void)incomingGameLogEntry:(NSString *)gameLogEntry;
 {
-	if ([[_gameLogTextView textStorage] length] > 0)
-		[[_gameLogTextView textStorage] appendAttributedString:[[[NSAttributedString alloc] initWithString:@"\n"] autorelease]];
+  NSUInteger oldLength = [[_gameChatTextView textStorage] length];
+	if ([[_gameChatTextView textStorage] length] > 0)
+		[[_gameChatTextView textStorage] appendAttributedString:[[[NSAttributedString alloc] initWithString:@"\n"] autorelease]];
 
 	NSAttributedString *attributedGameLogEntry = [[[NSAttributedString alloc] initWithString:gameLogEntry] autorelease];
-	[[_gameLogTextView textStorage] appendAttributedString:attributedGameLogEntry];
+	[[_gameChatTextView textStorage] appendAttributedString:attributedGameLogEntry];
 	
-	[_gameLogTextView scrollRangeToVisible:NSMakeRange([[_gameLogTextView string] length], 0)];
+	[_gameChatTextView scrollRangeToVisible:NSMakeRange(oldLength + 2, 0)];
 }
 
 - (void)updateTileRack:(NSArray *)tiles;
@@ -446,11 +446,6 @@
 - (void)setWindowTitle:(NSString *)windowTitle;
 {
 	[_gameWindow setTitle:windowTitle];
-}
-
-- (void)removeGameChatTabViewItem;
-{
-	[_gameChatAndLogTabView removeTabViewItem:[_gameChatAndLogTabView tabViewItemAtIndex:0]];
 }
 
 

@@ -1400,7 +1400,6 @@
 		return;
 	}
 	
-	[_gameWindowController removeGameChatTabViewItem];
 	[_gameWindowController incomingGameLogEntry:[NSString stringWithFormat:@"* Welcome to Acquire!\n* Game started at %@.", [NSDate date]]];
 }
 
