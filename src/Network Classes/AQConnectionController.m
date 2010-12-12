@@ -501,33 +501,38 @@
 		return;
 	
 	NSString *messageText = [[gameMessageDirective parameters] objectAtIndex:0];
-	
-	if ([messageText characterAtIndex:1] == '*' && [messageText length] > 13 && [[messageText substringToIndex:14] isEqualToString:@"\"*Waiting for "]) {
-		id associatedObject = [self _firstAssociatedObjectThatRespondsToSelector:@selector(setActivePlayerName:isPurchasing:)];
-		if ([messageText rangeOfString:@"play tile" options:NSBackwardsSearch].location != NSNotFound)
-			[associatedObject setActivePlayerName:[messageText substringWithRange:NSMakeRange(14, [messageText length] - 29)] isPurchasing:NO];
+  if ([messageText length] == 0)
+    return;
+  
+  unichar first = [messageText characterAtIndex:1];
+  NSString *tilePlayingRegex = @"\"?\\*Waiting for (.+) to play tile";
+  NSString *tilePlayer = [messageText stringByMatching:tilePlayingRegex
+                                               capture:1];
+  if ([messageText isMatchedByRegex:@"\"?Waiting for "])
+  {
+    SEL selector = @selector(setActivePlayerName:isPurchasing:);
+		id associatedObject = [self _firstAssociatedObjectThatRespondsToSelector:selector];
+    if (tilePlayer)
+			[associatedObject setActivePlayerName:tilePlayer isPurchasing:NO];
 		else if ([messageText rangeOfString:@"make purchase" options:NSBackwardsSearch].location != NSNotFound)
 			[associatedObject setActivePlayerName:[messageText substringWithRange:NSMakeRange(14, [messageText length] - 33)] isPurchasing:YES];
 	}
 	
-	if ([messageText characterAtIndex:1] == '*' && [messageText length] > 19 && [[messageText substringWithRange:NSMakeRange(([messageText length] - 20), 19)] isEqualToString:@"has ended the game."]) {
+  if (first == '*' && [messageText isMatchedByRegex:@"has ended the game."])
+  {
 		[[self _firstAssociatedObjectThatRespondsToSelector:@selector(determineAndCongratulateWinner)] determineAndCongratulateWinner];
-	}
-	
-	if ([messageText characterAtIndex:1] == '>' && [messageText length] > 20 && [[messageText substringWithRange:NSMakeRange(1, 19)] isEqualToString:@"> This game is over"]) {
 		[[self _firstAssociatedObjectThatRespondsToSelector:@selector(disableBoardAndTileRack)] disableBoardAndTileRack];
 	}
 	
-	if ([messageText characterAtIndex:1] == '*' || [messageText characterAtIndex:1] == '>') {
-		[[self _firstAssociatedObjectThatRespondsToSelector:@selector(incomingGameLogEntry:)] incomingGameLogEntry:[[[gameMessageDirective parameters] objectAtIndex:0] substringWithRange:NSMakeRange(1, [[[gameMessageDirective parameters] objectAtIndex:0] length] - 2)]];
-		return;
-	}
   NSRange chopRange = NSMakeRange(1, [messageText length] - 2);
   NSString *unquoted = [messageText substringWithRange:chopRange];
   NSString *unescaped = [unquoted stringByReplacingOccurrencesOfRegex:@"\"\""
                                                            withString:@"\""];
-	id associatedObject = [self _firstAssociatedObjectThatRespondsToSelector:@selector(incomingGameMessage:)];
-	[associatedObject incomingGameMessage:unescaped];
+  SEL selector = @selector(incomingGameMessage:);
+	if (first == '*' || first == '>')
+    selector = @selector(incomingGameLogEntry:);
+  id associatedObject = [self _firstAssociatedObjectThatRespondsToSelector:selector];
+  [associatedObject performSelector:selector withObject:unescaped];
 }
 
 - (void)_receivedGPDirective:(AQNetacquireDirective *)getPurchaseDirective;
