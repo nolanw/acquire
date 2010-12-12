@@ -6,12 +6,12 @@
       <description>Most recent changes with links to updates.</description>
       <language>en</language>
 			<item>
-				<title>Version 0.9.6 (minor bugfix release)</title>
+				<title>Version 0.9.7 (bugfix)</title>
 				<sparkle:releaseNotesLink>
-					http://nolanw.ca/acquire/release/Acquire_0.9.6.html
+					http://nolanw.ca/acquire/release/Acquire_0.9.7.html
 				</sparkle:releaseNotesLink>
-				<pubDate>Sat, 11 Dec 2010 05:00:00 -0700</pubDate>
-				<enclosure sparkle:dsaSignature="MC0CFQCPf3v5tKcgMp+dXq3bWgf7HaSuhwIUNIxr+Fb7otX7p/3jwvr/6fzxoKM=" url="http://nolanw.ca/acquire/release/Acquire_0.9.6.zip" sparkle:version="0.9.6" length="1155810" type="application/octet-stream"/>
+				<pubDate>Sat, 11 Dec 2010 23:45:00 -0700</pubDate>
+				<enclosure sparkle:dsaSignature="MC0CFQCV4mY+Sb1Bf55grFhIGmjURjIFFAIUYpCBUkfUUDyfACz0NloD17J+k8I=" url="http://nolanw.ca/acquire/release/Acquire_0.9.7.zip" sparkle:version="0.9.7" length="1155882" type="application/octet-stream"/>
 			</item>
    </channel>
 </rss>
