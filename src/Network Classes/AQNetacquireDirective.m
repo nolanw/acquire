@@ -51,11 +51,8 @@
 	return newDirective;
 }
 
-+ (NSArray *)directivesWithData:(NSData *)data
++ (NSArray *)directivesWithDataString:(NSString *)dataString
 {
-  NSString *string = [[NSString alloc] initWithData:data
-                                            encoding:NSUTF8StringEncoding];
-  [string autorelease];
   // With words:
   //   - One or two uppercase letters.
   //   - Followed by a semicolon.
@@ -64,8 +61,8 @@
   //       - unquoted parameters with no quotes, commas, colons, or semicolons.
   //   - Followed by a semicolon and then a colon.
   NSString *regex = @"[A-Z]{1,2};(((\"([^\"]|\"\")*\"|[^\",;:]+),?)*);:";
-  NSLog(@"%@ parsing with %@:\n%@", NSStringFromSelector(_cmd), regex, string);
-  NSArray *strings = [string componentsMatchedByRegex:regex];
+  NSLog(@"%@ parsing with %@:\n%@", NSStringFromSelector(_cmd), regex, dataString);
+  NSArray *strings = [dataString componentsMatchedByRegex:regex];
   NSMutableArray *directives = [NSMutableArray array];
   NSEnumerator *stringEnumerator = [strings objectEnumerator];
   NSString *cur;

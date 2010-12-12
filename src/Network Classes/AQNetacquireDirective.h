@@ -16,7 +16,7 @@
 + (id)directiveWithData:(NSData *)data;
 + (id)directiveWithString:(NSString *)string;
 + (id)directiveWithCode:(NSString *)code parameters:(NSString *)firstParameter, ...;
-+ (NSArray *)directivesWithData:(NSData *)data;
++ (NSArray *)directivesWithDataString:(NSString *)dataString;
 
 // init/dealloc
 - (id)init;

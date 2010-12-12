@@ -296,7 +296,9 @@
 	[(AQConnectionArrayController *)_arrayController connectionClosed:self];
 }
 
-- (void)onSocket:(AsyncSocket *)socket didConnectToHost:(NSString *)host port:(UInt16)port;
+- (void)onSocket:(AsyncSocket*)socket
+didConnectToHost:(NSString*)host
+            port:(UInt16)port;
 {
 	if (socket != _socket)
 		return;
@@ -305,9 +307,39 @@
 		[_socket readDataWithTimeout:-1 tag:0];
 }
 
-- (void)onSocket:(AsyncSocket *)socket didReadData:(NSData *)data withTag:(long)tag;
+- (void)onSocket:(AsyncSocket*)socket
+     didReadData:(NSData*)data
+         withTag:(long)tag;
 {
-  NSArray *directives = [AQNetacquireDirective directivesWithData:data];
+  NSMutableString *dataString = [[NSMutableString alloc] initWithData:data
+                                                 encoding:NSUTF8StringEncoding];
+  [dataString autorelease];
+  // There's a weird bug in (I think) ICU that appears when the end of the data 
+  // is not the end of a directive (";:"). The bug causes ICU to take a 
+  // *really* long time to parse out the components. To combat that, if the 
+  // data doesn't end with ";:", we only parse up to and including the last 
+  // whole directive. Anything that gets left off is saved for later, when it's 
+  // prepended to the new incoming data.
+  // (Well, this is what we should do, but at the moment we just look for the 
+  // most recent ";:". This could in theory come in the middle of a quoted 
+  // parameter, but that's a risk I'm willing to take at the moment.)
+  if (_partOfLastDataString)
+  {
+    [dataString insertString:_partOfLastDataString atIndex:0];
+    [_partOfLastDataString release];
+    _partOfLastDataString = nil;
+  }
+  NSRange lastEndish = [dataString rangeOfString:@";:"
+                                         options:NSBackwardsSearch];
+  NSUInteger lastEnd = lastEndish.location + lastEndish.length;                                    
+  if (lastEnd != [dataString length])
+  {
+    _partOfLastDataString = [[dataString substringFromIndex:lastEnd] retain];
+    NSRange chopRange = NSMakeRange(lastEnd, [dataString length] - lastEnd);
+    [dataString deleteCharactersInRange:chopRange];
+  }
+  NSArray *directives;
+  directives = [AQNetacquireDirective directivesWithDataString:dataString];
   NSEnumerator *directiveEnumerator = [directives objectEnumerator];
   AQNetacquireDirective *curDirective;
   while ((curDirective = [directiveEnumerator nextObject]))

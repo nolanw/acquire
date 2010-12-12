@@ -14,15 +14,16 @@
 #pragma mark Interface
 
 {
-	AsyncSocket	    *_socket;
-	id		    	_arrayController;
-	NSError	    	*_error;
-	BOOL	    	_handshakeComplete;
-	BOOL	    	_haveSeenFirstLMDirectives;
-	id		    	_objectRequestingGameListUpdate;
+	AsyncSocket	*_socket;
+	id	_arrayController;
+	NSError	*_error;
+	BOOL _handshakeComplete;
+	BOOL _haveSeenFirstLMDirectives;
+	id _objectRequestingGameListUpdate;
   NSMutableArray *_updatingGameList;
-	BOOL		    _creatingGame;
-	NSMutableArray	*_associatedObjects;
+	BOOL _creatingGame;
+	NSMutableArray *_associatedObjects;
+  NSString *_partOfLastDataString;
 }
 
 #pragma mark 
