@@ -24,18 +24,43 @@
 	_createNewHotelSheetController = [[AQCreateNewHotelSheetController alloc] initWithGameWindowController:self];
 	_purchaseSharesSheetController = [[AQPurchaseSharesSheetController alloc] initWithGameWindowController:self];
 	
-	if (_gameWindow == nil) {
-		if (![NSBundle loadNibNamed:@"GameWindow" owner:self]) {
+	if (_gameWindow == nil)
+	{
+		if (![NSBundle loadNibNamed:@"GameWindow" owner:self])
+		{
 			NSLog(@"%@ failed to load GameWindow.nib", NSStringFromSelector(_cmd));
+      [self release];
 			return nil;
 		}
 		
-		int i;
-		for (i = 0; i < 6; ++i) {
-			[[_tileRackMatrix cellAtRow:0 column:i] setTransparent:YES];
-			[[_tileRackMatrix cellAtRow:0 column:i] setEnabled:NO];
-			[[_tileRackMatrix cellAtRow:0 column:i] setTitle:@""];
+		for (NSInteger i = 0; i < 6; ++i)
+		{
+      NSButtonCell *cell = [_tileRackMatrix cellAtRow:0 column:i];
+			[cell setTransparent:YES];
+			[cell setEnabled:NO];
+			[cell setTitle:@""];
 		}
+		
+    NSArray *columns = [_scoreboardTableView tableColumns];
+    NSEnumerator *columnEnumerator = [columns objectEnumerator];
+    NSTableColumn *curColumn;
+    while ((curColumn = [columnEnumerator nextObject]))
+    {
+      NSString *identifier = [curColumn identifier];
+      if ([identifier hasPrefix:@"sharesOf"])
+      {
+        AQHotel *hotel = [game hotelNamed:[identifier substringFromIndex:8]];
+        NSTableHeaderCell *cell = [curColumn headerCell];
+        NSAttributedString *cellString = [cell attributedStringValue];
+        NSMutableAttributedString *newString = [cellString mutableCopy];
+        [newString autorelease];
+        NSRange wholeString = NSMakeRange(0, [newString length]);
+        [newString addAttribute:NSForegroundColorAttributeName
+                          value:[[hotel color] shadowWithLevel:0.3]
+                          range:wholeString];
+        [cell setAttributedStringValue:newString];
+      }
+    }
 	}
 	
 	[[_gameChatTextView textStorage] setAttributedString:[[[NSAttributedString alloc] initWithString:@""] autorelease]];
