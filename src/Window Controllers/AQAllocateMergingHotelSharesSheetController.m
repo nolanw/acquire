@@ -2,6 +2,7 @@
 //
 // Created August 04, 2008 by nwaite
 
+#import "AQAllocateMergingHotelSharesSheetController.h"
 #import "AQGameWindowController.h"
 
 @interface AQAllocateMergingHotelSharesSheetController (Private)
@@ -9,7 +10,7 @@
 @end
 
 @implementation AQAllocateMergingHotelSharesSheetController
-- (id)initWithGameWindowController:(id)gameWindowController;
+- (id)initWithGameWindowController:(AQGameWindowController *)gameWindowController;
 {
 	if (![super init])
 		return nil;

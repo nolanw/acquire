@@ -6,6 +6,8 @@
 #import "AQHotel.h"
 #import "AQPlayer.h"
 
+@class AQGameWindowController;
+
 @interface AQAllocateMergingHotelSharesSheetController : NSObject
 {
 	IBOutlet NSWindow		*_allocateMergingHotelSharesSheet;
@@ -19,7 +21,7 @@
 	IBOutlet NSTextField	*_sharesKeptInMergingHotelTextField;
 	IBOutlet NSButton		*_allocateButton;
 	
-	id		_gameWindowController;
+	AQGameWindowController *_gameWindowController;
 	id		_mergingHotel;
 	id		_survivingHotel;
 	id		_player;
@@ -29,7 +31,7 @@
 	double	_sharesTraded;
 }
 
-- (id)initWithGameWindowController:(id)gameWindowController;
+- (id)initWithGameWindowController:(AQGameWindowController *)gameWindowController;
 - (void)dealloc;
 
 - (IBAction)allocate:(id)sender;
