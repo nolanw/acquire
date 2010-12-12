@@ -4,7 +4,10 @@ Acquire
 Play the Acquire board game on your Mac!
 ----------------------------------------
 
-This code is a couple of years old. I've given it out here and there but never put it online, so now I'm putting it online.
+[Download the latest version at the Acquire homepage.](http://nolanw.ca/acquire/)
+
+Or, if you already have Acquire, hit **Check for Updates** in the **Acquire** menu.
+
 
 License
 -------
