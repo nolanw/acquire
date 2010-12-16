@@ -166,6 +166,21 @@
 
 - (void)enableTileRack;
 {
+  NSArray *tiles = [[_game localPlayer] tiles];
+  for (NSInteger i = 0; i < 6; i++)
+  {
+    NSCell *cell = [_tileRackMatrix cellAtRow:0 column:i];
+    if ([tiles count] > i)
+    {
+      AQTile *tile = [tiles objectAtIndex:i];
+      if ([tile isEqual:[NSNull null]] || [_game tileIsUnplayable:tile])
+        [cell setEnabled:NO];
+      else
+        [cell setEnabled:YES];
+    }
+    else
+      [cell setEnabled:NO];
+  }
 	[_tileRackMatrix setEnabled:YES];
 }
 
@@ -287,7 +302,7 @@
 	int i;
 	for (i = 0; i < [tiles count]; ++i) {
 		curTile = [tiles objectAtIndex:i];
-		if (curTile == [NSNull null]) {
+    if ([curTile isEqual:[NSNull null]]) {
 			[[_tileRackMatrix cellAtRow:0 column:i] setTransparent:YES];
 			[[_tileRackMatrix cellAtRow:0 column:i] setTitle:@""];
 		} else {
@@ -309,8 +324,9 @@
 	
 	NSEnumerator *tilesToHighlightEnumerator = [tilesToHighlight objectEnumerator];
 	id curTile;
-	while (curTile = [tilesToHighlightEnumerator nextObject]) {
-		if (curTile != [NSNull null])
+	while (curTile = [tilesToHighlightEnumerator nextObject])
+	{
+    if (curTile != [NSNull null] && ![_game tileIsUnplayable:curTile])
 			[[_boardMatrix cellAtRow:[curTile rowInt] column:([curTile column] - 1)] setButtonColor:[_game tilePlayableColor]];
 	}
 }
@@ -346,12 +362,6 @@
 - (void)announceLocalPlayersTurn;
 {
 	[NSApp requestUserAttention:NSInformationalRequest];
-	
-	if (_justAnnouncedLocalPlayersTurn)
-		return;
-	
-	[self incomingGameMessage:@"** It's your turn. Play a tile!"];
-	_justAnnouncedLocalPlayersTurn = YES;
 }
 
 - (void)enteringTestMode;

@@ -578,9 +578,6 @@
 	if (_tilePlayedThisTurn)
 		return;
 	
-	[_gameWindowController tilesChanged:[[self activePlayer] tiles]];
-	[_gameWindowController disableTileRack];
-	
 	AQTile *clickedTile = [_board tileOnBoardByString:tileClickedString];
 	
 	if ([self playedTileCreatesNewHotel:clickedTile] && 
@@ -589,6 +586,9 @@
 	
 	if ([self tileIsUnplayable:clickedTile])
 		return;
+	
+	[_gameWindowController tilesChanged:[[self activePlayer] tiles]];
+	[_gameWindowController disableTileRack];
 	
 	[_associatedConnection playTileAtRackIndex:([[self activePlayer] rackIndexOfTileNamed:tileClickedString] + 1)];
 	_tilePlayedThisTurn = YES;
@@ -661,7 +661,7 @@
 		}
 		if ([curPlayer cash] > [[playersWithMostCash objectAtIndex:0] cash])
 		{
-			playersWithMostCash = [NSMutableArray arrayWithCapacity:5];
+      [playersWithMostCash removeAllObjects];
 			[playersWithMostCash addObject:curPlayer];
 			continue;
 		}
@@ -703,7 +703,9 @@
 - (BOOL)tileIsUnplayable:(AQTile *)tile;
 {
 	NSArray *adjacentHotels = [self hotelsAdjacentToTile:tile];
-	if ([adjacentHotels count] < 2)
+  if ([adjacentHotels count] == 0)
+    return [self playedTileCreatesNewHotel:tile];
+	else if ([adjacentHotels count] == 1)
 		return NO;
 	
 	int safeAdjacentHotels = 0;
