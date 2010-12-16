@@ -32,13 +32,6 @@
 	return [_gameArray lastObject];
 }
 
-- (AQGame *)startNewLocalGame;
-{
-	[_gameArray addObject:[[[AQGame alloc] initLocalGameWithArrayController:self] autorelease]];
-	
-	return [_gameArray lastObject];
-}
-
 - (void)startNewNetworkGameAndMakeActiveWithAssociatedConnection:(AQConnectionController *)associatedConnection;
 {
 	if ([_gameArray count] == 0)
@@ -47,14 +40,6 @@
 		[_gameArray replaceObjectAtIndex:0 withObject:[[AQGame alloc] initNetworkGameWithArrayController:self associatedConnection:associatedConnection]];
 	else
 		[_gameArray insertObject:[[[AQGame alloc] initNetworkGameWithArrayController:self associatedConnection:associatedConnection] autorelease] atIndex:0];
-}
-
-- (void)startNewLocalGameAndMakeActive;
-{
-	if ([_gameArray count] == 0)
-		[self startNewLocalGame];
-	else
-		[_gameArray insertObject:[[[AQGame alloc] initLocalGameWithArrayController:self] autorelease] atIndex:0];
 }
 
 - (BOOL)isGameInArray:(AQGame *)game;

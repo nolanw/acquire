@@ -31,5 +31,5 @@
 - (void)didEndSheet:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
 
 - (void)resizeAndPopulateMatricesWithMergingHotels:(NSArray *)mergingHotels potentialSurvivors:(NSArray *)potentialSurvivors mergeTile:(id)mergeTile;
-- (void)showChooseMergerSurvivorSheet:(NSWindow *)window isNetworkGame:(BOOL)isNetworkGame;
+- (void)showChooseMergerSurvivorSheet:(NSWindow *)window;
 @end

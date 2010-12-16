@@ -41,19 +41,8 @@
 
 - (IBAction)allocate:(id)sender;
 {
-	if ([_gameWindowController isNetworkGame]) {
-		[_gameWindowController mergerSharesSold:(int)_sharesSold sharesTraded:((int)_sharesTraded * 2)];
-		
-		[NSApp stopModal];
-		return;
-	}
-	
-	if (_sharesSold > 0)
-		[(AQGameWindowController *)_gameWindowController sellSharesOfHotel:_mergingHotel numberOfShares:(int)_sharesSold player:_player sharePrice:_sharePrice];
-	
-	if (_sharesTraded > 0)
-		[(AQGameWindowController *)_gameWindowController tradeSharesOfHotel:_mergingHotel forSharesInHotel:_survivingHotel numberOfShares:(int)_sharesTraded player:_player];
-	
+	[_gameWindowController mergerSharesSold:(int)_sharesSold
+                             sharesTraded:((int)_sharesTraded * 2)];
 	[NSApp stopModal];
 }
 

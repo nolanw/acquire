@@ -28,5 +28,5 @@
 - (void)didEndSheet:(NSWindow *)sheet returnCode:(int)returnCode contextInfo:(void *)contextInfo;
 
 - (void)resizeAndPopulateMatricesWithHotels:(NSArray *)hotels tile:(id)tile;
-- (void)showCreateNewHotelSheet:(NSWindow *)window isNetworkGame:(BOOL)isNetworkGame;
+- (void)showCreateNewHotelSheet:(NSWindow *)window;
 @end

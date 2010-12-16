@@ -143,17 +143,7 @@
 }
 
 - (void)leaveGame;
-{
-	if ([[_gameArrayController activeGame] isLocalGame]) {
-		[[_gameArrayController activeGame] closeGameWindow];
-		[_gameArrayController removeGame:[_gameArrayController activeGame]];
-		if (_welcomeWindowController == nil)
-			_welcomeWindowController = [[AQWelcomeWindowController alloc] initWithAcquireController:self];
-		[_welcomeWindowController bringWelcomeWindowToFront:nil];
-		
-		return;
-	}
-	
+{	
 	[[_gameArrayController activeGame] closeGameWindow];
 	[[_connectionArrayController serverConnection] deregisterAssociatedObject:[_gameArrayController activeGame]];
 	[[_connectionArrayController serverConnection] leaveGame];

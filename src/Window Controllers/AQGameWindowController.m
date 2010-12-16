@@ -318,12 +318,13 @@
 - (void)congratulateWinnersByName:(NSArray *)winners;
 {
 	NSAlert *congratulateWinnerAlert = [[[NSAlert alloc] init] autorelease];
-	if ([_game isNetworkGame] && ![winners containsObject:[_game localPlayer]])
+	if (![winners containsObject:[_game localPlayer]])
 		[congratulateWinnerAlert addButtonWithTitle:@"Fiddlesticks"];
 	else
 		[congratulateWinnerAlert addButtonWithTitle:@"Congratulations!"];
 	
-	if ([winners count] == 1) {
+	if ([winners count] == 1)
+	{
 		[congratulateWinnerAlert setMessageText:NSLocalizedStringFromTable(@"We have a winner!", @"Acquire", @"An announcement that we have a winner.")];
 		[congratulateWinnerAlert setInformativeText:[NSString stringWithFormat:@"%@ %@", [[winners objectAtIndex:0] name], NSLocalizedStringFromTable(@"has won the game!", @"Acquire", @"Text saying someone has won the game")]];
 	} else {
@@ -480,13 +481,13 @@
 - (void)showCreateNewHotelSheetWithHotels:(NSArray *)hotels atTile:(id)tile;
 {
 	[_createNewHotelSheetController resizeAndPopulateMatricesWithHotels:hotels tile:tile];
-	[_createNewHotelSheetController showCreateNewHotelSheet:_gameWindow isNetworkGame:[_game isNetworkGame]];
+	[_createNewHotelSheetController showCreateNewHotelSheet:_gameWindow];
 }
 
 - (void)showChooseMergerSurvivorSheetWithMergingHotels:(NSArray *)mergingHotels potentialSurvivors:(NSArray *)potentialSurvivors mergeTile:(id)mergeTile;
 {
 	[_chooseMergerSurvivorSheetController resizeAndPopulateMatricesWithMergingHotels:mergingHotels potentialSurvivors:potentialSurvivors mergeTile:mergeTile];
-	[_chooseMergerSurvivorSheetController showChooseMergerSurvivorSheet:_gameWindow isNetworkGame:[self isNetworkGame]];
+	[_chooseMergerSurvivorSheetController showChooseMergerSurvivorSheet:_gameWindow];
 }
 
 - (void)showAllocateMergingHotelSharesSheetForMergingHotel:(AQHotel *)mergingHotel survivingHotel:(AQHotel *)survivingHotel player:(AQPlayer *)player sharePrice:(int)sharePrice;
@@ -527,11 +528,6 @@
 - (void)tradeSharesOfHotel:(AQHotel *)fromHotel forSharesInHotel:(AQHotel *)toHotel numberOfShares:(int)numberOfShares player:(AQPlayer *)player;
 {
 	[_game tradeSharesOfHotel:fromHotel forSharesInHotel:toHotel numberOfShares:numberOfShares player:player];
-}
-
-- (BOOL)isNetworkGame;
-{
-	return [_game isNetworkGame];
 }
 
 - (void)mergerSharesSold:(int)sharesSold sharesTraded:(int)sharesTraded;
