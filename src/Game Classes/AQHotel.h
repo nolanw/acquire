@@ -35,10 +35,11 @@
 
 // Instance methods
 // init/dealloc
-/*
-	* DO NOT CALL -init DIRECTLY!
-	* Use one of the init methods in LocalGame or NetworkGame.
-*/
+- (id)initWithName:(NSString*)name
+           oldName:(NSString*)oldName
+              tier:(int)tier
+             color:(NSColor*)color
+      netacquireID:(int)netacquireID;
 - (void)dealloc;
 
 // Physical characteristics
@@ -63,22 +64,9 @@
 - (int)sharePrice;
 - (int)majorityShareholderBonus;
 - (int)minorityShareholderBonus;
-@end
 
-#pragma mark -
-@interface AQHotel (LocalGame)
-#pragma mark LocalGame interface
-// init/dealloc
-- (id)initWithName:(NSString *)name oldName:(NSString *)oldName tier:(int)tier color:(NSColor *)color;
-@end
-
-#pragma mark -
-@interface AQHotel (NetworkGame)
-#pragma mark NetworkGame interface
-// init/dealloc
-- (id)initWithName:(NSString *)name oldName:(NSString *)oldName tier:(int)tier color:(NSColor *)color netacquireID:(int)netacquireID;
-
-// Accessors/setters
+// Netacquire
 - (int)netacquireID;
 - (void)setNetacquireID:(int)netacquireID;
+
 @end
