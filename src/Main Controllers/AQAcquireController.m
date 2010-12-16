@@ -115,7 +115,7 @@
 
 - (void)joiningGame:(BOOL)createdGame;
 {
-	[_gameArrayController startNewNetworkGameAndMakeActiveWithAssociatedConnection:[_connectionArrayController serverConnection]];
+	[_gameArrayController startNewGameAndMakeActiveWithAssociatedConnection:[_connectionArrayController serverConnection]];
 	id activeGame = [_gameArrayController activeGame];
 	[[_connectionArrayController serverConnection] registerAssociatedObjectAndPrioritize:activeGame];
 	[activeGame setLocalPlayerName:_localPlayerName];
@@ -143,17 +143,7 @@
 }
 
 - (void)leaveGame;
-{
-	if ([[_gameArrayController activeGame] isLocalGame]) {
-		[[_gameArrayController activeGame] closeGameWindow];
-		[_gameArrayController removeGame:[_gameArrayController activeGame]];
-		if (_welcomeWindowController == nil)
-			_welcomeWindowController = [[AQWelcomeWindowController alloc] initWithAcquireController:self];
-		[_welcomeWindowController bringWelcomeWindowToFront:nil];
-		
-		return;
-	}
-	
+{	
 	[[_gameArrayController activeGame] closeGameWindow];
 	[[_connectionArrayController serverConnection] deregisterAssociatedObject:[_gameArrayController activeGame]];
 	[[_connectionArrayController serverConnection] leaveGame];
@@ -193,24 +183,7 @@
 - (void)connection:(AQConnectionController *)connection willDisconnectWithError:(NSError *)err;
 {
 	if ([connection isServerConnection])
-		[_welcomeWindowController networkGameConnectionFailed];
-}
-
-- (void)startNewLocalGameWithPlayersNamed:(NSArray *)playerNames;
-{
-	[_welcomeWindowController saveLocalGameDefaults];
-	[_welcomeWindowController closeWelcomeWindow];
-	
-	[_gameArrayController startNewLocalGameAndMakeActive];
-	[[_gameArrayController activeGame] loadGameWindow];
-	[[_gameArrayController activeGame] bringGameWindowToFront];
-	
-	NSEnumerator *playerNameEnumerator = [playerNames objectEnumerator];
-	id curPlayerName;
-	while (curPlayerName = [playerNameEnumerator nextObject])
-		[[_gameArrayController activeGame] addPlayerNamed:curPlayerName];
-	
-	[[_gameArrayController activeGame] startGame];
+		[_welcomeWindowController gameConnectionFailed];
 }
 
 

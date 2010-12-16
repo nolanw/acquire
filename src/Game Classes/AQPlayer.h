@@ -9,10 +9,10 @@
 @interface AQPlayer : NSObject
 #pragma mark Interface
 {
-    NSString            *_name;
-    int                 _cash;
-    NSMutableDictionary *_sharesByHotelName;
-	NSMutableArray		*_tiles;
+  NSString *_name;
+  int _cash;
+  NSMutableDictionary *_sharesByHotelName;
+  NSMutableArray *_tiles;
 }
 
 // Class methods
@@ -37,26 +37,16 @@
 - (void)playedTileNamed:(NSString *)tileName;
 - (NSArray *)tiles;
 - (int)numberOfTiles;
+- (void)drewTile:(AQTile *)tile atRackIndex:(int)rackIndex;
+- (int)rackIndexOfTileNamed:(NSString *)tileName;
 
 // Shares
 - (BOOL)hasSharesOfHotelNamed:(NSString *)hotelName;
 - (int)numberOfSharesOfHotelNamed:(NSString *)hotelName;
-- (void)addSharesOfHotelNamed:(NSString *)hotelName numberOfShares:(int)numShares;
-- (void)subtractSharesOfHotelNamed:(NSString *)hotelName numberOfShares:(int)numShares;
+- (void)addSharesOfHotelNamed:(NSString*)hotelName
+               numberOfShares:(int)numShares;
+- (void)subtractSharesOfHotelNamed:(NSString*)hotelName
+                    numberOfShares:(int)numShares;
 - (NSEnumerator *)namesOfHotelsInWhichAShareIsOwnedEnumerator;
-@end
 
-#pragma mark -
-@interface AQPlayer (LocalGame)
-#pragma mark LocalGame interface
-// Tiles
-- (void)drewTile:(AQTile *)tileName;
-@end
-
-#pragma mark -
-@interface AQPlayer (NetworkGame)
-#pragma mark NetworkGame interface
-// Tiles
-- (void)drewTile:(AQTile *)tile atRackIndex:(int)rackIndex;
-- (int)rackIndexOfTileNamed:(NSString *)tileName;
 @end

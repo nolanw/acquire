@@ -16,35 +16,40 @@
 #pragma mark Interface
 
 {
-	id						_arrayController;
-	AQConnectionController	*_associatedConnection;
+	id _arrayController;
+	AQConnectionController *_associatedConnection;
 	
-	AQGameWindowController	*_gameWindowController;
+	AQGameWindowController *_gameWindowController;
 	
-	AQBoard			*_board;
-	NSArray			*_hotels;
-	NSMutableArray	*_players;
-	BOOL			_isNetworkGame;
-	NSString		*_localPlayerName;
-	int				_activePlayerIndex;
-	BOOL			_tilePlayedThisTurn;
-	NSArray			*_finalTurnSharesPurchased;
-	NSArray			*_finalTurnHotelNames;
-	BOOL			_isReadyToStart;
-	BOOL			_isOn;
-	int				_localPlayerTilesDrawn;
-	BOOL			_isInTestMode;
-	BOOL			_winnerCongratulated;
+	AQBoard *_board;
+	NSArray *_hotels;
+	NSMutableArray *_players;
+	NSString *_localPlayerName;
+	int _activePlayerIndex;
+	BOOL _tilePlayedThisTurn;
+	NSArray *_finalTurnSharesPurchased;
+	NSArray *_finalTurnHotelNames;
+	BOOL _isReadyToStart;
+	BOOL _isOn;
+	int _localPlayerTilesDrawn;
+	BOOL _isInTestMode;
+	BOOL _winnerCongratulated;
 }
 
 #pragma mark 
 #pragma mark init/dealloc
 
-/*
-	* DO NOT CALL -init DIRECTLY!
-	* Use one of the init methods in LocalGame or NetworkGame.
-*/
+- (id)initWithArrayController:(id)arrayController
+         associatedConnection:(AQConnectionController*)connection;
 - (void)dealloc;
+
+
+#pragma mark 
+#pragma mark Accessors/setters
+
+- (BOOL)isReadyToStart;
+- (void)setIsReadyToStart:(BOOL)isReadyToStart;
+- (BOOL)isOn;
 
 #pragma mark 
 #pragma mark Player accessors/setters
@@ -56,19 +61,52 @@
 - (AQPlayer *)playerNamed:(NSString *)name;
 - (void)addPlayerNamed:(NSString *)playerName;
 - (void)clearPlayers;
+- (AQPlayer *)localPlayer;
+- (NSString *)localPlayerName;
+- (void)setLocalPlayerName:(NSString *)localPlayerName;
+- (void)setActivePlayerName:(NSString*)activePlayerName
+               isPurchasing:(BOOL)isPurchasing;
+- (void)playerAtIndex:(int)playerIndex isNamed:(NSString *)name;
+- (void)playerAtIndex:(int)playerIndex hasCash:(int)cash;
+- (void)playerAtIndex:(int)playerIndex hasSacksonShares:(int)sacksonShares;
+- (void)playerAtIndex:(int)playerIndex hasZetaShares:(int)zetaShares;
+- (void)playerAtIndex:(int)playerIndex hasAmericaShares:(int)americaShares;
+- (void)playerAtIndex:(int)playerIndex hasFusionShares:(int)fusionShares;
+- (void)playerAtIndex:(int)playerIndex hasHydraShares:(int)hydraShares;
+- (void)playerAtIndex:(int)playerIndex hasQuantumShares:(int)quantumShares;
+- (void)playerAtIndex:(int)playerIndex hasPhoenixShares:(int)phoenixShares;
+- (void)rackTileAtIndex:(int)index
+         isNetacquireID:(int)netacquireID
+      netacquireChainID:(int)netacquireChainID;
 
 #pragma mark 
 #pragma mark Hotel accessors/setters
 
 + (NSArray *)initialHotelsArray;
 - (AQHotel *)hotelNamed:(NSString *)hotelName;
-- (void)purchaseShares:(NSArray *)sharesPurchased ofHotelsNamed:(NSArray *)hotelNames sender:(id)sender;
-- (void)purchaseShares:(NSArray *)sharesPurchased ofHotelsNamed:(NSArray *)hotelNames endGame:(BOOL)endGame sender:(id)sender;
+- (void)purchaseShares:(NSArray*)sharesPurchased
+         ofHotelsNamed:(NSArray*)hotelNames
+                sender:(id)sender;
+- (void)purchaseShares:(NSArray*)sharesPurchased
+         ofHotelsNamed:(NSArray*)hotelNames
+               endGame:(BOOL)endGame
+                sender:(id)sender;
 - (int)sharesAvailableOfHotelNamed:(NSString *)hotelName;
 - (NSArray *)hotelsAdjacentToTile:(AQTile *)tile;
 - (NSArray *)hotelsNotOnBoard;
 - (NSArray *)hotelsOnBoard;
 - (NSArray *)hotelsWithPurchaseableShares;
+- (void)getChainFromHotelIndexes:(NSArray *)hotelIndexes;
+- (AQHotel *)hotelFromChainID:(int)chainID;
+- (AQHotel *)hotelWithNetacquireID:(int)netacquireID;
+
+#pragma mark 
+#pragma mark Board accessors/setters
+
+- (void)boardTile:(AQTile *)tile isNetacquireChainID:(int)netacquireChainID;
+- (void)boardTileAtNetacquireID:(int)netacquireID
+            isNetacquireChainID:(int)netacquireChainID;
+- (AQTileState)tileStateFromChainID:(int)chainID;
 
 #pragma mark 
 #pragma mark UI
@@ -83,6 +121,9 @@
 - (BOOL)gameCanEnd;
 - (void)endGame;
 - (NSArray *)winningPlayers;
+- (void)determineAndCongratulateWinner;
+- (void)enteringTestMode;
+- (void)exitingTestMode;
 
 #pragma mark 
 #pragma mark Turn actions
@@ -92,9 +133,23 @@
 - (BOOL)playedTileCreatesNewHotel:(AQTile *)playedTile;
 - (void)createHotelNamed:(NSString *)hotelName atTile:(id)tile;
 - (BOOL)playedTileTriggersAMerger:(AQTile *)playedTile;
-- (void)hotelSurvives:(AQHotel *)hotel mergingHotels:(NSArray *)mergingHotels mergeTile:(AQTile *)mergeTile;
-- (void)sellSharesOfHotel:(AQHotel *)hotel numberOfShares:(int)numberOfShares player:(AQPlayer *)player sharePrice:(int)sharePrice;
-- (void)tradeSharesOfHotel:(AQHotel *)fromHotel forSharesInHotel:(AQHotel *)toHotel numberOfShares:(int)numberOfShares player:(AQPlayer *)player;
+- (void)hotelSurvives:(AQHotel*)hotel
+        mergingHotels:(NSArray*)mergingHotels
+            mergeTile:(AQTile*)mergeTile;
+- (void)sellSharesOfHotel:(AQHotel*)hotel
+           numberOfShares:(int)numberOfShares
+                   player:(AQPlayer*)player
+               sharePrice:(int)sharePrice;
+- (void)tradeSharesOfHotel:(AQHotel*)fromHotel
+          forSharesInHotel:(AQHotel*)toHotel
+            numberOfShares:(int)numberOfShares
+                    player:(AQPlayer*)player;
+- (void)showCreateNewHotelSheet;
+- (void)chooseMergeSurvivorFromHotelIndexes:(NSArray *)hotelIndexes;
+- (void)showAllocateMergingHotelSharesSheetForHotelWithNetacquireID:(int)mergingHotelNetacquireID survivingHotelNetacquireID:(int)survivingHotelNetacquireID;
+- (void)mergerSharesSold:(int)sharesSold sharesTraded:(int)sharesTraded;
+- (void)getPurchaseWithGameEndFlag:(int)gameEndFlag cash:(int)cash;
+
 
 #pragma mark 
 #pragma mark Passthrus
@@ -106,114 +161,9 @@
 - (void)disableBoardAndTileRack;
 - (void)closeGameWindow;
 - (void)bringGameWindowToFront;
-@end
-
-#pragma mark -
-
-@interface AQGame (LocalGame)
-#pragma mark LocalGame interface
-
-#pragma mark 
-#pragma mark init/dealloc
-
-- (id)initLocalGameWithArrayController:(id)arrayController;
-
-#pragma mark 
-#pragma mark Accessors/setters
-
-- (BOOL)isLocalGame;
-
-#pragma mark 
-#pragma mark Pre-game fun
-
-- (void)determineStartingOrder;
-- (void)drawTilesForEveryone;
-
-#pragma mark 
-#pragma mark Game actions
-
-- (void)startGame;
-- (void)payPlayersForSharesInHotels:(NSArray *)hotels;
-
-#pragma mark 
-#pragma mark Turn actions
-
-- (void)mergerHappeningAtTile:(AQTile *)tile;
-- (void)payShareholderBonusesForHotels:(NSArray *)hotels;
-- (void)showPurchaseSharesSheetIfNeededOrAdvanceTurn;
-- (void)checkTileRacksForUnplayableTiles;
-@end
-
-#pragma mark -
-
-@interface AQGame (NetworkGame)
-#pragma mark NetworkGame interface
-
-#pragma mark 
-#pragma mark init/dealloc
-
-- (id)initNetworkGameWithArrayController:(id)arrayController associatedConnection:(AQConnectionController *)associatedConnection;
-
-#pragma mark 
-#pragma mark Accessors/setters
-
-- (BOOL)isNetworkGame;
-- (BOOL)isReadyToStart;
-- (void)setIsReadyToStart:(BOOL)isReadyToStart;
-- (BOOL)isOn;
-
-#pragma mark 
-#pragma mark Game actions
-
-- (void)determineAndCongratulateWinner;
-- (void)enteringTestMode;
-- (void)exitingTestMode;
-
-#pragma mark 
-#pragma mark Turn actions
-
-- (void)showCreateNewHotelSheet;
-- (void)chooseMergeSurvivorFromHotelIndexes:(NSArray *)hotelIndexes;
-- (void)showAllocateMergingHotelSharesSheetForHotelWithNetacquireID:(int)mergingHotelNetacquireID survivingHotelNetacquireID:(int)survivingHotelNetacquireID;
-- (void)mergerSharesSold:(int)sharesSold sharesTraded:(int)sharesTraded;
-- (void)getPurchaseWithGameEndFlag:(int)gameEndFlag cash:(int)cash;
-
-#pragma mark 
-#pragma mark Board accessors/setters
-
-- (void)boardTile:(AQTile *)tile isNetacquireChainID:(int)netacquireChainID;
-- (void)boardTileAtNetacquireID:(int)netacquireID isNetacquireChainID:(int)netacquireChainID;
-- (AQTileState)tileStateFromChainID:(int)chainID;
-
-#pragma mark 
-#pragma mark Hotel accessors/setters
-
-- (void)getChainFromHotelIndexes:(NSArray *)hotelIndexes;
-- (AQHotel *)hotelFromChainID:(int)chainID;
-- (AQHotel *)hotelWithNetacquireID:(int)netacquireID;
-
-#pragma mark 
-#pragma mark Player accessors/setters
-
-- (AQPlayer *)localPlayer;
-- (NSString *)localPlayerName;
-- (void)setLocalPlayerName:(NSString *)localPlayerName;
-- (void)setActivePlayerName:(NSString *)activePlayerName isPurchasing:(BOOL)isPurchasing;
-- (void)playerAtIndex:(int)playerIndex isNamed:(NSString *)name;
-- (void)playerAtIndex:(int)playerIndex hasCash:(int)cash;
-- (void)playerAtIndex:(int)playerIndex hasSacksonShares:(int)sacksonShares;
-- (void)playerAtIndex:(int)playerIndex hasZetaShares:(int)zetaShares;
-- (void)playerAtIndex:(int)playerIndex hasAmericaShares:(int)americaShares;
-- (void)playerAtIndex:(int)playerIndex hasFusionShares:(int)fusionShares;
-- (void)playerAtIndex:(int)playerIndex hasHydraShares:(int)hydraShares;
-- (void)playerAtIndex:(int)playerIndex hasQuantumShares:(int)quantumShares;
-- (void)playerAtIndex:(int)playerIndex hasPhoenixShares:(int)phoenixShares;
-- (void)rackTileAtIndex:(int)index isNetacquireID:(int)netacquireID netacquireChainID:(int)netacquireChainID;
-
-#pragma mark 
-#pragma mark Passthrus
 
 - (void)incomingGameMessage:(NSString *)gameMessage;
 - (void)outgoingGameMessage:(NSString *)gameMessage;
 - (void)incomingGameLogEntry:(NSString *)gameLogEntry;
+
 @end

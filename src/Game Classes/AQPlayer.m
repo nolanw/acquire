@@ -24,7 +24,9 @@
 	_name = [newName copy];
 	_cash = 6000;
 	_sharesByHotelName = [[NSMutableDictionary alloc] initWithCapacity:7];
-	_tiles = [[NSMutableArray alloc] initWithObjects:[NSNull null], [NSNull null], [NSNull null], [NSNull null], [NSNull null], [NSNull null], nil];
+  _tiles = [[NSMutableArray alloc] init];
+  for (NSInteger i = 0; i < 6; i++)
+    [_tiles addObject:[NSNull null]];
 
     return self;
 }
@@ -45,14 +47,14 @@
 // Identifying characteristics
 - (NSString *)name;
 {
-    return _name;
+  return _name;
 }
 
 
 // Money
 - (int)cash;
 {
-    return _cash;
+  return _cash;
 }
 
 - (void)setCash:(int)dollars;
@@ -62,12 +64,12 @@
 
 - (void)addCash:(int)dollars;
 {
-    _cash += dollars;
+  _cash += dollars;
 }
 
 - (void)subtractCash:(int)dollars;
 {
-    _cash -= dollars;
+  _cash -= dollars;
 }
 
 
@@ -79,8 +81,10 @@
 	
 	NSEnumerator *tileEnum = [_tiles objectEnumerator];
 	id curTile;
-	while (curTile = [tileEnum nextObject]) {
-		if (curTile != [NSNull null] && [[curTile description] isEqualToString:tileName])
+	while (curTile = [tileEnum nextObject])
+	{
+		if (curTile != [NSNull null] && 
+		    [[curTile description] isEqualToString:tileName])
 			return YES;
 	}
 	
@@ -91,7 +95,9 @@
 {
 	int i;
 	for (i = 0; i < [_tiles count]; ++i) {
-		if ([_tiles objectAtIndex:i] != [NSNull null] && [[[_tiles objectAtIndex:i] description] isEqualToString:tileName]) {
+		if ([_tiles objectAtIndex:i] != [NSNull null] && 
+		    [[[_tiles objectAtIndex:i] description] isEqualToString:tileName])
+		{
 			[_tiles replaceObjectAtIndex:i withObject:[NSNull null]];
 			break;
 		}
@@ -112,79 +118,14 @@
 	NSEnumerator *tileEnumerator = [_tiles objectEnumerator];
 	id curTile;
 	while (curTile = [tileEnumerator nextObject])
+	{
 		if (curTile != [NSNull null])
 			++numberOfTiles;
+	}
 	
 	return numberOfTiles;
 }
 
-
-// Shares
-- (BOOL)hasSharesOfHotelNamed:(NSString *)hotelName;
-{
-    NSArray *hotelsWithShares = [_sharesByHotelName allKeys];
-    if (![hotelsWithShares containsObject:hotelName])
-		return NO;
-	
-	if ([_sharesByHotelName objectForKey:hotelName] == nil)
-	    return NO;
-	
-    return YES;
-}
-
-- (int)numberOfSharesOfHotelNamed:(NSString *)hotelName;
-{
-    if (![self hasSharesOfHotelNamed:hotelName])
-		return 0;
-	
-	return [(NSNumber *)[_sharesByHotelName objectForKey:hotelName] intValue];
-}
-
-- (void)addSharesOfHotelNamed:(NSString *)hotelName numberOfShares:(int)numShares;
-{
-    if ([self hasSharesOfHotelNamed:hotelName]) {
-        int newNumShares = numShares + [(NSNumber *) [_sharesByHotelName objectForKey:hotelName] intValue];
-        [_sharesByHotelName setObject: [NSNumber numberWithInt:newNumShares] forKey:hotelName];
-    } else
-        [_sharesByHotelName setObject: [NSNumber numberWithInt:numShares] forKey:hotelName];
-}
-
-- (void)subtractSharesOfHotelNamed:(NSString *)hotelName numberOfShares:(int)numShares;
-{
-	if (![self hasSharesOfHotelNamed:hotelName])
-		return;
-	
-	int newNumShares = [(NSNumber *)[_sharesByHotelName objectForKey:hotelName] intValue] - numShares;
-
-	if (newNumShares < 1)
-	    [_sharesByHotelName removeObjectForKey:hotelName];
-	else
-	    [_sharesByHotelName setObject:[NSNumber numberWithInt:newNumShares] forKey:hotelName];
-}
-
-- (NSEnumerator *)namesOfHotelsInWhichAShareIsOwnedEnumerator;
-{
-	return [_sharesByHotelName keyEnumerator];
-}
-@end
-
-#pragma mark -
-@implementation AQPlayer (LocalGame)
-#pragma mark LocalGame implementation
-// Tiles
-- (void)drewTile:(AQTile *)tile;
-{
-	if ([_tiles indexOfObject:[NSNull null]] == NSNotFound)
-		return;
-	
-	[_tiles replaceObjectAtIndex:[_tiles indexOfObject:[NSNull null]] withObject:tile];
-}
-@end
-
-#pragma mark -
-@implementation AQPlayer (NetworkGame)
-#pragma mark NetworkGame implementation
-// Tiles
 - (void)drewTile:(AQTile *)tile atRackIndex:(int)rackIndex;
 {
 	if (tile == nil)
@@ -196,13 +137,72 @@
 - (int)rackIndexOfTileNamed:(NSString *)tileName;
 {
 	int i;
-	for (i = 0; i < [_tiles count]; ++i) {
-		if ([_tiles objectAtIndex:i] == [NSNull null])
+	for (i = 0; i < [_tiles count]; ++i)
+	{
+    if ([[_tiles objectAtIndex:i] isEqual:[NSNull null]])
 			continue;
 		if ([[[_tiles objectAtIndex:i] description] isEqualToString:tileName])
 			return i;
 	}
     
-    return -1;
+  return -1;
 }
+
+
+// Shares
+- (BOOL)hasSharesOfHotelNamed:(NSString *)hotelName;
+{
+  NSArray *hotelsWithShares = [_sharesByHotelName allKeys];
+  if (![hotelsWithShares containsObject:hotelName])
+	  return NO;
+	else
+    return ([_sharesByHotelName objectForKey:hotelName] != nil);
+}
+
+- (int)numberOfSharesOfHotelNamed:(NSString *)hotelName;
+{
+  if (![self hasSharesOfHotelNamed:hotelName])
+		return 0;
+	else
+	  return [(NSNumber *)[_sharesByHotelName objectForKey:hotelName] intValue];
+}
+
+- (void)addSharesOfHotelNamed:(NSString *)hotelName numberOfShares:(int)numShares;
+{
+  if ([self hasSharesOfHotelNamed:hotelName])
+  {
+    NSNumber *shares = [_sharesByHotelName objectForKey:hotelName];
+    int newNumShares = numShares + [shares intValue];
+    [_sharesByHotelName setObject:[NSNumber numberWithInt:newNumShares]
+                           forKey:hotelName];
+  }
+  else
+  {
+    [_sharesByHotelName setObject:[NSNumber numberWithInt:numShares]
+                           forKey:hotelName];
+  }
+}
+
+- (void)subtractSharesOfHotelNamed:(NSString *)hotelName numberOfShares:(int)numShares;
+{
+	if (![self hasSharesOfHotelNamed:hotelName])
+		return;
+	
+  NSNumber *shares = [_sharesByHotelName objectForKey:hotelName];
+	int newNumShares = [shares intValue] - numShares;
+
+	if (newNumShares < 1)
+	    [_sharesByHotelName removeObjectForKey:hotelName];
+	else
+	{
+	    [_sharesByHotelName setObject:[NSNumber numberWithInt:newNumShares]
+                             forKey:hotelName];
+  }
+}
+
+- (NSEnumerator *)namesOfHotelsInWhichAShareIsOwnedEnumerator;
+{
+	return [_sharesByHotelName keyEnumerator];
+}
+
 @end

@@ -25,36 +25,21 @@
 
 
 // Accessors/setters/etc.
-- (AQGame *)startNewNetworkGameWithAssociatedConnection:(AQConnectionController *)associatedConnection;
+- (AQGame *)startNewGameWithAssociatedConnection:(AQConnectionController *)associatedConnection;
 {
-	[_gameArray addObject:[[[AQGame alloc] initNetworkGameWithArrayController:self associatedConnection:associatedConnection] autorelease]];
+	[_gameArray addObject:[[[AQGame alloc] initWithArrayController:self associatedConnection:associatedConnection] autorelease]];
 	
 	return [_gameArray lastObject];
 }
 
-- (AQGame *)startNewLocalGame;
-{
-	[_gameArray addObject:[[[AQGame alloc] initLocalGameWithArrayController:self] autorelease]];
-	
-	return [_gameArray lastObject];
-}
-
-- (void)startNewNetworkGameAndMakeActiveWithAssociatedConnection:(AQConnectionController *)associatedConnection;
+- (void)startNewGameAndMakeActiveWithAssociatedConnection:(AQConnectionController *)associatedConnection;
 {
 	if ([_gameArray count] == 0)
-		[self startNewNetworkGameWithAssociatedConnection:associatedConnection];
+		[self startNewGameWithAssociatedConnection:associatedConnection];
 	else if ([_gameArray objectAtIndex:0] == [NSNull null])
-		[_gameArray replaceObjectAtIndex:0 withObject:[[AQGame alloc] initNetworkGameWithArrayController:self associatedConnection:associatedConnection]];
+		[_gameArray replaceObjectAtIndex:0 withObject:[[AQGame alloc] initWithArrayController:self associatedConnection:associatedConnection]];
 	else
-		[_gameArray insertObject:[[[AQGame alloc] initNetworkGameWithArrayController:self associatedConnection:associatedConnection] autorelease] atIndex:0];
-}
-
-- (void)startNewLocalGameAndMakeActive;
-{
-	if ([_gameArray count] == 0)
-		[self startNewLocalGame];
-	else
-		[_gameArray insertObject:[[[AQGame alloc] initLocalGameWithArrayController:self] autorelease] atIndex:0];
+		[_gameArray insertObject:[[[AQGame alloc] initWithArrayController:self associatedConnection:associatedConnection] autorelease] atIndex:0];
 }
 
 - (BOOL)isGameInArray:(AQGame *)game;
