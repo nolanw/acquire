@@ -15,11 +15,6 @@
 #pragma mark Private interface
 
 #pragma mark 
-#pragma mark init/dealloc
-
-- (id)_initGameWithArrayController:(id)arrayController;
-
-#pragma mark 
 #pragma mark UI
 
 - (void)_updateGameWindow;
@@ -42,12 +37,28 @@
 #pragma mark 
 #pragma mark init/dealloc
 
-- (id)initNetworkGameWithArrayController:(id)arrayController associatedConnection:(AQConnectionController *)associatedConnection;
+- (id)initWithArrayController:(id)arrayController
+         associatedConnection:(AQConnectionController*)connection;
 {
-	if (![self _initGameWithArrayController:arrayController])
+	if (![super init])
 		return nil;
 	
-	_associatedConnection = [associatedConnection retain];
+	_arrayController = [arrayController retain];
+	_gameWindowController = nil;
+	
+	_board = [[AQBoard alloc] init];
+	_hotels = [[AQGame initialHotelsArray] retain];
+	_players = [[NSMutableArray arrayWithCapacity:6] retain];
+	_localPlayerName = nil;
+	_tilePlayedThisTurn = NO;
+	_finalTurnSharesPurchased = nil;
+	_finalTurnHotelNames = nil;
+	_isReadyToStart = NO;
+	_isOn = NO;
+	_localPlayerTilesDrawn = 0;
+	_winnerCongratulated = NO;
+	
+	_associatedConnection = [connection retain];
 	_localPlayerName = nil;
 
 	return self;
@@ -873,33 +884,6 @@
 
 @implementation AQGame (Private)
 #pragma mark Private implementation
-
-#pragma mark 
-#pragma mark init/dealloc
-
-// This init method gets called by both init methods in the LocalGame and NetworkGame categories.
-- (id)_initGameWithArrayController:(id)arrayController;
-{
-	if (![super init])
-		return nil;
-	
-	_arrayController = [arrayController retain];
-	_gameWindowController = nil;
-	
-	_board = [[AQBoard alloc] init];
-	_hotels = [[AQGame initialHotelsArray] retain];
-	_players = [[NSMutableArray arrayWithCapacity:6] retain];
-	_localPlayerName = nil;
-	_tilePlayedThisTurn = NO;
-	_finalTurnSharesPurchased = nil;
-	_finalTurnHotelNames = nil;
-	_isReadyToStart = NO;
-	_isOn = NO;
-	_localPlayerTilesDrawn = 0;
-	_winnerCongratulated = NO;
-
-	return self;
-}
 
 #pragma mark 
 #pragma mark UI

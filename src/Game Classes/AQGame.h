@@ -39,8 +39,8 @@
 #pragma mark 
 #pragma mark init/dealloc
 
-- (id)initNetworkGameWithArrayController:(id)arrayController
-                    associatedConnection:(AQConnectionController*)connection;
+- (id)initWithArrayController:(id)arrayController
+         associatedConnection:(AQConnectionController*)connection;
 - (void)dealloc;
 
 
