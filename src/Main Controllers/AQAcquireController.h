@@ -33,7 +33,10 @@
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem;
 
 // Start games
-- (void)connectToServer:(NSString *)hostOrIPAddress port:(int)port withLocalDisplayName:(NSString *)localDisplayName sender:(id)sender;
+- (void)connectToServer:(NSString*)hostOrIPAddress
+                   port:(int)port
+   withLocalDisplayName:(NSString*)localDisplayName
+                 sender:(id)sender;
 - (void)connectedToServer;
 - (void)cancelConnectingToServer;
 - (void)joinGame:(int)gameNumber;
@@ -44,7 +47,8 @@
 - (void)leaveGame;
 - (void)disconnectFromServer;
 - (void)disconnectedFromServer:(BOOL)connectionWasLost;
-- (void)connection:(AQConnectionController *)connection willDisconnectWithError:(NSError *)err;
+- (void)connection:(AQConnectionController *)connection 
+  willDisconnectWithError:(NSError *)err;
 
 // Passthrus
 - (void)updateGameListFor:(id)anObject;

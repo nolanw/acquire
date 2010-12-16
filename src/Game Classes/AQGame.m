@@ -361,37 +361,14 @@
 
 - (void)endCurrentTurn;
 {
-	if ([self isNetworkGame]) {
-		[self purchaseShares:_finalTurnSharesPurchased ofHotelsNamed:_finalTurnHotelNames endGame:NO sender:self];
-		
-		[_gameWindowController hidePurchaseSharesButton];
-		[_gameWindowController hideEndCurrentTurnButton];
-		[_gameWindowController hideEndGameButton];
-		return;
-	}
+	[self purchaseShares:_finalTurnSharesPurchased
+         ofHotelsNamed:_finalTurnHotelNames
+               endGame:NO
+                sender:self];
 	
-	int i;
-	for (i = [[self activePlayer] numberOfTiles]; i < 6; ++i)
-		[[self activePlayer] drewTile:[_board tileFromTileBag]];
-	
-	++_activePlayerIndex;
-	if (_activePlayerIndex >= [_players count])
-		_activePlayerIndex = 0;
-	
-	[_gameWindowController reloadScoreboard];
-	[_gameWindowController updateTileRack:[[self activePlayer] tiles]];
-	[_gameWindowController highlightTilesOnBoard:[[self activePlayer] tiles]];
-	[_gameWindowController enableTileRack];
-	[_gameWindowController incomingGameLogEntry:[NSString stringWithFormat:@"* It's %@'s turn.", [[self activePlayer] name]]];
-	
-	_tilePlayedThisTurn = NO;
-	
+	[_gameWindowController hidePurchaseSharesButton];
 	[_gameWindowController hideEndCurrentTurnButton];
-	
-	if ([self gameCanEnd])
-		[_gameWindowController showEndGameButton];
-	else
-		[_gameWindowController hideEndGameButton];
+	[_gameWindowController hideEndGameButton];
 }
 
 - (BOOL)gameCanEnd;
@@ -709,66 +686,9 @@
 	return (_associatedConnection == nil);
 }
 
-#pragma mark 
-#pragma mark Pre-game fun
-
-- (void)determineStartingOrder;
-{
-	NSMutableArray *startingTiles = [NSMutableArray arrayWithCapacity:[self numberOfPlayers]];
-	NSEnumerator *playerEnumerator = [_players objectEnumerator];
-	id curPlayer;
-	while (curPlayer = [playerEnumerator nextObject]) {
-		[startingTiles addObject:[_board tileFromTileBag]];
-		[_gameWindowController incomingGameLogEntry:[NSString stringWithFormat:@"* %@ drew initial tile %@.", [curPlayer name], [startingTiles lastObject]]];
-		[(AQTile *)[startingTiles lastObject] setState:AQTileNotInHotel];
-	}
-	[_gameWindowController tilesChanged:startingTiles];
-	
-	int topmostRow = 9;
-	int leftmostColumn = 12;
-	NSEnumerator *startingTilesEnumerator = [startingTiles objectEnumerator];
-	id curStartingTile;
-	while (curStartingTile = [startingTilesEnumerator nextObject]) {
-		if ([curStartingTile rowInt] < topmostRow) {
-			topmostRow = [curStartingTile rowInt];
-			leftmostColumn = [curStartingTile column];
-		} else if ([curStartingTile rowInt] == topmostRow && [curStartingTile column] < leftmostColumn)
-			leftmostColumn = [curStartingTile column];
-	}
-	
-	_activePlayerIndex = [startingTiles indexOfObject:[_board tileOnBoardAtColumn:leftmostColumn row:[AQTile rowStringFromInt:topmostRow]]];
-}
-
-- (void)drawTilesForEveryone;
-{
-	NSEnumerator *playerEnumerator = [_players objectEnumerator];
-	id curPlayer;
-	int i;
-	while (curPlayer = [playerEnumerator nextObject])
-		for (i = 0; i < 6; ++i)
-			[curPlayer drewTile:[_board tileFromTileBag]];
-}
 
 #pragma mark 
 #pragma mark Game actions
-
-- (void)startGame;
-{
-	if (![self isLocalGame])
-		return;
-	
-	[self determineStartingOrder];
-	
-	[_gameWindowController incomingGameLogEntry:[NSString stringWithFormat:@"* It's %@'s turn.", [[self activePlayer] name]]];
-	
-	[_gameWindowController reloadScoreboard];
-	
-	[self drawTilesForEveryone];
-	
-	[_gameWindowController updateTileRack:[[self activePlayer] tiles]];
-	[_gameWindowController enableTileRack];
-	[_gameWindowController highlightTilesOnBoard:[[self activePlayer] tiles]];
-}
 
 - (void)payPlayersForSharesInHotels:(NSArray *)hotelsToPay;
 {

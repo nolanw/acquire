@@ -124,15 +124,8 @@
 - (BOOL)isLocalGame;
 
 #pragma mark 
-#pragma mark Pre-game fun
-
-- (void)determineStartingOrder;
-- (void)drawTilesForEveryone;
-
-#pragma mark 
 #pragma mark Game actions
 
-- (void)startGame;
 - (void)payPlayersForSharesInHotels:(NSArray *)hotels;
 
 #pragma mark 
