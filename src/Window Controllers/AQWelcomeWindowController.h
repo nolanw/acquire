@@ -9,7 +9,6 @@
 	
 	IBOutlet NSWindow	*_welcomeWindow;
 	
-	// Network game stuff
 	IBOutlet NSTextField			*_hostOrIPAddressTextField;
 	IBOutlet NSTextField			*_portTextField;
 	IBOutlet NSTextField			*_displayNameTextField;
@@ -42,7 +41,7 @@
 - (void)stopConnectingToAServer;
 
 // Button action responses
-- (void)networkGameConnectionFailed;
+- (void)gameConnectionFailed;
 - (void)displayNameAlreadyInUse;
 - (void)duplicateLocalPlayerNamesEntered;
 - (void)lostServerConnection;

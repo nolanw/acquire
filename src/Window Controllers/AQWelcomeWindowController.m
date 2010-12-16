@@ -159,7 +159,7 @@
 
 
 // Button action responses
-- (void)networkGameConnectionFailed;
+- (void)gameConnectionFailed;
 {
 	if (_displayNameInUseErrorShown)
 		return;

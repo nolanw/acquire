@@ -25,17 +25,17 @@
 
 
 // Accessors/setters/etc.
-- (AQGame *)startNewNetworkGameWithAssociatedConnection:(AQConnectionController *)associatedConnection;
+- (AQGame *)startNewGameWithAssociatedConnection:(AQConnectionController *)associatedConnection;
 {
 	[_gameArray addObject:[[[AQGame alloc] initWithArrayController:self associatedConnection:associatedConnection] autorelease]];
 	
 	return [_gameArray lastObject];
 }
 
-- (void)startNewNetworkGameAndMakeActiveWithAssociatedConnection:(AQConnectionController *)associatedConnection;
+- (void)startNewGameAndMakeActiveWithAssociatedConnection:(AQConnectionController *)associatedConnection;
 {
 	if ([_gameArray count] == 0)
-		[self startNewNetworkGameWithAssociatedConnection:associatedConnection];
+		[self startNewGameWithAssociatedConnection:associatedConnection];
 	else if ([_gameArray objectAtIndex:0] == [NSNull null])
 		[_gameArray replaceObjectAtIndex:0 withObject:[[AQGame alloc] initWithArrayController:self associatedConnection:associatedConnection]];
 	else

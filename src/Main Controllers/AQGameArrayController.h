@@ -15,8 +15,8 @@
 - (void)dealloc;
 
 // Accessors/setters/etc.
-- (AQGame *)startNewNetworkGameWithAssociatedConnection:(AQConnectionController *)associatedConnection;
-- (void)startNewNetworkGameAndMakeActiveWithAssociatedConnection:(AQConnectionController *)associatedConnection;
+- (AQGame *)startNewGameWithAssociatedConnection:(AQConnectionController *)associatedConnection;
+- (void)startNewGameAndMakeActiveWithAssociatedConnection:(AQConnectionController *)associatedConnection;
 - (BOOL)isGameInArray:(AQGame *)game;
 - (void)removeGame:(AQGame *)game;
 - (AQGame *)activeGame;

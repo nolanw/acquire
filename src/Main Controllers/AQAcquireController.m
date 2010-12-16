@@ -115,7 +115,7 @@
 
 - (void)joiningGame:(BOOL)createdGame;
 {
-	[_gameArrayController startNewNetworkGameAndMakeActiveWithAssociatedConnection:[_connectionArrayController serverConnection]];
+	[_gameArrayController startNewGameAndMakeActiveWithAssociatedConnection:[_connectionArrayController serverConnection]];
 	id activeGame = [_gameArrayController activeGame];
 	[[_connectionArrayController serverConnection] registerAssociatedObjectAndPrioritize:activeGame];
 	[activeGame setLocalPlayerName:_localPlayerName];
@@ -183,7 +183,7 @@
 - (void)connection:(AQConnectionController *)connection willDisconnectWithError:(NSError *)err;
 {
 	if ([connection isServerConnection])
-		[_welcomeWindowController networkGameConnectionFailed];
+		[_welcomeWindowController gameConnectionFailed];
 }
 
 
