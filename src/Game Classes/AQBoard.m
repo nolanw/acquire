@@ -9,7 +9,7 @@
 @interface AQBoard (Private)
 #pragma mark Private interface
 
-- (void)_createTileMatrixAndFillTileBag;
+- (void)_createTileMatrix;
 @end
 
 #pragma mark -
@@ -22,23 +22,17 @@
 
 - (id)init;
 {
-    if (![super init])
-		return nil;
-	
-	srand([[NSDate date] timeIntervalSince1970]);
-      
-	_tileBag = [[NSMutableArray alloc] initWithCapacity:108];
-	[self _createTileMatrixAndFillTileBag];
-
-    return self;
+  if ((self = [super init]))
+  {
+  	[self _createTileMatrix];
+  }
+  return self;
 }
 
 - (void)dealloc;
 {
 	[_tileMatrix release];
 	_tileMatrix = nil;
-	[_tileBag release];
-	_tileBag = nil;
 	
 	[super dealloc];
 }
@@ -48,32 +42,31 @@
 
 - (AQTile *)tileOnBoardAtColumn:(int)col row:(NSString *)row;
 {
-    int rowNameAsInt = [AQTile rowIntFromString:row];
+  int rowNameAsInt = [AQTile rowIntFromString:row];
 
-    if (rowNameAsInt == -1 || col < 1 || col > 12)
-        return nil;
+  if (rowNameAsInt == -1 || col < 1 || col > 12)
+    return nil;
 
-    return [[_tileMatrix objectAtIndex:(col - 1)] objectAtIndex:rowNameAsInt];
+  return [[_tileMatrix objectAtIndex:(col - 1)] objectAtIndex:rowNameAsInt];
 }
 
 - (AQTile *)tileOnBoardByString:(NSString *)tileString;
 {
-    if ([tileString length] < 2 || [tileString length] > 3)
-        return nil;
+  if ([tileString length] < 2 || [tileString length] > 3)
+      return nil;
 	
 	if ([tileString length] == 2)
-		return [self tileOnBoardAtColumn:[[tileString substringToIndex:1] intValue] row:[tileString substringFromIndex:1]];
-
-    return [self tileOnBoardAtColumn:[[tileString substringToIndex:2] intValue] row:[tileString substringFromIndex:2]];
+		return [self tileOnBoardAtColumn:[[tileString substringToIndex:1] intValue]
+                                 row:[tileString substringFromIndex:1]];
+  else
+    return [self tileOnBoardAtColumn:[[tileString substringToIndex:2] intValue]
+                                 row:[tileString substringFromIndex:2]];
 }
 
-- (AQTile *)tileFromTileBag;
-{
-    int randomTileIndex = rand() % [_tileBag count];
-    AQTile *randomTile = [_tileBag objectAtIndex:randomTileIndex];
-    [_tileBag removeObjectAtIndex:randomTileIndex];
-    
-    return randomTile;
+- (AQTile *)tileFromNetacquireID:(int)netacquireID;
+{	
+	return [self tileOnBoardAtColumn:[AQTile columnFromNetacquireID:netacquireID]
+                               row:[AQTile rowFromNetacquireID:netacquireID]];
 }
 
 #pragma mark 
@@ -100,28 +93,16 @@
 
 	return ret;
 }
+
 @end
 
-#pragma mark -
-
-@implementation AQBoard (NetworkGame)
-#pragma mark NetworkGame implementation
-
-#pragma mark 
-#pragma mark Accessors
-
-- (AQTile *)tileFromNetacquireID:(int)netacquireID;
-{	
-	return [self tileOnBoardAtColumn:[AQTile columnFromNetacquireID:netacquireID] row:[AQTile rowFromNetacquireID:netacquireID]];
-}
-@end
 
 #pragma mark -
 
 @implementation AQBoard (Private)
 #pragma mark Private implementation
 
-- (void)_createTileMatrixAndFillTileBag;
+- (void)_createTileMatrix;
 {
     NSMutableArray  *columns = [NSMutableArray array];
     NSMutableArray  *currentRow;
@@ -135,7 +116,6 @@
 		for (currentRowAsInt = 0; currentRowAsInt < 9; ++currentRowAsInt) {
 			currentTile = [[AQTile alloc] initWithRow:[AQTile rowStringFromInt:currentRowAsInt] column:currentColumnAsInt];
 			[currentRow addObject:currentTile];
-			[_tileBag addObject:currentTile];
 		}
 		
 		[columns addObject:[NSArray arrayWithArray:currentRow]];

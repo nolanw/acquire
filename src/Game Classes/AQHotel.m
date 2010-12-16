@@ -65,6 +65,32 @@
 
 // Instance methods
 // init/dealloc
+- (id)init
+{
+  NSAssert(NO, @"This is not the initializer for the AQHotel class.");
+  return nil;
+}
+
+- (id)initWithName:(NSString*)name
+           oldName:(NSString*)oldName
+              tier:(int)tier
+             color:(NSColor*)color
+      netacquireID:(int)netacquireID;
+{
+	if (![super init])
+		return nil;
+	
+  _name = [name copy];
+  _oldName = [oldName copy];
+  _color = [color retain];
+  _tilesInHotel = [[NSMutableArray alloc] initWithCapacity:50];
+  _sharesInBank = 25;
+  _tier = tier;
+	_netacquireID = netacquireID;
+	
+	return self;
+}
+
 - (void)dealloc;
 {
 	[_name release];
@@ -214,47 +240,8 @@
 	
 	return ([self sharePrice] * 5);
 }
-@end
 
-#pragma mark -
-@implementation AQHotel (LocalGame)
-#pragma mark LocalGame implementation
-// init/dealloc
-- (id)initWithName:(NSString *)name oldName:(NSString *)oldName tier:(int)tier color:(NSColor *)color;
-{
-	if (![super init])
-		return nil;
-	
-	_name = [name copy];
-	_oldName = [_oldName copy];
-	_color = [color retain];
-	_tilesInHotel = [[NSMutableArray alloc] initWithCapacity:50];
-	_sharesInBank = 25;
-	_tier = tier;
-	_netacquireID = -1;
-
-	return self;
-}
-@end
-
-#pragma mark -
-@implementation AQHotel (NetworkGame)
-#pragma mark NetworkGame implementation
-// init/dealloc
-- (id)initWithName:(NSString *)name oldName:(NSString *)oldName tier:(int)tier color:(NSColor *)color netacquireID:(int)netacquireID;
-{
-	if (![super init])
-		return nil;
-	
-	[self initWithName:name oldName:oldName tier:tier color:color];
-	_oldName = [oldName copy];
-	_netacquireID = netacquireID;
-	
-	return self;
-}
-
-
-// Accessors/setters
+// Netacquire
 - (int)netacquireID;
 {
 	return _netacquireID;
@@ -264,4 +251,5 @@
 {
 	_netacquireID = netacquireID;
 }
+
 @end

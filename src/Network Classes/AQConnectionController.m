@@ -732,6 +732,11 @@ didConnectToHost:(NSString*)host
     id associatedObject = [self _firstAssociatedObjectThatRespondsToSelector:@selector(canStartActiveGame)];
     [associatedObject canStartActiveGame];
 	}
+	else if (state == 99)
+	{
+    id associatedObject = [self _firstAssociatedObjectThatRespondsToSelector:@selector(determineAndCongratulateWinner)];
+    [associatedObject determineAndCongratulateWinner];
+	}
 }
 
 - (void)_receivedSVDirective:(AQNetacquireDirective *)setValueDirective;

@@ -166,6 +166,21 @@
 
 - (void)enableTileRack;
 {
+  NSArray *tiles = [[_game localPlayer] tiles];
+  for (NSInteger i = 0; i < 6; i++)
+  {
+    NSCell *cell = [_tileRackMatrix cellAtRow:0 column:i];
+    if ([tiles count] > i)
+    {
+      AQTile *tile = [tiles objectAtIndex:i];
+      if ([tile isEqual:[NSNull null]] || [_game tileIsUnplayable:tile])
+        [cell setEnabled:NO];
+      else
+        [cell setEnabled:YES];
+    }
+    else
+      [cell setEnabled:NO];
+  }
 	[_tileRackMatrix setEnabled:YES];
 }
 
@@ -287,7 +302,7 @@
 	int i;
 	for (i = 0; i < [tiles count]; ++i) {
 		curTile = [tiles objectAtIndex:i];
-		if (curTile == [NSNull null]) {
+    if ([curTile isEqual:[NSNull null]]) {
 			[[_tileRackMatrix cellAtRow:0 column:i] setTransparent:YES];
 			[[_tileRackMatrix cellAtRow:0 column:i] setTitle:@""];
 		} else {
@@ -309,8 +324,9 @@
 	
 	NSEnumerator *tilesToHighlightEnumerator = [tilesToHighlight objectEnumerator];
 	id curTile;
-	while (curTile = [tilesToHighlightEnumerator nextObject]) {
-		if (curTile != [NSNull null])
+	while (curTile = [tilesToHighlightEnumerator nextObject])
+	{
+    if (curTile != [NSNull null] && ![_game tileIsUnplayable:curTile])
 			[[_boardMatrix cellAtRow:[curTile rowInt] column:([curTile column] - 1)] setButtonColor:[_game tilePlayableColor]];
 	}
 }
@@ -318,12 +334,13 @@
 - (void)congratulateWinnersByName:(NSArray *)winners;
 {
 	NSAlert *congratulateWinnerAlert = [[[NSAlert alloc] init] autorelease];
-	if ([_game isNetworkGame] && ![winners containsObject:[_game localPlayer]])
+	if (![winners containsObject:[_game localPlayer]])
 		[congratulateWinnerAlert addButtonWithTitle:@"Fiddlesticks"];
 	else
 		[congratulateWinnerAlert addButtonWithTitle:@"Congratulations!"];
 	
-	if ([winners count] == 1) {
+	if ([winners count] == 1)
+	{
 		[congratulateWinnerAlert setMessageText:NSLocalizedStringFromTable(@"We have a winner!", @"Acquire", @"An announcement that we have a winner.")];
 		[congratulateWinnerAlert setInformativeText:[NSString stringWithFormat:@"%@ %@", [[winners objectAtIndex:0] name], NSLocalizedStringFromTable(@"has won the game!", @"Acquire", @"Text saying someone has won the game")]];
 	} else {
@@ -345,12 +362,6 @@
 - (void)announceLocalPlayersTurn;
 {
 	[NSApp requestUserAttention:NSInformationalRequest];
-	
-	if (_justAnnouncedLocalPlayersTurn)
-		return;
-	
-	[self incomingGameMessage:@"** It's your turn. Play a tile!"];
-	_justAnnouncedLocalPlayersTurn = YES;
 }
 
 - (void)enteringTestMode;
@@ -480,13 +491,13 @@
 - (void)showCreateNewHotelSheetWithHotels:(NSArray *)hotels atTile:(id)tile;
 {
 	[_createNewHotelSheetController resizeAndPopulateMatricesWithHotels:hotels tile:tile];
-	[_createNewHotelSheetController showCreateNewHotelSheet:_gameWindow isNetworkGame:[_game isNetworkGame]];
+	[_createNewHotelSheetController showCreateNewHotelSheet:_gameWindow];
 }
 
 - (void)showChooseMergerSurvivorSheetWithMergingHotels:(NSArray *)mergingHotels potentialSurvivors:(NSArray *)potentialSurvivors mergeTile:(id)mergeTile;
 {
 	[_chooseMergerSurvivorSheetController resizeAndPopulateMatricesWithMergingHotels:mergingHotels potentialSurvivors:potentialSurvivors mergeTile:mergeTile];
-	[_chooseMergerSurvivorSheetController showChooseMergerSurvivorSheet:_gameWindow isNetworkGame:[self isNetworkGame]];
+	[_chooseMergerSurvivorSheetController showChooseMergerSurvivorSheet:_gameWindow];
 }
 
 - (void)showAllocateMergingHotelSharesSheetForMergingHotel:(AQHotel *)mergingHotel survivingHotel:(AQHotel *)survivingHotel player:(AQPlayer *)player sharePrice:(int)sharePrice;
@@ -527,11 +538,6 @@
 - (void)tradeSharesOfHotel:(AQHotel *)fromHotel forSharesInHotel:(AQHotel *)toHotel numberOfShares:(int)numberOfShares player:(AQPlayer *)player;
 {
 	[_game tradeSharesOfHotel:fromHotel forSharesInHotel:toHotel numberOfShares:numberOfShares player:player];
-}
-
-- (BOOL)isNetworkGame;
-{
-	return [_game isNetworkGame];
 }
 
 - (void)mergerSharesSold:(int)sharesSold sharesTraded:(int)sharesTraded;

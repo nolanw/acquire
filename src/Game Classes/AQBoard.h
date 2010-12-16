@@ -11,37 +11,20 @@
 #pragma mark Interface
 
 {
-	NSArray         *_tileMatrix;   // The actual board of tiles
-	NSMutableArray  *_tileBag;      // The bag of tiles to draw from
-    NSArray         *_rowNames;     // Handy array mapping rowAsInt to rowName
+	NSArray *_tileMatrix;   // The actual board of tiles
+  NSArray *_rowNames;     // Handy array mapping rowAsInt to rowName
 }
-
-#pragma mark 
-#pragma mark init/dealloc
-
-- (id)init;
-- (void)dealloc;
 
 #pragma mark 
 #pragma mark Tile accessors
 
 - (AQTile *)tileOnBoardAtColumn:(int)col row:(NSString *)row;
 - (AQTile *)tileOnBoardByString:(NSString *)tileString;
-- (AQTile *)tileFromTileBag;
+- (AQTile *)tileFromNetacquireID:(int)netacquireID;
 
 #pragma mark 
 #pragma mark Lists of tiles
 
 - (NSArray *)tilesOrthogonalToTile:(AQTile *)tile;
-@end
 
-#pragma mark -
-@interface AQBoard (NetworkGame)
-
-#pragma mark NetworkGame interface
-
-#pragma mark 
-#pragma mark Accessors
-
-- (AQTile *)tileFromNetacquireID:(int)netacquireID;
 @end

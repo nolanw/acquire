@@ -42,7 +42,6 @@
 	STAssertEqualObjects([AQTile rowStringFromInt:9], nil, @"rowStringFromInt invalid int");
 	STAssertEqualObjects([AQTile rowStringFromInt:11], nil, @"rowStringFromInt invalid int");
 	
-	// Network methods
 	// netacquireIDFromTile
 	STAssertEquals([AQTile netacquireIDFromTile:tile], 1, @"netacquireIDFromTile valid tile");
 	
