@@ -45,7 +45,6 @@
 - (void)disconnectFromServer;
 - (void)disconnectedFromServer:(BOOL)connectionWasLost;
 - (void)connection:(AQConnectionController *)connection willDisconnectWithError:(NSError *)err;
-- (void)startNewLocalGameWithPlayersNamed:(NSArray *)playerNames;
 
 // Passthrus
 - (void)updateGameListFor:(id)anObject;

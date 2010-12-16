@@ -196,23 +196,6 @@
 		[_welcomeWindowController networkGameConnectionFailed];
 }
 
-- (void)startNewLocalGameWithPlayersNamed:(NSArray *)playerNames;
-{
-	[_welcomeWindowController saveLocalGameDefaults];
-	[_welcomeWindowController closeWelcomeWindow];
-	
-	[_gameArrayController startNewLocalGameAndMakeActive];
-	[[_gameArrayController activeGame] loadGameWindow];
-	[[_gameArrayController activeGame] bringGameWindowToFront];
-	
-	NSEnumerator *playerNameEnumerator = [playerNames objectEnumerator];
-	id curPlayerName;
-	while (curPlayerName = [playerNameEnumerator nextObject])
-		[[_gameArrayController activeGame] addPlayerNamed:curPlayerName];
-	
-	[[_gameArrayController activeGame] startGame];
-}
-
 
 // Passthrus
 - (void)updateGameListFor:(id)anObject;

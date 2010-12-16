@@ -6,17 +6,18 @@
 #import "AQAcquireController.h"
 
 @interface AQWelcomeWindowController (Private)
-// Sync local player names form with number of players stepper and text field
-- (void)_updateLocalPlayerNamesForm;
 
 // Make sure the names and numbers given for a network game are sensible
 - (NSString *)_verifyNetworkGameParameters;
 
 // Connecting to server state changes
 - (void)_startConnectingToAServer;
+
 @end
 
+
 @implementation AQWelcomeWindowController
+
 - (id)initWithAcquireController:(id)acquireController;
 {
 	if (![super init])
@@ -28,13 +29,10 @@
 	if (_welcomeWindow == nil) {
 		if (![NSBundle loadNibNamed:@"WelcomeWindow" owner:self]) {
 			NSLog(@"%@ failed to load WelcomeWindow.nib", NSStringFromSelector(_cmd));
+      [self release];
 			return nil;
 		}
 	}
-	
-	[_localNumberOfPlayersStepper setTarget:self];
-	[_localNumberOfPlayersStepper setAction:@selector(localNumberOfPlayersStepperHasChanged:)];
-	[self _updateLocalPlayerNamesForm];
 	
 	NSString *lastHostOrIPAddress = [[NSUserDefaults standardUserDefaults] objectForKey:@"LastHostOrIPAddress"];
 	if (lastHostOrIPAddress != nil)
@@ -48,22 +46,6 @@
 	if (lastDisplayName != nil)
 		[_displayNameTextField setStringValue:lastDisplayName];
 	
-	NSArray *lastLocalPlayerNames = [[NSUserDefaults standardUserDefaults] objectForKey:@"LastLocalPlayerNames"];
-	if (lastLocalPlayerNames != nil) {
-		[_localNumberOfPlayersStepper setIntValue:[lastLocalPlayerNames count]];
-		[self localNumberOfPlayersStepperHasChanged:self];
-		
-		int i;
-		for (i = 0; i < [lastLocalPlayerNames count]; ++i)
-			[[_localPlayerNamesForm cellAtIndex:i] setStringValue:[lastLocalPlayerNames objectAtIndex:i]];
-	}
-	
-	BOOL mostRecentGameWasLocalGame = [[NSUserDefaults standardUserDefaults] boolForKey:@"MostRecentGameWasLocalGame"];
-	if (mostRecentGameWasLocalGame)
-		[_gameTypeTabView selectTabViewItemAtIndex:1];
-	
-	_displayNameInUseErrorShown = NO;
-
 	return self;
 }
 
@@ -93,41 +75,6 @@
 	[[NSUserDefaults standardUserDefaults] setObject:[_hostOrIPAddressTextField stringValue] forKey:@"LastHostOrIPAddress"];
 	[[NSUserDefaults standardUserDefaults] setObject:[_portTextField stringValue] forKey:@"LastPort"];
 	[[NSUserDefaults standardUserDefaults] setObject:[_displayNameTextField stringValue] forKey:@"LastDisplayName"];
-	[[NSUserDefaults standardUserDefaults] setObject:@"NO" forKey:@"MostRecentGameWasLocalGame"];
-}
-
-- (void)saveLocalGameDefaults;
-{
-	NSMutableArray *localPlayerNames = [NSMutableArray arrayWithCapacity:[_localPlayerNamesForm numberOfRows]];
-	int i;
-	for (i = 0; i < [_localPlayerNamesForm numberOfRows]; ++i)
-		[localPlayerNames addObject:[[[_localPlayerNamesForm cellAtIndex:i] stringValue] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
-	[[NSUserDefaults standardUserDefaults] setObject:localPlayerNames forKey:@"LastLocalPlayerNames"];
-	[[NSUserDefaults standardUserDefaults] setObject:@"YES" forKey:@"MostRecentGameWasLocalGame"];
-}
-
-
-// NSTabView delegate selectors
-- (BOOL)tabView:(NSTabView *)tabView shouldSelectTabViewItem:(NSTabViewItem *)tabViewItem;
-{
-	if (tabView != _gameTypeTabView)
-		return YES;
-	
-	if ([_hostOrIPAddressTextField isEnabled] == NO)
-		return NO;
-	
-	return YES;
-}
-
-- (void)tabView:(NSTabView *)tabView willSelectTabViewItem:(NSTabViewItem *)tabViewItem;
-{
-	if (tabView != _gameTypeTabView)
-		return;
-	
-	if ([[tabViewItem label] isEqualToString:@"Online Game"])
-		[_welcomeWindow makeFirstResponder:_connectToServerButton];
-	else
-		[_welcomeWindow makeFirstResponder:_startLocalGameButton];
 }
 
 
@@ -183,38 +130,15 @@
 	
 	[self _startConnectingToAServer];
 	
-	[_acquireController connectToServer:[_hostOrIPAddressTextField stringValue] port:[_portTextField intValue] withLocalDisplayName:[_displayNameTextField stringValue] sender:self];
+	[_acquireController connectToServer:[_hostOrIPAddressTextField stringValue]
+                                 port:[_portTextField intValue]
+                 withLocalDisplayName:[_displayNameTextField stringValue]
+                               sender:self];
 }
 
 - (IBAction)cancelConnectingToServer:(id)sender;
 {
 	[_acquireController cancelConnectingToServer];
-}
-
-- (IBAction)startLocalGame:(id)sender;
-{
-	int numberOfPlayers = [_localNumberOfPlayersTextField intValue];
-	NSMutableArray *playersNames = [NSMutableArray arrayWithCapacity:numberOfPlayers];
-	int i;
-	for (i = 0; i < numberOfPlayers; ++i) {
-		if ([playersNames containsObject:[[_localPlayerNamesForm cellAtIndex:i] stringValue]]) {
-			[self duplicateLocalPlayerNamesEntered];
-			return;
-		}
-		
-		[playersNames addObject:[[[_localPlayerNamesForm cellAtIndex:i] stringValue] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
-	}
-	
-	_displayNameInUseErrorShown = NO;
-	
-	[_acquireController startNewLocalGameWithPlayersNamed:playersNames];
-}
-
-- (void)localNumberOfPlayersStepperHasChanged:(id)sender;
-{
-	[_localNumberOfPlayersTextField setIntValue:[_localNumberOfPlayersStepper intValue]];
-	
-	[self _updateLocalPlayerNamesForm];
 }
 
 - (void)networkErrorAlertDismissed:(id)sender;
@@ -293,23 +217,6 @@
 @end
 
 @implementation AQWelcomeWindowController (Private)
-// Sync local player names form with number of players stepper and text field
-- (void)_updateLocalPlayerNamesForm;
-{
-	int rowsNeeded = [_localNumberOfPlayersStepper intValue];
-	
-	while ([_localPlayerNamesForm numberOfRows] > rowsNeeded)
-		[_localPlayerNamesForm removeEntryAtIndex:rowsNeeded];
-	
-	while ([_localPlayerNamesForm numberOfRows] < rowsNeeded)
-		[_localPlayerNamesForm addEntry:NSLocalizedStringFromTable(@"Player", @"Acquire", @"The word 'player'.")];
-	
-	int i;
-	for (i = 0; i < rowsNeeded; ++i) {
-		[[_localPlayerNamesForm cellAtIndex:i] setTitle:[NSString stringWithFormat:@"%@ %d", NSLocalizedStringFromTable(@"Player", @"Acquire", @"The word 'player'."), (i + 1)]];
-		[[_localPlayerNamesForm cellAtIndex:i] setPlaceholderString:NSLocalizedStringFromTable(@"Enter name", @"Acquire", @"Prompt user to enter name.")];
-	}
-}
 
 // Make sure the names and numbers given for a network game are sensible
 - (NSString *)_verifyNetworkGameParameters;
@@ -337,4 +244,5 @@
 	[_connectToServerButton setTitle:NSLocalizedStringFromTable(@"Cancel Connection", @"Acquire", "Button text saying 'cancel connection'.")];
 	[_connectToServerButton setAction:@selector(cancelConnectingToServer:)];
 }
+
 @end
