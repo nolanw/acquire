@@ -56,6 +56,27 @@
 	return nil;
 }
 
++ (int)netacquireIDFromTile:(AQTile *)tile;
+{
+	NSAssert(tile, @"tile was nil");
+	
+	return ([tile column] * 9) - (8 - [tile rowInt]);
+}
+
++ (int)columnFromNetacquireID:(int)netacquireID;
+{
+	NSAssert((netacquireID >= 1 || netacquireID <= 108), @"invalid netacquireID");
+	
+	return ((netacquireID - 1) / 9) + 1;
+}
+
++ (NSString *)rowFromNetacquireID:(int)netacquireID;
+{
+	NSAssert((netacquireID >= 1 || netacquireID <= 108), @"invalid netacquireID");
+	
+	return [AQTile rowStringFromInt:((netacquireID - 1) % 9)];
+}
+
 
 // Instance methods
 // init/dealloc
@@ -124,43 +145,16 @@
 		_state = AQTileInHotel;
 }
 
+- (int)netacquireID;
+{
+	return [AQTile netacquireIDFromTile:self];
+}
+
 
 // Equality
 - (BOOL)isEqualToTile:(AQTile *)otherTile;
 {
 	return [[self description] isEqualToString:[otherTile description]];
 }
-@end
 
-#pragma mark -
-@implementation AQTile (NetworkGame)
-#pragma mark NetworkGame implementation
-// Class methods
-+ (int)netacquireIDFromTile:(AQTile *)tile;
-{
-	NSAssert(tile, @"tile was nil");
-	
-	return ([tile column] * 9) - (8 - [tile rowInt]);
-}
-
-+ (int)columnFromNetacquireID:(int)netacquireID;
-{
-	NSAssert((netacquireID >= 1 || netacquireID <= 108), @"invalid netacquireID");
-	
-	return ((netacquireID - 1) / 9) + 1;
-}
-
-+ (NSString *)rowFromNetacquireID:(int)netacquireID;
-{
-	NSAssert((netacquireID >= 1 || netacquireID <= 108), @"invalid netacquireID");
-	
-	return [AQTile rowStringFromInt:((netacquireID - 1) % 9)];
-}
-
-
-// Accessors/setters
-- (int)netacquireID;
-{
-	return [AQTile netacquireIDFromTile:self];
-}
 @end

@@ -24,6 +24,9 @@ typedef enum _AQTileState {
 // Class methods
 + (int)rowIntFromString:(NSString *)rowString;
 + (NSString *)rowStringFromInt:(int)rowInt;
++ (int)netacquireIDFromTile:(AQTile *)tile;
++ (int)columnFromNetacquireID:(int)netacquireID;
++ (NSString *)rowFromNetacquireID:(int)netacquireID;
 
 // Instance methods
 // init/dealloc
@@ -41,19 +44,9 @@ typedef enum _AQTileState {
 - (void)setState:(AQTileState)newState;
 - (id)hotel;
 - (void)setHotel:(id)newHotel;
+- (int)netacquireID;
 
 // Equality
 - (BOOL)isEqualToTile:(AQTile *)otherTile;
-@end
 
-#pragma mark -
-@interface AQTile (NetworkGame)
-#pragma mark NetworkGame interface
-// Class methods
-+ (int)netacquireIDFromTile:(AQTile *)tile;
-+ (int)columnFromNetacquireID:(int)netacquireID;
-+ (NSString *)rowFromNetacquireID:(int)netacquireID;
-
-// Accessors/setters
-- (int)netacquireID;
 @end
