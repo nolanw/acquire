@@ -657,7 +657,7 @@ didConnectToHost:(NSString*)host
 
 	id associatedObject = [self _firstAssociatedObjectThatRespondsToSelector:@selector(boardTileAtNetacquireID:isNetacquireChainID:)];
   NSArray *parameters = [setBoardStatusDirective parameters];
-  NSInteger first = [[parameters objectAtIndex:0] integerValue];
+  NSInteger first = [[parameters objectAtIndex:0] intValue];
   NSInteger second = [[parameters objectAtIndex:1] intValue];
 	[associatedObject boardTileAtNetacquireID:first isNetacquireChainID:second];
 }

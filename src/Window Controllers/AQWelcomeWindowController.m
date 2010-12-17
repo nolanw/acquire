@@ -13,6 +13,10 @@
 // Connecting to server state changes
 - (void)_startConnectingToAServer;
 
+// Set the string value of the recent server combo box to the given recent 
+// server.
+- (void)_placeRecentServerInComboBox:(NSInteger)index;
+
 @end
 
 
@@ -26,23 +30,39 @@
 	_acquireController = [acquireController retain];
 	_quitOnNextWindowClose = YES;
 	
-	if (_welcomeWindow == nil) {
-		if (![NSBundle loadNibNamed:@"WelcomeWindow" owner:self]) {
+	if (_welcomeWindow == nil)
+	{
+		if (![NSBundle loadNibNamed:@"WelcomeWindow" owner:self])
+		{
 			NSLog(@"%@ failed to load WelcomeWindow.nib", NSStringFromSelector(_cmd));
       [self release];
 			return nil;
 		}
 	}
 	
-	NSString *lastHostOrIPAddress = [[NSUserDefaults standardUserDefaults] objectForKey:@"LastHostOrIPAddress"];
-	if (lastHostOrIPAddress != nil)
-		[_hostOrIPAddressTextField setStringValue:lastHostOrIPAddress];
+  NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+  NSArray *recentServers = [defaults objectForKey:@"RecentServers"];
+  if (recentServers)
+    _recentServers = [recentServers mutableCopy];
+  else
+  {
+    NSString *initialRecent;
+    NSString *oldLastServer = [defaults objectForKey:@"LastHostOrIPAddress"];
+    NSString *oldLastPort = [defaults objectForKey:@"LastPort"];
+    if (oldLastServer && oldLastPort)
+      initialRecent = [NSString stringWithFormat:@"%@:%@", oldLastServer, oldLastPort];
+    else
+      initialRecent = @"acquire.game-host.org:1001";
+    if (oldLastServer)
+      [defaults removeObjectForKey:@"LastHostOrIPAddress"];
+    if (oldLastPort)
+      [defaults removeObjectForKey:@"LastPort"];
+    _recentServers = [[NSMutableArray alloc] initWithObjects:initialRecent, nil];
+  }
+  if ([_recentServers count] > 0)
+    [self _placeRecentServerInComboBox:0];
 	
-	NSString *lastPort = [[NSUserDefaults standardUserDefaults] objectForKey:@"LastPort"];
-	if (lastPort != nil)
-		[_portTextField setStringValue:lastPort];
-	
-	NSString *lastDisplayName = [[NSUserDefaults standardUserDefaults] objectForKey:@"LastDisplayName"];
+	NSString *lastDisplayName = [defaults objectForKey:@"LastDisplayName"];
 	if (lastDisplayName != nil)
 		[_displayNameTextField setStringValue:lastDisplayName];
 	
@@ -51,6 +71,7 @@
 
 - (void)dealloc;
 {
+  [_recentServers release], _recentServers = nil;
 	[_welcomeWindow close];
 	[_welcomeWindow release];
 	_welcomeWindow = nil;
@@ -66,15 +87,26 @@
 // Accessors
 - (NSString *)hostOrIPAddress;
 {
-	return [_hostOrIPAddressTextField stringValue];
+	return [_serverComboBox stringValue];
 }
 
 
 - (void)saveNetworkGameDefaults;
 {
-	[[NSUserDefaults standardUserDefaults] setObject:[_hostOrIPAddressTextField stringValue] forKey:@"LastHostOrIPAddress"];
-	[[NSUserDefaults standardUserDefaults] setObject:[_portTextField stringValue] forKey:@"LastPort"];
-	[[NSUserDefaults standardUserDefaults] setObject:[_displayNameTextField stringValue] forKey:@"LastDisplayName"];
+  NSString *nameAndPort;
+  NSString *server = [_serverComboBox stringValue];
+  int port = [_portTextField intValue];
+  if (port == 1001 && [_recentServers containsObject:server])
+    nameAndPort = server;
+  else
+    nameAndPort = [NSString stringWithFormat:@"%@:%d", server, port];
+  if ([_recentServers containsObject:nameAndPort])
+    [_recentServers removeObject:nameAndPort];
+  [_recentServers insertObject:nameAndPort atIndex:0];
+  NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+  [defaults setObject:_recentServers forKey:@"RecentServers"];
+	[defaults setObject:[_displayNameTextField stringValue]
+               forKey:@"LastDisplayName"];
 }
 
 
@@ -104,10 +136,21 @@
 }
 
 // UI widget actions
+- (IBAction)separateHostAndPort:(id)sender;
+{
+  NSString *server = [_serverComboBox stringValue];
+  NSArray *nameAndPort = [server componentsSeparatedByString:@":"];
+  if ([nameAndPort count] >= 1)
+    [_serverComboBox setStringValue:[nameAndPort objectAtIndex:0]];
+  if ([nameAndPort count] > 1)
+    [_portTextField setStringValue:[nameAndPort objectAtIndex:1]];
+}
+
 - (IBAction)connectToServer:(id)sender;
 {
 	NSString *verificationErrorString = [self _verifyNetworkGameParameters];
-	if (verificationErrorString != nil) {
+	if (verificationErrorString != nil)
+	{
 		NSAlert *verificationErrorAlert = [[[NSAlert alloc] init] autorelease];
 		[verificationErrorAlert addButtonWithTitle:@"OK"];
 		[verificationErrorAlert setMessageText:NSLocalizedStringFromTable(@"Some settings need correction.", @"Acquire", @"Error shown when settings on the welcome screen are invalid.")];
@@ -117,7 +160,7 @@
 		[verificationErrorAlert beginSheetModalForWindow:_welcomeWindow modalDelegate:self didEndSelector:@selector(networkErrorAlertDismissed:) contextInfo:nil];
 		
 		if ([verificationErrorString isEqualToString:NSLocalizedStringFromTable(@"Please enter a host or IP address.", @"Acquire", @"String asking user to enter a hostname or IP address.")])
-			[_hostOrIPAddressTextField selectText:self];
+			[_serverComboBox selectText:self];
 		else if ([verificationErrorString isEqualToString:NSLocalizedStringFromTable(@"Please enter a port number in the range 1-65535.", @"Acquire", @"String asking user to enter a port number from 1-65535 inclusive.")])
 			[_portTextField selectText:self];
 		else if ([verificationErrorString isEqualToString:NSLocalizedStringFromTable(@"Please enter a display name.", @"Acquire", @"String asking user to enter a display name.")])
@@ -130,7 +173,7 @@
 	
 	[self _startConnectingToAServer];
 	
-	[_acquireController connectToServer:[_hostOrIPAddressTextField stringValue]
+	[_acquireController connectToServer:[_serverComboBox stringValue]
                                  port:[_portTextField intValue]
                  withLocalDisplayName:[_displayNameTextField stringValue]
                                sender:self];
@@ -149,7 +192,7 @@
 - (void)stopConnectingToAServer;
 {
 	[_networkProgressIndicator setHidden:YES];
-	[_hostOrIPAddressTextField setEnabled:YES];
+	[_serverComboBox setEnabled:YES];
 	[_portTextField setEnabled:YES];
 	[_displayNameTextField setEnabled:YES];
 	[_connectToServerButton setEnabled:YES];
@@ -190,17 +233,6 @@
 	[duplicateDisplayNameAlert beginSheetModalForWindow:_welcomeWindow modalDelegate:self didEndSelector:@selector(networkErrorAlertDismissed:) contextInfo:nil];
 }
 
-- (void)duplicateLocalPlayerNamesEntered;
-{
-	NSAlert *duplicateLocalPlayerNamesEnteredAlert = [[[NSAlert alloc] init] autorelease];
-	[duplicateLocalPlayerNamesEnteredAlert addButtonWithTitle:@"OK"];
-	[duplicateLocalPlayerNamesEnteredAlert setMessageText:NSLocalizedStringFromTable(@"Every local player needs their own name.", @"Acquire", @"Alert box title saying that every local player needs their own name.")];
-	[duplicateLocalPlayerNamesEnteredAlert setInformativeText:NSLocalizedStringFromTable(@"Please ensure each local player has a unique name.", @"Acquire", @"Ask to ensure each local player has a unique name.")];
-	[duplicateLocalPlayerNamesEnteredAlert setAlertStyle:NSWarningAlertStyle];
-
-	[duplicateLocalPlayerNamesEnteredAlert beginSheetModalForWindow:_welcomeWindow modalDelegate:self didEndSelector:nil contextInfo:nil];
-}
-
 - (void)lostServerConnection;
 {
 	if (_displayNameInUseErrorShown)
@@ -212,8 +244,71 @@
 	[lostServerConnectionAlert setInformativeText:NSLocalizedStringFromTable(@"The connection to the server was unexpectedly lost. If the server's still up, any games being played should still exist. You can rejoin any game you were a part of so long as your display name doesn't change.", @"Acquire", @"Alert informative text saying the server connection was unexpectedly lost, but games will be safe if the server didn't crash, and to leave the display name unchanged in order to join a new game.")];
 	[lostServerConnectionAlert setAlertStyle:NSWarningAlertStyle];
 	
-	[lostServerConnectionAlert beginSheetModalForWindow:_welcomeWindow modalDelegate:self didEndSelector:nil contextInfo:nil];
+	[lostServerConnectionAlert beginSheetModalForWindow:_welcomeWindow
+                                        modalDelegate:self
+                                       didEndSelector:nil
+                                          contextInfo:nil];
 }
+
+#if 0
+#pragma mark -
+#pragma mark NSComboBoxDataSource
+#endif
+
+- (NSString*)comboBox:(NSComboBox*)aComboBox
+      completedString:(NSString*)uncompletedString
+{
+  NSEnumerator *serverEnumerator = [_recentServers objectEnumerator];
+  NSString *curServer;
+  while ((curServer = [serverEnumerator nextObject]))
+  {
+    if ([curServer hasPrefix:uncompletedString])
+      return curServer;
+  }
+  return uncompletedString;
+}
+
+- (NSUInteger)comboBox:(NSComboBox *)aComboBox
+  indexOfItemWithStringValue:(NSString *)aString
+{
+  return [_recentServers indexOfObject:aString];
+}
+
+- (id)comboBox:(NSComboBox *)aComboBox 
+  objectValueForItemAtIndex:(NSInteger)index
+{
+  if (index < 0)
+  {
+    if ([_recentServers count] > 0)
+      return [_recentServers objectAtIndex:0];
+    else
+      return nil;
+  }
+  else
+  {
+    return [_recentServers objectAtIndex:index];
+  }
+}
+
+- (NSInteger)numberOfItemsInComboBox:(NSComboBox *)aComboBox
+{
+  return [_recentServers count];
+}
+
+#if 0
+#pragma mark -
+#pragma mark NSComboBoxDelegate
+#endif
+
+- (void)comboBoxSelectionDidChange:(NSNotification *)notification
+{
+  NSUInteger selectedIndex = [_serverComboBox indexOfSelectedItem];
+  if (selectedIndex == -1)
+    return;
+  [_serverComboBox deselectItemAtIndex:selectedIndex];
+  [self _placeRecentServerInComboBox:selectedIndex];
+}
+
 @end
 
 @implementation AQWelcomeWindowController (Private)
@@ -221,7 +316,7 @@
 // Make sure the names and numbers given for a network game are sensible
 - (NSString *)_verifyNetworkGameParameters;
 {
-	if ([[_hostOrIPAddressTextField stringValue] length] == 0)
+	if ([[_serverComboBox stringValue] length] == 0)
 		return NSLocalizedStringFromTable(@"Please enter a host or IP address.", @"Acquire", @"String asking user to enter a hostname or IP address.");
 	
 	if ([_portTextField intValue] < 1 || [_portTextField intValue] > 65535)
@@ -238,11 +333,18 @@
 {
 	[_networkProgressIndicator startAnimation:self];
 	[_networkProgressIndicator setHidden:NO];
-	[_hostOrIPAddressTextField setEnabled:NO];
+	[_serverComboBox setEnabled:NO];
 	[_portTextField setEnabled:NO];
 	[_displayNameTextField setEnabled:NO];
 	[_connectToServerButton setTitle:NSLocalizedStringFromTable(@"Cancel Connection", @"Acquire", "Button text saying 'cancel connection'.")];
 	[_connectToServerButton setAction:@selector(cancelConnectingToServer:)];
+}
+
+- (void)_placeRecentServerInComboBox:(NSInteger)index;
+{
+  NSString *server = [_recentServers objectAtIndex:index];
+  [_serverComboBox setStringValue:server];
+  [self separateHostAndPort:self];
 }
 
 @end

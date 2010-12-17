@@ -3,20 +3,25 @@
 //
 // Created May 26, 2008 by nwaite
 
+@class AQAcquireController;
+
+
 @interface AQWelcomeWindowController : NSObject
 {
-	id	_acquireController;
+	AQAcquireController *_acquireController;
 	
-	IBOutlet NSWindow	*_welcomeWindow;
+	IBOutlet NSWindow *_welcomeWindow;
 	
-	IBOutlet NSTextField			*_hostOrIPAddressTextField;
-	IBOutlet NSTextField			*_portTextField;
-	IBOutlet NSTextField			*_displayNameTextField;
-	IBOutlet NSProgressIndicator	*_networkProgressIndicator;
-	IBOutlet NSButton				*_connectToServerButton;
+  IBOutlet NSComboBox *_serverComboBox;
+	IBOutlet NSTextField *_portTextField;
+	IBOutlet NSTextField *_displayNameTextField;
+	IBOutlet NSProgressIndicator *_networkProgressIndicator;
+	IBOutlet NSButton *_connectToServerButton;
 	
 	BOOL _quitOnNextWindowClose;
 	BOOL _displayNameInUseErrorShown;
+	
+  NSMutableArray *_recentServers;
 }
 
 - (id)initWithAcquireController:(id)acquireController;
@@ -35,6 +40,7 @@
 - (void)windowWillClose:(NSNotification *)notification;
 
 // UI widget actions
+- (IBAction)separateHostAndPort:(id)sender;
 - (IBAction)connectToServer:(id)sender;
 - (void)cancelConnectingToServer:(id)sender;
 - (void)networkErrorAlertDismissed:(id)sender;
@@ -43,6 +49,6 @@
 // Button action responses
 - (void)gameConnectionFailed;
 - (void)displayNameAlreadyInUse;
-- (void)duplicateLocalPlayerNamesEntered;
 - (void)lostServerConnection;
+
 @end

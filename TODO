@@ -1,7 +1,6 @@
 New features
 ------------
 - Detect whether server is acquire-server or NetAcquire and show hotel names as appropriate.
-- Store ~5 last connected servers and ports (instead of one) for the Welcome Window.
 - Color rack tiles with the hotels they'd be a part of, or a different color if they merge, or whatever.
 - Disable rack tiles that cannot currently be played.
 - Change the Purchase Shares Sheet's submit button to say something else when it's possible to end the game.
@@ -10,3 +9,4 @@ New features
 - Update games drawer on new game creation (instead of timed events).
 - Show unplayable tiles on the board.
 - Allow game creator to choose the maximum number of players.
+- Disable 'Create Game' button when in a game.
