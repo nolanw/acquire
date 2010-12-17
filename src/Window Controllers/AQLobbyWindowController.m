@@ -6,7 +6,7 @@
 @end
 
 @implementation AQLobbyWindowController
-- (id)initWithAcquireController:(id)acquireController;
+- (id)initWithAcquireController:(AQAcquireController *)acquireController;
 {
 	if (![super init])
 		return nil;
@@ -97,7 +97,7 @@
 		desiredGameNumber = [[_gameListMatrix selectedCell] tag];
 	
 	[_gameListMatrix setEnabled:NO];
-	[(AQAcquireController *)_acquireController joinGame:desiredGameNumber];
+	[_acquireController joinGame:desiredGameNumber];
 }
 
 - (void)leftGame;
@@ -108,13 +108,17 @@
 
 - (void)incomingLobbyMessage:(NSString *)lobbyMessage;
 {
+  NSAttributedString *newline = [[[NSAttributedString alloc] initWithString:
+    @"\n"] autorelease];
 	if ([[_lobbyChatTextView textStorage] length] > 0)
-		[[_lobbyChatTextView textStorage] appendAttributedString:[[[NSAttributedString alloc] initWithString:@"\n"] autorelease]];
+		[[_lobbyChatTextView textStorage] appendAttributedString:newline];
 
-	NSAttributedString *attributedLobbyMessage = [[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@", lobbyMessage]] autorelease];
-	[[_lobbyChatTextView textStorage] appendAttributedString:attributedLobbyMessage];
+  NSAttributedString *attributed = [[[NSAttributedString alloc] initWithString:
+    lobbyMessage] autorelease];
+	[[_lobbyChatTextView textStorage] appendAttributedString:attributed];
 	
-	[_lobbyChatTextView scrollRangeToVisible:NSMakeRange([[_lobbyChatTextView string] length], 0)];
+  NSRange end = NSMakeRange([[_lobbyChatTextView string] length], 0);
+	[_lobbyChatTextView scrollRangeToVisible:end];
 }
 
 - (void)requestGameListUpdate:(NSTimer *)theTimer;
@@ -153,11 +157,14 @@
 
 - (void)resetLobbyMessages;
 {
-	[[_lobbyChatTextView textStorage] setAttributedString:[[[NSAttributedString alloc] initWithString:@""] autorelease]];
+  NSAttributedString *blank = [[[NSAttributedString alloc] initWithString:
+    @""] autorelease];
+	[[_lobbyChatTextView textStorage] setAttributedString:blank];
 }
 @end
 
 @implementation AQLobbyWindowController (Private)
+
 - (void)_gameListMatrixSetEnabled:(BOOL)flag;
 {
 	int i;
