@@ -9,13 +9,13 @@
 @interface AQHotel : NSObject
 #pragma mark Interface
 {
-	NSString		*_name;
-	NSString		*_oldName;
-	NSColor			*_color;
-	NSMutableArray 	*_tilesInHotel;
-	int				_sharesInBank;
-	int				_tier;
-	int				_netacquireID;
+	NSString *_name;
+	NSString *_oldName;
+	NSColor *_color;
+	NSMutableArray *_tilesInHotel;
+	int _sharesInBank;
+	int _tier;
+	int _netacquireID;
 }
 
 // Class methods

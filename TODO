@@ -7,6 +7,5 @@ New features
 - Change the Purchase Shares Sheet's submit button to say something else when it's possible to end the game.
 - Differentiate games that can be joined as player, as observer, or not at all.
 - Update games drawer on new game creation (instead of timed events).
-- Show value of shares being sold during merger.
 - Show unplayable tiles on the board.
 - Allow game creator to choose the maximum number of players.

@@ -10,25 +10,26 @@
 
 @interface AQAllocateMergingHotelSharesSheetController : NSObject
 {
-	IBOutlet NSWindow		*_allocateMergingHotelSharesSheet;
-	IBOutlet NSTextField	*_playerNameTextField;
-	IBOutlet NSTextField	*_mergingHotelNameTextField;
-	IBOutlet NSTextField	*_survivingHotelNameTextField;
-	IBOutlet NSTextField	*_sharesSoldTextField;
-	IBOutlet NSStepper		*_sharesSoldStepper;
-	IBOutlet NSTextField	*_sharesTradedTextField;
-	IBOutlet NSStepper		*_sharesTradedStepper;
-	IBOutlet NSTextField	*_sharesKeptInMergingHotelTextField;
-	IBOutlet NSButton		*_allocateButton;
+	IBOutlet NSWindow *_allocateMergingHotelSharesSheet;
+	IBOutlet NSTextField *_playerNameTextField;
+  IBOutlet NSTextField *_sharePriceTextField;
+	IBOutlet NSTextField *_mergingHotelNameTextField;
+	IBOutlet NSTextField *_survivingHotelNameTextField;
+	IBOutlet NSTextField *_sharesSoldTextField;
+	IBOutlet NSStepper *_sharesSoldStepper;
+	IBOutlet NSTextField *_sharesTradedTextField;
+	IBOutlet NSStepper *_sharesTradedStepper;
+	IBOutlet NSTextField *_sharesKeptInMergingHotelTextField;
+	IBOutlet NSButton *_allocateButton;
 	
 	AQGameWindowController *_gameWindowController;
-	id		_mergingHotel;
-	id		_survivingHotel;
-	id		_player;
-	int		_sharePrice;
-	double	_sharesKeptInMergingHotel;
-	double	_sharesSold;
-	double	_sharesTraded;
+	id _mergingHotel;
+	id _survivingHotel;
+	id _player;
+	int _sharePrice;
+	double _sharesKeptInMergingHotel;
+	double _sharesSold;
+	double _sharesTraded;
 }
 
 - (id)initWithGameWindowController:(AQGameWindowController *)gameWindowController;
@@ -39,5 +40,9 @@
 - (void)sharesSoldStepperChanged:(id)sender;
 - (void)sharesTradedStepperChanged:(id)sender;
 
-- (void)showAllocateMergingHotelSharesSheet:(NSWindow *)window forMergingHotel:(AQHotel *)mergingHotel survivingHotel:(AQHotel *)survivingHotel player:(AQPlayer *)player sharePrice:(int)sharePrice;
+- (void)showAllocateMergingHotelSharesSheet:(NSWindow*)window
+                            forMergingHotel:(AQHotel*)mergingHotel
+                             survivingHotel:(AQHotel*)survivingHotel
+                                     player:(AQPlayer*)player
+                                 sharePrice:(int)sharePrice;
 @end

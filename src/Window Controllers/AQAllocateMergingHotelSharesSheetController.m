@@ -111,9 +111,13 @@
 }
 
 
-- (void)showAllocateMergingHotelSharesSheet:(NSWindow *)window forMergingHotel:(AQHotel *)mergingHotel survivingHotel:(AQHotel *)survivingHotel player:(AQPlayer *)player sharePrice:(int)sharePrice;
+- (void)showAllocateMergingHotelSharesSheet:(NSWindow*)window
+                            forMergingHotel:(AQHotel*)mergingHotel
+                             survivingHotel:(AQHotel*)survivingHotel
+                                     player:(AQPlayer*)player
+                                 sharePrice:(int)sharePrice;
 {
-	if (window == nil || mergingHotel == nil || survivingHotel == nil || player == nil)
+	if (!window || !mergingHotel || !survivingHotel || !player)
 		return;
 	
 	_sharesKeptInMergingHotel = (double)[player numberOfSharesOfHotelNamed:[mergingHotel name]];
@@ -121,7 +125,7 @@
 	_sharesTraded = 0.0;
 	
 	if (!_allocateMergingHotelSharesSheet)
-        [NSBundle loadNibNamed:@"AllocateMergingHotelSharesSheet" owner:self];
+    [NSBundle loadNibNamed:@"AllocateMergingHotelSharesSheet" owner:self];
 	
 	[_mergingHotel release];
 	_mergingHotel = [mergingHotel retain];
@@ -131,7 +135,10 @@
 	_player = [player retain];
 	_sharePrice = sharePrice;
 	
-	[_playerNameTextField setStringValue:[player name]];
+  NSString *formattedPlayerName = [NSString stringWithFormat:@"%@, Allocate Your Shares", [player name]];
+	[_playerNameTextField setStringValue:formattedPlayerName];
+  NSString *formattedSharePrice = [NSString stringWithFormat:@"Sell shares for $%d", [mergingHotel sharePrice]];
+  [_sharePriceTextField setStringValue:formattedSharePrice];
 	[_mergingHotelNameTextField setStringValue:[mergingHotel oldName]];
 	[_survivingHotelNameTextField setStringValue:[survivingHotel oldName]];
 	[_sharesSoldTextField takeIntValueFrom:_sharesSoldStepper];

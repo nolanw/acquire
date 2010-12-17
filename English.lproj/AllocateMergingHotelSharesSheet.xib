@@ -91,13 +91,13 @@
 						<object class="NSTextField" id="777330503">
 							<reference key="NSNextResponder" ref="1006"/>
 							<int key="NSvFlags">268</int>
-							<string key="NSFrame">{{137, 81}, {61, 14}}</string>
+							<string key="NSFrame">{{110, 81}, {118, 14}}</string>
 							<reference key="NSSuperview" ref="1006"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSTextFieldCell" key="NSCell" id="205750215">
 								<int key="NSCellFlags">67239488</int>
 								<int key="NSCellFlags2">272630784</int>
-								<string key="NSContents">Sell shares</string>
+								<string key="NSContents">Sell shares for $1200</string>
 								<reference key="NSSupport" ref="859583215"/>
 								<reference key="NSControlView" ref="777330503"/>
 								<reference key="NSBackgroundColor" ref="275939970"/>
@@ -225,31 +225,15 @@
 						<object class="NSTextField" id="102407948">
 							<reference key="NSNextResponder" ref="1006"/>
 							<int key="NSvFlags">268</int>
-							<string key="NSFrame">{{103, 124}, {132, 17}}</string>
+							<string key="NSFrame">{{17, 124}, {304, 17}}</string>
 							<reference key="NSSuperview" ref="1006"/>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSTextFieldCell" key="NSCell" id="250345004">
 								<int key="NSCellFlags">67239488</int>
-								<int key="NSCellFlags2">272630784</int>
+								<int key="NSCellFlags2">138413056</int>
 								<string key="NSContents">Allocate your shares</string>
 								<reference key="NSSupport" ref="420744451"/>
 								<reference key="NSControlView" ref="102407948"/>
-								<reference key="NSBackgroundColor" ref="275939970"/>
-								<reference key="NSTextColor" ref="240900910"/>
-							</object>
-						</object>
-						<object class="NSTextField" id="904322693">
-							<reference key="NSNextResponder" ref="1006"/>
-							<int key="NSvFlags">268</int>
-							<string key="NSFrame">{{20, 20}, {204, 14}}</string>
-							<reference key="NSSuperview" ref="1006"/>
-							<bool key="NSEnabled">YES</bool>
-							<object class="NSTextFieldCell" key="NSCell" id="534725139">
-								<int key="NSCellFlags">67239488</int>
-								<int key="NSCellFlags2">272630784</int>
-								<string key="NSContents">Player's name</string>
-								<reference key="NSSupport" ref="859583215"/>
-								<reference key="NSControlView" ref="904322693"/>
 								<reference key="NSBackgroundColor" ref="275939970"/>
 								<reference key="NSTextColor" ref="240900910"/>
 							</object>
@@ -330,14 +314,6 @@
 					<int key="connectionID">49</int>
 				</object>
 				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
-						<string key="label">_playerNameTextField</string>
-						<reference key="source" ref="1001"/>
-						<reference key="destination" ref="904322693"/>
-					</object>
-					<int key="connectionID">50</int>
-				</object>
-				<object class="IBConnectionRecord">
 					<object class="IBActionConnection" key="connection">
 						<string key="label">allocate:</string>
 						<reference key="source" ref="1001"/>
@@ -352,6 +328,22 @@
 						<reference key="destination" ref="85611780"/>
 					</object>
 					<int key="connectionID">55</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">_playerNameTextField</string>
+						<reference key="source" ref="1001"/>
+						<reference key="destination" ref="102407948"/>
+					</object>
+					<int key="connectionID">59</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">_sharePriceTextField</string>
+						<reference key="source" ref="1001"/>
+						<reference key="destination" ref="777330503"/>
+					</object>
+					<int key="connectionID">60</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -396,7 +388,6 @@
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<reference ref="228752207"/>
-							<reference ref="777330503"/>
 							<reference ref="832948854"/>
 							<reference ref="1023110059"/>
 							<reference ref="392213310"/>
@@ -405,7 +396,7 @@
 							<reference ref="718548746"/>
 							<reference ref="85611780"/>
 							<reference ref="102407948"/>
-							<reference ref="904322693"/>
+							<reference ref="777330503"/>
 						</object>
 						<reference key="parent" ref="1005"/>
 					</object>
@@ -549,20 +540,6 @@
 						<reference key="object" ref="250345004"/>
 						<reference key="parent" ref="102407948"/>
 					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">40</int>
-						<reference key="object" ref="904322693"/>
-						<object class="NSMutableArray" key="children">
-							<bool key="EncodedWithXMLCoder">YES</bool>
-							<reference ref="534725139"/>
-						</object>
-						<reference key="parent" ref="1006"/>
-					</object>
-					<object class="IBObjectRecord">
-						<int key="objectID">41</int>
-						<reference key="object" ref="534725139"/>
-						<reference key="parent" ref="904322693"/>
-					</object>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="flattenedProperties">
@@ -580,6 +557,7 @@
 					<string>1.editorWindowContentRectSynchronizationRect</string>
 					<string>10.IBPluginDependency</string>
 					<string>11.IBPluginDependency</string>
+					<string>11.IBViewBoundsToFrameTransform</string>
 					<string>12.IBPluginDependency</string>
 					<string>13.IBPluginDependency</string>
 					<string>14.IBPluginDependency</string>
@@ -598,8 +576,6 @@
 					<string>37.IBPluginDependency</string>
 					<string>38.IBPluginDependency</string>
 					<string>39.IBPluginDependency</string>
-					<string>40.IBPluginDependency</string>
-					<string>41.IBPluginDependency</string>
 					<string>9.IBPluginDependency</string>
 				</object>
 				<object class="NSMutableArray" key="dict.values">
@@ -615,8 +591,9 @@
 					<string>{{357, 527}, {338, 161}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<object class="NSAffineTransform">
+						<bytes key="NSTransformStruct">P4AAAL+AAABDCQAAwroAAA</bytes>
+					</object>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -654,7 +631,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">55</int>
+			<int key="maxID">60</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -709,6 +686,7 @@
 							<string>_allocateMergingHotelSharesSheet</string>
 							<string>_mergingHotelNameTextField</string>
 							<string>_playerNameTextField</string>
+							<string>_sharePriceTextField</string>
 							<string>_sharesKeptInMergingHotelTextField</string>
 							<string>_sharesSoldStepper</string>
 							<string>_sharesSoldTextField</string>
@@ -720,6 +698,7 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>NSButton</string>
 							<string>NSWindow</string>
+							<string>NSTextField</string>
 							<string>NSTextField</string>
 							<string>NSTextField</string>
 							<string>NSTextField</string>
@@ -738,6 +717,7 @@
 							<string>_allocateMergingHotelSharesSheet</string>
 							<string>_mergingHotelNameTextField</string>
 							<string>_playerNameTextField</string>
+							<string>_sharePriceTextField</string>
 							<string>_sharesKeptInMergingHotelTextField</string>
 							<string>_sharesSoldStepper</string>
 							<string>_sharesSoldTextField</string>
@@ -761,6 +741,10 @@
 							</object>
 							<object class="IBToOneOutletInfo">
 								<string key="name">_playerNameTextField</string>
+								<string key="candidateClassName">NSTextField</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">_sharePriceTextField</string>
 								<string key="candidateClassName">NSTextField</string>
 							</object>
 							<object class="IBToOneOutletInfo">
