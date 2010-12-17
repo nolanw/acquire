@@ -1,12 +1,20 @@
-New features
-------------
-- Detect whether server is acquire-server or NetAcquire and show hotel names as appropriate.
+For 1.0
+-------
+- Allow game creator to choose the maximum number of players.
+- Disable 'Create Game' button when in a game.
+
+
+For 1.1
+-------
 - Color rack tiles with the hotels they'd be a part of, or a different color if they merge, or whatever.
-- Disable rack tiles that cannot currently be played.
 - Change the Purchase Shares Sheet's submit button to say something else when it's possible to end the game.
 - Allow joining games as an observer.
 - Differentiate games that can be joined as player, as observer, or not at all.
-- Update games drawer on new game creation (instead of timed events).
 - Show unplayable tiles on the board.
-- Allow game creator to choose the maximum number of players.
-- Disable 'Create Game' button when in a game.
+- Change look of unplayable rack tiles.
+
+
+Beyond
+------
+- Detect whether server is acquire-server or NetAcquire and show hotel names as appropriate.
+- Update games drawer on new game creation (instead of timed events).
