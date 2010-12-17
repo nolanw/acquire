@@ -13,6 +13,7 @@
 }
 
 // Class methods
++ (id)directive;
 + (id)directiveWithData:(NSData *)data;
 + (id)directiveWithString:(NSString *)string;
 + (id)directiveWithCode:(NSString *)code parameters:(NSString *)firstParameter, ...;

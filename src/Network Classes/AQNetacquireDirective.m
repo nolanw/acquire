@@ -24,6 +24,11 @@
 @implementation AQNetacquireDirective
 #pragma mark Implementation
 
++ (id)directive;
+{
+  return [[[self alloc] init] autorelease];
+}
+
 + (id)directiveWithData:(NSData *)data;
 {
 	return [[[self alloc] initWithData:data] autorelease];

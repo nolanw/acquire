@@ -128,12 +128,10 @@
 
 - (void)registerAssociatedObject:(id)newAssociatedObject;
 {
-    NSAssert(newAssociatedObject != nil, @"Passed nil object.");
+  NSAssert(newAssociatedObject != nil, @"Passed nil object.");
 	
-	if ([self _objectIsAssociated:newAssociatedObject])
-		return;
-	
-	[_associatedObjects addObject:newAssociatedObject];
+	if (![self _objectIsAssociated:newAssociatedObject])
+	  [_associatedObjects addObject:newAssociatedObject];
 }
 
 - (void)registerAssociatedObjectAndPrioritize:(id)newPriorityAssociatedObject;
@@ -161,15 +159,22 @@
 
 - (void)updateGameListFor:(id)anObject;
 {
-    NSAssert(anObject != nil, @"Passed in nil object.");
+  NSAssert(anObject != nil, @"Passed in nil object.");
     
-	if (!_handshakeComplete) {
-		[NSTimer scheduledTimerWithTimeInterval:0.2 target:self selector:@selector(retryUpdateGameList:) userInfo:anObject repeats:NO];
+	if (_handshakeComplete)
+	{
+	  _objectRequestingGameListUpdate = [anObject retain];
+  	[self _sendDirectiveWithCode:@"LG"];
+  }
+  else
+  {
+		[NSTimer scheduledTimerWithTimeInterval:0.2
+                                     target:self
+                                   selector:@selector(retryUpdateGameList:)
+                                   userInfo:anObject
+                                    repeats:NO];
 		return;
 	}
-	
-    _objectRequestingGameListUpdate = [anObject retain];
-	[self _sendDirectiveWithCode:@"LG"];
 }
 
 - (void)retryUpdateGameList:(NSTimer *)aTimer;
@@ -179,7 +184,7 @@
 
 - (void)outgoingLobbyMessage:(NSString *)lobbyMessage;
 {
-    NSAssert(lobbyMessage != nil, @"Passed in nil object.");
+  NSAssert(lobbyMessage != nil, @"Passed in nil object.");
     
 	if ([lobbyMessage length] == 0)
 		return;
@@ -189,7 +194,7 @@
 
 - (void)joinGame:(int)gameNumber;
 {
-    NSAssert(gameNumber > 0, @"Game number must be > 0.");
+  NSAssert(gameNumber > 0, @"Game number must be > 0.");
 	[self _sendJGDirectiveWithGameNumber:gameNumber];
 }
 
@@ -201,7 +206,7 @@
 
 - (void)outgoingGameMessage:(NSString *)gameMessage;
 {
-    NSAssert(gameMessage != nil, @"Passed in nil object.");
+  NSAssert(gameMessage != nil, @"Passed in nil object.");
     
 	if ([gameMessage length] == 0)
 		return;
@@ -216,7 +221,7 @@
 
 - (void)playTileAtRackIndex:(int)rackIndex;
 {
-    NSAssert(rackIndex > 0 && rackIndex <= 6, @"Rack index out of bounds.");
+  NSAssert(rackIndex > 0 && rackIndex <= 6, @"Rack index out of bounds.");
 	[self _sendPTDirectiveWithIndex:rackIndex];
 }
 
@@ -227,7 +232,7 @@
 
 - (void)purchaseShares:(NSArray *)sharesPurchasedAsParameters;
 {
-    NSAssert(sharesPurchasedAsParameters != nil, @"Passed in nil object.");
+  NSAssert(sharesPurchasedAsParameters != nil, @"Passed in nil object.");
     
 	NSMutableArray *pDirectiveParameters = [NSMutableArray arrayWithArray:sharesPurchasedAsParameters];
 	[pDirectiveParameters addObject:@"0"];
@@ -236,21 +241,21 @@
 
 - (void)selectedMergeSurvivor:(int)survivingHotelNetacquireID;
 {
-    NSAssert(survivingHotelNetacquireID >= 0, @"Hotel Netacquire ID cannot be negative.");
+  NSAssert(survivingHotelNetacquireID >= 0, @"Hotel Netacquire ID cannot be negative.");
 	[self _sendCSDirectiveWithChainID:survivingHotelNetacquireID selectionType:6];
 }
 
 - (void)mergerSharesSold:(int)sharesSold sharesTraded:(int)sharesTraded;
 {
-    NSAssert(sharesSold >= 0, @"Number of share sold cannot be negative.");
-    NSAssert(sharesTraded >= 0, @"Number of share sold cannot be negative.");
+  NSAssert(sharesSold >= 0, @"Number of share sold cannot be negative.");
+  NSAssert(sharesTraded >= 0, @"Number of share sold cannot be negative.");
     
 	[self _sendMDDirectiveWithSharesSold:sharesSold sharesTraded:sharesTraded];
 }
 
 - (void)purchaseSharesAndEndGame:(NSArray *)sharesPurchasedAsParameters;
 {
-    NSAssert(sharesPurchasedAsParameters != nil, @"Passed in nil object.");
+  NSAssert(sharesPurchasedAsParameters != nil, @"Passed in nil object.");
     
 	NSMutableArray *pDirectiveParameters = [NSMutableArray arrayWithArray:sharesPurchasedAsParameters];
 	[pDirectiveParameters addObject:@"1"];
@@ -331,10 +336,6 @@ didConnectToHost:(NSString*)host
 	[_socket readDataWithTimeout:-1 tag:0];
 }
 
-- (void)onSocket:(AsyncSocket *)socket didWriteDataWithTag:(long)tag;
-{
-	[_socket readDataWithTimeout:-1 tag:0];
-}
 @end
 
 #pragma mark -
@@ -347,28 +348,30 @@ didConnectToHost:(NSString*)host
 
 - (id)_firstAssociatedObjectThatRespondsToSelector:(SEL)selector;
 {
-    NSAssert(selector != NULL, @"Passed in null object.");
+  NSAssert(selector != NULL, @"Passed in null object.");
     
 	NSEnumerator *associatedObjectEnumerator = [_associatedObjects objectEnumerator];
 	id curAssociatedObject;
 	while (curAssociatedObject = [associatedObjectEnumerator nextObject])
+	{
 		if ([curAssociatedObject respondsToSelector:selector])
 			return curAssociatedObject;
-	
+	}
 	return nil;
 }
 
 - (NSArray *)_associatedObjectsThatRespondToSelector:(SEL)selector;
 {
-    NSAssert(selector != NULL, @"Passed in null object.");
+  NSAssert(selector != NULL, @"Passed in null object.");
     
 	NSMutableArray *ret = [NSMutableArray arrayWithCapacity:5];
 	NSEnumerator *associatedObjectEnumerator = [_associatedObjects objectEnumerator];
 	id curAssociatedObject;
 	while (curAssociatedObject = [associatedObjectEnumerator nextObject])
+	{
 		if ([curAssociatedObject respondsToSelector:selector])
 			[ret addObject:curAssociatedObject];
-	
+	}
 	return ret;
 }
 
@@ -379,9 +382,10 @@ didConnectToHost:(NSString*)host
 	NSEnumerator *associatedObjectEnumerator = [_associatedObjects objectEnumerator];
 	id curAssociatedObject;
 	while (curAssociatedObject = [associatedObjectEnumerator nextObject])
+	{
 		if (curAssociatedObject == objectToCheck)
 			return YES;
-	
+	}
 	return NO;
 }
 
@@ -390,9 +394,10 @@ didConnectToHost:(NSString*)host
 
 - (void)_receivedDirective:(AQNetacquireDirective *)directive;
 {
-    NSAssert(directive != nil, @"Passed in nil object.");
+  NSAssert(directive != nil, @"Passed in nil object.");
     
-	if ([[directive directiveCode] isEqualToString:@"LM"]) {
+	if ([[directive directiveCode] isEqualToString:@"LM"])
+	{
 		if (_haveSeenFirstLMDirectives)
 			[self _receivedLMDirective:directive];
 		else
@@ -401,7 +406,8 @@ didConnectToHost:(NSString*)host
 		return;
 	}
 	
-	if ([[directive directiveCode] isEqualToString:@"GM"]) {
+	if ([[directive directiveCode] isEqualToString:@"GM"])
+	{
 		[self _receivedGMDirective:directive];
 		return;
 	}
@@ -414,47 +420,21 @@ didConnectToHost:(NSString*)host
   NSAssert(directive != nil, @"Passed in nil object.");
     
 	NSString *directiveCode = [directive directiveCode];
-	
-	if ([directiveCode isEqualToString:@"AT"])
-		[self _receivedATDirective:directive];
-	
-	else if ([directiveCode isEqualToString:@"GC"])
-		[self _receivedGCDirective:directive];
-    
-	else if ([directiveCode isEqualToString:@"GD"])
-		[self _receivedGDDirective:directive];
-	
-	else if ([directiveCode isEqualToString:@"GM"])
-		[self _receivedGMDirective:directive];
-	
-	else if ([directiveCode isEqualToString:@"GP"])
-		[self _receivedGPDirective:directive];
-	
-	else if ([directiveCode isEqualToString:@"LM"])
-		[self _receivedLMDirective:directive];
-	
-	else if ([directiveCode isEqualToString:@"M"])
-		[self _receivedMDirective:directive];
-	
-	else if ([directiveCode isEqualToString:@"PI"])
-		[self _receivedPIDirective:directive];
-	
-	else if ([directiveCode isEqualToString:@"SB"])
-		[self _receivedSBDirective:directive];
-	
-	else if ([directiveCode isEqualToString:@"SP"])
-		[self _receivedSPDirective:directive];
-	
-	else if ([directiveCode isEqualToString:@"SS"])
-		[self _receivedSSDirective:directive];
-	
-	else if ([directiveCode isEqualToString:@"SV"])
-		[self _receivedSVDirective:directive];
+  NSString *methodName = [NSString stringWithFormat:@"_received%@Directive:", 
+                                                                 directiveCode];
+  SEL selector = NSSelectorFromString(methodName);
+  NSMethodSignature *sig = [self methodSignatureForSelector:selector];
+  if (sig == nil)
+    return;
+  NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:sig];
+  [invocation setSelector:selector];
+  [invocation setArgument:&directive atIndex:2];
+  [invocation invokeWithTarget:self];
 }
 
 - (void)_receivedATDirective:(AQNetacquireDirective *)activateTileDirective;
 {
-    NSAssert(activateTileDirective != nil, @"Passed in nil object.");
+  NSAssert(activateTileDirective != nil, @"Passed in nil object.");
     
 	NSArray *parameters = [activateTileDirective parameters];
 	if ([parameters count] != 3)
@@ -467,7 +447,7 @@ didConnectToHost:(NSString*)host
 
 - (void)_receivedGCDirective:(AQNetacquireDirective *)getChainDirective;
 {
-    NSAssert(getChainDirective != nil, @"Passed in nil object.");
+  NSAssert(getChainDirective != nil, @"Passed in nil object.");
     
 	NSArray *parameters = [getChainDirective parameters];
 	if ([parameters count] == 1 && [[parameters objectAtIndex:0] intValue] == 4) {
@@ -487,13 +467,15 @@ didConnectToHost:(NSString*)host
 	for (i = 1; i < [parameters count]; ++i)
 		[hotelIndexes addObject:[NSNumber numberWithInt:([[parameters objectAtIndex:i] intValue] - 1)]];
 	
-	if (selectionType == 4) {
+	if (selectionType == 4)
+	{
 		id associatedObject = [self _firstAssociatedObjectThatRespondsToSelector:@selector(getChainFromHotelIndexes:)];
 		[associatedObject getChainFromHotelIndexes:hotelIndexes];
 		return;
 	}
 	
-	if (selectionType == 6) {
+	if (selectionType == 6)
+	{
 		id associatedObject = [self _firstAssociatedObjectThatRespondsToSelector:@selector(chooseMergeSurvivorFromHotelIndexes:)];
 		[associatedObject chooseMergeSurvivorFromHotelIndexes:hotelIndexes];
 		return;
@@ -502,7 +484,7 @@ didConnectToHost:(NSString*)host
 
 - (void)_receivedGDDirective:(AQNetacquireDirective *)getDispositionDirective;
 {
-    NSAssert(getDispositionDirective != nil, @"Passed in nil object.");
+  NSAssert(getDispositionDirective != nil, @"Passed in nil object.");
     
 	NSArray *parameters = [getDispositionDirective parameters];
 	id associatedObject = [self _firstAssociatedObjectThatRespondsToSelector:@selector(showAllocateMergingHotelSharesSheetForHotelWithNetacquireID:survivingHotelNetacquireID:)];
@@ -511,7 +493,7 @@ didConnectToHost:(NSString*)host
 
 - (void)_receivedGMDirective:(AQNetacquireDirective *)gameMessageDirective;
 {
-    NSAssert(gameMessageDirective != nil, @"Passed in nil object.");
+  NSAssert(gameMessageDirective != nil, @"Passed in nil object.");
     
 	if ([[gameMessageDirective parameters] count] != 1)
 		return;
@@ -553,7 +535,7 @@ didConnectToHost:(NSString*)host
 
 - (void)_receivedGPDirective:(AQNetacquireDirective *)getPurchaseDirective;
 {
-    NSAssert(getPurchaseDirective != nil, @"Passed in nil object.");
+  NSAssert(getPurchaseDirective != nil, @"Passed in nil object.");
     
 	if ([[getPurchaseDirective parameters] count] != 2)
 		return;
@@ -564,11 +546,12 @@ didConnectToHost:(NSString*)host
 
 - (void)_receivedLMDirective:(AQNetacquireDirective *)lobbyMessageDirective;
 {
-    NSAssert(lobbyMessageDirective != nil, @"Passed in nil object.");
+  NSAssert(lobbyMessageDirective != nil, @"Passed in nil object.");
     
 	// The server's response to LG and LU directives come in chunks of LM directives.
 	NSString *messageText = [[lobbyMessageDirective parameters] objectAtIndex:0];
-  if (_objectRequestingGameListUpdate && [messageText hasPrefix:@"\"#"]) {
+  if (_objectRequestingGameListUpdate && [messageText hasPrefix:@"\"#"])
+  {
 		[self _receivedGameListDirective:lobbyMessageDirective];
 		return;
 	}
@@ -582,7 +565,7 @@ didConnectToHost:(NSString*)host
 
 - (void)_receivedFirstLMDirectives:(AQNetacquireDirective *)bunchOfLMDirectives;
 {
-    NSAssert(bunchOfLMDirectives != nil, @"Passed in nil object.");
+  NSAssert(bunchOfLMDirectives != nil, @"Passed in nil object.");
     
 	[[self _firstAssociatedObjectThatRespondsToSelector:@selector(connectedToServer)] connectedToServer];
 	
@@ -594,7 +577,7 @@ didConnectToHost:(NSString*)host
 
 - (void)_receivedGameListDirective:(AQNetacquireDirective *)gameListDirective;
 {
-    NSAssert(gameListDirective != nil, @"Passed in nil object.");
+  NSAssert(gameListDirective != nil, @"Passed in nil object.");
     
 	if (_objectRequestingGameListUpdate == nil)
 		return;
@@ -606,11 +589,14 @@ didConnectToHost:(NSString*)host
   NSString *regex = @"\"?\\s*->\\s*Game\\s*#([0-9]+)";
   NSString *gameNumber = [gameListString stringByMatching:regex capture:1];
   if (gameNumber)
+  {
     [_updatingGameList addObject:gameNumber];
+  }
   else if ([gameListString isMatchedByRegex:@"\"?# End of game list."])
   {
     SEL updatedList = @selector(updatedGameList:);
-  	if ([_objectRequestingGameListUpdate respondsToSelector:updatedList]) {
+  	if ([_objectRequestingGameListUpdate respondsToSelector:updatedList])
+  	{
   		[_objectRequestingGameListUpdate performSelector:updatedList
                                             withObject:_updatingGameList];
   	}
@@ -622,90 +608,80 @@ didConnectToHost:(NSString*)host
 
 - (void)_receivedMDirective:(AQNetacquireDirective *)messageDirective;
 {
-    NSAssert(messageDirective != nil, @"Passed in nil object.");
+  NSAssert(messageDirective != nil, @"Passed in nil object.");
     
 	if ([[messageDirective parameters] count] != 1)
 		return;
 	
 	NSString *message = [[messageDirective parameters] objectAtIndex:0];
 	
-	if ([message length] < 17)
-		return;
-	
-	if ([[message substringToIndex:17] isEqualToString:@"\"W;Test Mode Used"]) {
+	if ([message hasPrefix:@"\"W;Test Mode Used"])
+	{
 		[[self _firstAssociatedObjectThatRespondsToSelector:@selector(enteringTestMode)] enteringTestMode];
-		return;
 	}
-	
-	if ([message length] < 23)
-		return;
-	
-	if ([[message substringToIndex:23] isEqualToString:@"\"W;Test mode turned on."]) {
+	else if ([message hasPrefix:@"\"W;Test mode turned on."])
+	{
 		[[self _firstAssociatedObjectThatRespondsToSelector:@selector(enteringTestMode)] enteringTestMode];
-		return;
 	}
-	
-	if ([message length] < 24)
-		return;
-	
-	if ([[message substringToIndex:24] isEqualToString:@"\"W;Test mode turned off."]) {
+	else if ([message hasPrefix:@"\"W;Test mode turned off."])
+	{
 		[[self _firstAssociatedObjectThatRespondsToSelector:@selector(exitingTestMode)] exitingTestMode];
-		return;
 	}
-	
-	if ([message length] < 26)
-		return;
-	
-	if ([[message substringToIndex:26] isEqualToString:@"\"E;Duplicate user Nickname"])
+	else if ([message hasPrefix:@"\"E;Duplicate user Nickname"])
 	{
     SEL inUse = @selector(displayNameAlreadyInUse);
 		id associatedObject = [self _firstAssociatedObjectThatRespondsToSelector:inUse];
     [associatedObject performSelector:inUse];
-		return;
 	}
 }
 
 - (void)_receivedPIDirective:(AQNetacquireDirective *)pingDirective;
 {
-    NSAssert(pingDirective != nil, @"Passed in nil object.");
+  NSAssert(pingDirective != nil, @"Passed in nil object.");
     
 	if ([[pingDirective parameters] count] != 1)
 		return;
 	
 	// In theory, we should pull current time and so on. I think.
 	// In reality, screw it.
-	[self _sendPRDirectiveWithTimestamp:[[pingDirective parameters] objectAtIndex:0]];
+  id firstParameter = [[pingDirective parameters] objectAtIndex:0];
+	[self _sendPRDirectiveWithTimestamp:firstParameter];
 }
 
 - (void)_receivedSBDirective:(AQNetacquireDirective *)setBoardStatusDirective;
 {
-    NSAssert(setBoardStatusDirective != nil, @"Passed in nil object.");
+  NSAssert(setBoardStatusDirective != nil, @"Passed in nil object.");
     
 	if ([[setBoardStatusDirective parameters] count] != 2)
 		return;
 
 	id associatedObject = [self _firstAssociatedObjectThatRespondsToSelector:@selector(boardTileAtNetacquireID:isNetacquireChainID:)];
-	[associatedObject boardTileAtNetacquireID:[[[setBoardStatusDirective parameters] objectAtIndex:0] intValue] isNetacquireChainID:[[[setBoardStatusDirective parameters] objectAtIndex:1] intValue]];
+  NSArray *parameters = [setBoardStatusDirective parameters];
+  NSInteger first = [[parameters objectAtIndex:0] integerValue];
+  NSInteger second = [[parameters objectAtIndex:1] intValue];
+	[associatedObject boardTileAtNetacquireID:first isNetacquireChainID:second];
 }
 
 - (void)_receivedSPDirective:(AQNetacquireDirective *)startPlayerDirective;
 {
-    NSAssert(startPlayerDirective != nil, @"Passed in nil object.");
-    
-	if ([[startPlayerDirective parameters] count] == 0)
+  NSAssert(startPlayerDirective != nil, @"Passed in nil object.");
+  
+  NSArray *parameters = [startPlayerDirective parameters];
+	if ([parameters count] == 0)
 		return;
 	
-	NSRange versionInfoRange = NSMakeRange(0, [[startPlayerDirective parameters] count] - 1);
 	id associatedObject = [self _firstAssociatedObjectThatRespondsToSelector:@selector(localPlayerName)];
 	if (associatedObject == nil)
 		return;
-	
-	[self _sendPLDirectiveWithDisplayName:[associatedObject localPlayerName] versionStrings:[[startPlayerDirective parameters] subarrayWithRange:versionInfoRange]];
+	NSRange versionInfoRange = NSMakeRange(0, [parameters count] - 1);
+  NSArray *versionInfo = [parameters subarrayWithRange:versionInfoRange];
+	[self _sendPLDirectiveWithDisplayName:[associatedObject localPlayerName]
+                         versionStrings:versionInfo];
 }
 
 - (void)_receivedSSDirective:(AQNetacquireDirective *)setStateDirective;
 {
-    NSAssert(setStateDirective != nil, @"Passed in nil object.");
+  NSAssert(setStateDirective != nil, @"Passed in nil object.");
     
 	if ([[setStateDirective parameters] count] != 1)
 		return;
@@ -731,7 +707,7 @@ didConnectToHost:(NSString*)host
 
 - (void)_receivedSVDirective:(AQNetacquireDirective *)setValueDirective;
 {
-    NSAssert(setValueDirective != nil, @"Passed in nil object.");
+  NSAssert(setValueDirective != nil, @"Passed in nil object.");
     
 	NSString *netacquireForm = [[setValueDirective parameters] objectAtIndex:0];
 	int netacquireTableIndex = [[[setValueDirective parameters] objectAtIndex:2] intValue];
@@ -744,64 +720,71 @@ didConnectToHost:(NSString*)host
 	if (![netacquireValueType isEqualToString:@"Caption"])
 		return;
 	
-	if (netacquireTableIndex < 7) {
+	if (netacquireTableIndex < 7)
+	{
 		// Player name
 		if ([netacquireCaption length] == 0)
 			return;
 		
 		id associatedObject = [self _firstAssociatedObjectThatRespondsToSelector:@selector(playerAtIndex:isNamed:)];
-		[associatedObject playerAtIndex:netacquireTableIndex isNamed:netacquireCaption];
+		[associatedObject playerAtIndex:netacquireTableIndex
+                            isNamed:netacquireCaption];
 		
 		return;
 	}
 	
-	if (netacquireTableIndex >= 33 && netacquireTableIndex <= 80) {
+	if (netacquireTableIndex >= 33 && netacquireTableIndex <= 80)
+	{
 		// Shares in a hotel
-		int shares = [netacquireCaption length] == 0 ? 0 : [netacquireCaption intValue];
+    int shares = 0;
+    if ([netacquireCaption length] > 0)
+      shares = [netacquireCaption intValue];
 		
 		id associatedObject;
 		
-		if (netacquireTableIndex >= 33 && netacquireTableIndex <= 38) {
+		if (netacquireTableIndex >= 33 && netacquireTableIndex <= 38)
+		{
 			associatedObject = [self _firstAssociatedObjectThatRespondsToSelector:@selector(playerAtIndex:hasSacksonShares:)];
-			[associatedObject playerAtIndex:(netacquireTableIndex - 33) hasSacksonShares:shares];
-			return;			
+			[associatedObject playerAtIndex:(netacquireTableIndex - 33)
+                     hasSacksonShares:shares];
 		}
-		
-		if (netacquireTableIndex >= 40 && netacquireTableIndex <= 45) {
+		else if (netacquireTableIndex >= 40 && netacquireTableIndex <= 45)
+		{
 			associatedObject = [self _firstAssociatedObjectThatRespondsToSelector:@selector(playerAtIndex:hasZetaShares:)];
-			[associatedObject playerAtIndex:(netacquireTableIndex - 40) hasZetaShares:shares];
-			return;			
+			[associatedObject playerAtIndex:(netacquireTableIndex - 40)
+                        hasZetaShares:shares];		
 		}
-		
-		if (netacquireTableIndex >= 47 && netacquireTableIndex <= 52) {
+		else if (netacquireTableIndex >= 47 && netacquireTableIndex <= 52)
+		{
 			associatedObject = [self _firstAssociatedObjectThatRespondsToSelector:@selector(playerAtIndex:hasAmericaShares:)];
-			[associatedObject playerAtIndex:(netacquireTableIndex - 47) hasAmericaShares:shares];
-			return;			
+			[associatedObject playerAtIndex:(netacquireTableIndex - 47)
+                     hasAmericaShares:shares];
 		}
-		
-		if (netacquireTableIndex >= 54 && netacquireTableIndex <= 59) {
+		else if (netacquireTableIndex >= 54 && netacquireTableIndex <= 59)
+		{
 			associatedObject = [self _firstAssociatedObjectThatRespondsToSelector:@selector(playerAtIndex:hasFusionShares:)];
-			[associatedObject playerAtIndex:(netacquireTableIndex - 54) hasFusionShares:shares];
-			return;			
+			[associatedObject playerAtIndex:(netacquireTableIndex - 54)
+                      hasFusionShares:shares];
 		}
-		
-		if (netacquireTableIndex >= 61 && netacquireTableIndex <= 66) {
+		else if (netacquireTableIndex >= 61 && netacquireTableIndex <= 66)
+		{
 			associatedObject = [self _firstAssociatedObjectThatRespondsToSelector:@selector(playerAtIndex:hasHydraShares:)];
-			[associatedObject playerAtIndex:(netacquireTableIndex - 61) hasHydraShares:shares];
-			return;			
+			[associatedObject playerAtIndex:(netacquireTableIndex - 61)
+                       hasHydraShares:shares];
 		}
-		
-		if (netacquireTableIndex >= 68 && netacquireTableIndex <= 73) {
+		else if (netacquireTableIndex >= 68 && netacquireTableIndex <= 73)
+		{
 			associatedObject = [self _firstAssociatedObjectThatRespondsToSelector:@selector(playerAtIndex:hasQuantumShares:)];
-			[associatedObject playerAtIndex:(netacquireTableIndex - 68) hasQuantumShares:shares];
-			return;			
+			[associatedObject playerAtIndex:(netacquireTableIndex - 68)
+                     hasQuantumShares:shares];
 		}
-		
-		if (netacquireTableIndex >= 75 && netacquireTableIndex <= 80) {
+		else if (netacquireTableIndex >= 75 && netacquireTableIndex <= 80)
+		{
 			associatedObject = [self _firstAssociatedObjectThatRespondsToSelector:@selector(playerAtIndex:hasPhoenixShares:)];
-			[associatedObject playerAtIndex:(netacquireTableIndex - 75) hasPhoenixShares:shares];
-			return;			
+			[associatedObject playerAtIndex:(netacquireTableIndex - 75)
+                     hasPhoenixShares:shares];
 		}
+    return;
 	}
 	
 	if (netacquireTableIndex >= 82 && netacquireTableIndex <= 87) {
@@ -810,8 +793,8 @@ didConnectToHost:(NSString*)host
 			return;
 		
 		id associatedObject = [self _firstAssociatedObjectThatRespondsToSelector:@selector(playerAtIndex:hasCash:)];
-		[associatedObject playerAtIndex:(netacquireTableIndex - 82) hasCash:[netacquireCaption intValue]];
-		
+		[associatedObject playerAtIndex:(netacquireTableIndex - 82)
+                            hasCash:[netacquireCaption intValue]];
 		return;
 	}
 }
@@ -821,30 +804,30 @@ didConnectToHost:(NSString*)host
 
 - (void)_sendDirectiveData:(NSData *)data;
 {
-    NSAssert(data != nil, @"Passed in nil object.");
+  NSAssert(data != nil, @"Passed in nil object.");
     
 	[_socket writeData:data withTimeout:20.0 tag:0];
 }
 
 - (void)_sendDirectiveWithCode:(NSString *)directiveCode;
 {
-    NSAssert(directiveCode != nil, @"Passed in nil object.");
+  NSAssert(directiveCode != nil, @"Passed in nil object.");
     
-	AQNetacquireDirective *directive = [[[AQNetacquireDirective alloc] init] autorelease];
+	AQNetacquireDirective *directive = [AQNetacquireDirective directive];
 	[directive setDirectiveCode:directiveCode];
 	[self _sendDirectiveData:[directive protocolData]];
 }
 
 - (void)_sendBMDirectiveToLobbyWithMessage:(NSString *)message;
 {
-    NSAssert(message != nil, @"Passed in nil object.");
+  NSAssert(message != nil, @"Passed in nil object.");
   
   [self _broadcastMessage:message to:@"Lobby"];
 }
 
 - (void)_sendBMDirectiveToGameRoomWithMessage:(NSString *)message;
 {
-    NSAssert(message != nil, @"Passed in nil object.");
+  NSAssert(message != nil, @"Passed in nil object.");
     
   [self _broadcastMessage:message to:@"Game Room"];
 }
@@ -855,16 +838,17 @@ didConnectToHost:(NSString*)host
   
   NSString *escaped = [message stringByReplacingOccurrencesOfRegex:@"\""
                                                         withString:@"\"\""];
-  AQNetacquireDirective *directive = [[[AQNetacquireDirective alloc] init] autorelease];
+  AQNetacquireDirective *directive = [AQNetacquireDirective directive];
 	[directive setDirectiveCode:@"BM"];
 	[directive addParameter:destination];
 	[directive addParameter:[NSString stringWithFormat:@"\"%@\"", escaped]];
 	[self _sendDirectiveData:[directive protocolData]];
 }
 
-- (void)_sendCSDirectiveWithChainID:(int)chainID selectionType:(int)selectionType;
+- (void)_sendCSDirectiveWithChainID:(int)chainID
+                      selectionType:(int)selectionType;
 {
-	AQNetacquireDirective *directive = [[[AQNetacquireDirective alloc] init] autorelease];
+	AQNetacquireDirective *directive = [AQNetacquireDirective directive];
 	[directive setDirectiveCode:@"CS"];
 	[directive addParameter:[NSString stringWithFormat:@"%d", chainID]];
 	[directive addParameter:[NSString stringWithFormat:@"%d", selectionType]];
@@ -873,7 +857,7 @@ didConnectToHost:(NSString*)host
 
 - (void)_sendJGDirectiveWithGameNumber:(int)gameNumber;
 {
-	AQNetacquireDirective *directive = [[[AQNetacquireDirective alloc] init] autorelease];
+	AQNetacquireDirective *directive = [AQNetacquireDirective directive];
 	[directive setDirectiveCode:@"JG"];
 	[directive addParameter:[NSString stringWithFormat:@"%d", gameNumber]];
 	[directive addParameter:@"-1"];
@@ -882,11 +866,10 @@ didConnectToHost:(NSString*)host
 
 - (void)_sendMDDirectiveWithSharesSold:(int)sharesSold sharesTraded:(int)sharesTraded;
 {
-	AQNetacquireDirective *directive = [[[AQNetacquireDirective alloc] init] autorelease];
+	AQNetacquireDirective *directive = [AQNetacquireDirective directive];
 	[directive setDirectiveCode:@"MD"];
 	[directive addParameter:[NSString stringWithFormat:@"%d", sharesSold]];
 	[directive addParameter:[NSString stringWithFormat:@"%d", sharesTraded]];
-	
 	[self _sendDirectiveData:[directive protocolData]];
 }
 
@@ -894,7 +877,7 @@ didConnectToHost:(NSString*)host
 {
     NSAssert(parameters != nil, @"Passed in nil object.");
     
-	AQNetacquireDirective *directive = [[[AQNetacquireDirective alloc] init] autorelease];
+	AQNetacquireDirective *directive = [AQNetacquireDirective directive];
 	[directive setDirectiveCode:@"P"];
 	[directive addParameters:parameters];
 	[self _sendDirectiveData:[directive protocolData]];
@@ -902,9 +885,9 @@ didConnectToHost:(NSString*)host
 
 - (void)_sendPLDirectiveWithDisplayName:(NSString *)displayName versionStrings:(NSArray *)versionStrings;
 {
-    NSAssert(displayName != nil && versionStrings != nil, @"Passed in nil object.");
-    
-	AQNetacquireDirective *directive = [[[AQNetacquireDirective alloc] init] autorelease];
+  NSAssert(displayName != nil && versionStrings != nil, @"Passed in nil object.");
+  
+	AQNetacquireDirective *directive = [AQNetacquireDirective directive];
 	[directive setDirectiveCode:@"PL"];
 	[directive addParameter:displayName];
 	[directive addParameters:versionStrings];
@@ -913,9 +896,9 @@ didConnectToHost:(NSString*)host
 
 - (void)_sendPRDirectiveWithTimestamp:(NSString *)timestamp;
 {
-    NSAssert(timestamp != nil, @"Passed in nil object.");
+  NSAssert(timestamp != nil, @"Passed in nil object.");
     
-	AQNetacquireDirective *directive = [[[AQNetacquireDirective alloc] init] autorelease];
+	AQNetacquireDirective *directive = [AQNetacquireDirective directive];
 	[directive setDirectiveCode:@"PR"];
 	[directive addParameter:timestamp];
 	[self _sendDirectiveData:[directive protocolData]];
@@ -923,7 +906,7 @@ didConnectToHost:(NSString*)host
 
 - (void)_sendPTDirectiveWithIndex:(int)index;
 {
-	AQNetacquireDirective *directive = [[[AQNetacquireDirective alloc] init] autorelease];
+	AQNetacquireDirective *directive = [AQNetacquireDirective directive];
 	[directive setDirectiveCode:@"PT"];
 	[directive addParameter:[NSString stringWithFormat:@"%d", index]];
 	[self _sendDirectiveData:[directive protocolData]];
@@ -931,7 +914,7 @@ didConnectToHost:(NSString*)host
 
 - (void)_sendSGDirectiveWithMaximumPlayers:(int)maximumPlayers;
 {
-	AQNetacquireDirective *directive = [[[AQNetacquireDirective alloc] init] autorelease];
+	AQNetacquireDirective *directive = [AQNetacquireDirective directive];
 	[directive setDirectiveCode:@"SG"];
 	[directive addParameter:[NSString stringWithFormat:@"%d", maximumPlayers]];
 	[self _sendDirectiveData:[directive protocolData]];
