@@ -210,7 +210,7 @@
 - (void)showPurchaseSharesSheet:(NSWindow *)window;
 {
 	if (!_purchaseSharesSheet)
-        [NSBundle loadNibNamed:@"PurchaseSharesSheet" owner:self];
+    [NSBundle loadNibNamed:@"PurchaseSharesSheet" owner:self];
 	
 	[_purchaseSharesSheet makeFirstResponder:_letMeSeeTheBoardButton];
 	
