@@ -699,7 +699,12 @@
 {
 	NSArray *adjacentHotels = [self hotelsAdjacentToTile:tile];
   if ([adjacentHotels count] == 0)
-    return [self playedTileCreatesNewHotel:tile];
+  {
+    if ([[self hotelsNotOnBoard] count] > 0)
+      return NO;
+    else
+      return [self playedTileCreatesNewHotel:tile];
+  }
 	else if ([adjacentHotels count] == 1)
 		return NO;
 	
