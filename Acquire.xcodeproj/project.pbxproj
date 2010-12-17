@@ -31,8 +31,6 @@
 		F28B09760E1460BD00D100DF /* AQNetacquireDirective.m in Sources */ = {isa = PBXBuildFile; fileRef = F28B09750E1460BD00D100DF /* AQNetacquireDirective.m */; };
 		F28B09A00E14762900D100DF /* Acquire.icns in Resources */ = {isa = PBXBuildFile; fileRef = F28B099F0E14762900D100DF /* Acquire.icns */; };
 		F29A825B0DEAA6500060432A /* AQAcquireController.m in Sources */ = {isa = PBXBuildFile; fileRef = F29A82560DEAA6500060432A /* AQAcquireController.m */; };
-		F29A825C0DEAA6500060432A /* AQConnectionArrayController.m in Sources */ = {isa = PBXBuildFile; fileRef = F29A82580DEAA6500060432A /* AQConnectionArrayController.m */; };
-		F29A825D0DEAA6500060432A /* AQGameArrayController.m in Sources */ = {isa = PBXBuildFile; fileRef = F29A825A0DEAA6500060432A /* AQGameArrayController.m */; };
 		F2A7E4B20EE46DA000432D03 /* AQTileTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F2A7E4B10EE46DA000432D03 /* AQTileTests.m */; };
 		F2ABA59A0DEE718A00F58E4B /* AQBoard.m in Sources */ = {isa = PBXBuildFile; fileRef = F2ABA5930DEE718A00F58E4B /* AQBoard.m */; };
 		F2ABA59B0DEE718A00F58E4B /* AQHotel.m in Sources */ = {isa = PBXBuildFile; fileRef = F2ABA5950DEE718A00F58E4B /* AQHotel.m */; };
@@ -109,10 +107,6 @@
 		F28B099F0E14762900D100DF /* Acquire.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Acquire.icns; sourceTree = "<group>"; };
 		F29A82550DEAA6500060432A /* AQAcquireController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AQAcquireController.h; path = "src/Main Controllers/AQAcquireController.h"; sourceTree = "<group>"; };
 		F29A82560DEAA6500060432A /* AQAcquireController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AQAcquireController.m; path = "src/Main Controllers/AQAcquireController.m"; sourceTree = "<group>"; };
-		F29A82570DEAA6500060432A /* AQConnectionArrayController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AQConnectionArrayController.h; path = "src/Main Controllers/AQConnectionArrayController.h"; sourceTree = "<group>"; };
-		F29A82580DEAA6500060432A /* AQConnectionArrayController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AQConnectionArrayController.m; path = "src/Main Controllers/AQConnectionArrayController.m"; sourceTree = "<group>"; };
-		F29A82590DEAA6500060432A /* AQGameArrayController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AQGameArrayController.h; path = "src/Main Controllers/AQGameArrayController.h"; sourceTree = "<group>"; };
-		F29A825A0DEAA6500060432A /* AQGameArrayController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AQGameArrayController.m; path = "src/Main Controllers/AQGameArrayController.m"; sourceTree = "<group>"; };
 		F2A7E4940EE46C9400432D03 /* All Unit Tests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "All Unit Tests.octest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F2A7E4950EE46C9400432D03 /* All Unit Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "All Unit Tests-Info.plist"; sourceTree = "<group>"; };
 		F2A7E4B00EE46DA000432D03 /* AQTileTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AQTileTests.h; path = "src/Unit Tests/AQTileTests.h"; sourceTree = "<group>"; };
@@ -288,10 +282,6 @@
 			children = (
 				F29A82550DEAA6500060432A /* AQAcquireController.h */,
 				F29A82560DEAA6500060432A /* AQAcquireController.m */,
-				F29A82570DEAA6500060432A /* AQConnectionArrayController.h */,
-				F29A82580DEAA6500060432A /* AQConnectionArrayController.m */,
-				F29A82590DEAA6500060432A /* AQGameArrayController.h */,
-				F29A825A0DEAA6500060432A /* AQGameArrayController.m */,
 			);
 			name = "Main Controllers";
 			sourceTree = "<group>";
@@ -491,8 +481,6 @@
 			files = (
 				8D11072D0486CEB800E47090 /* main.m in Sources */,
 				F29A825B0DEAA6500060432A /* AQAcquireController.m in Sources */,
-				F29A825C0DEAA6500060432A /* AQConnectionArrayController.m in Sources */,
-				F29A825D0DEAA6500060432A /* AQGameArrayController.m in Sources */,
 				F24990240DED297F004F3509 /* AsyncSocket.m in Sources */,
 				F2ABA59A0DEE718A00F58E4B /* AQBoard.m in Sources */,
 				F2ABA59B0DEE718A00F58E4B /* AQHotel.m in Sources */,

@@ -37,7 +37,7 @@
  * @param arrayController the array controller that handles this connection.
  * @return a nicely set up connection controller.
  */
-- (id)initWithHost:(NSString *)host port:(UInt16)port for:(id)sender arrayController:(id)arrayController;
+- (id)initWithHost:(NSString *)host port:(UInt16)port for:(id)sender;
 
 - (void)dealloc;
 
@@ -45,7 +45,6 @@
 #pragma mark Accessors/setters/etc.
 
 - (NSError *)error;
-- (BOOL)isServerConnection;
 - (BOOL)isConnected;
 - (NSString *)connectedHostOrIPAddress;
 - (void)disconnectFromServer;

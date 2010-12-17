@@ -3,7 +3,6 @@
 // Created May 27, 2008 by nwaite
 
 #import "AQConnectionController.h"
-#import "AQConnectionArrayController.h"
 #import "AQAcquireController.h"
 #import "AQNetacquireDirective.h"
 #import "AQGame.h"
@@ -67,17 +66,15 @@
 
 #pragma mark 
 #pragma mark init/dealloc
-- (id)initWithHost:(NSString *)host port:(UInt16)port for:(id)sender arrayController:(id)arrayController;
+- (id)initWithHost:(NSString *)host port:(UInt16)port for:(id)sender;
 {
 	if (![super init])
 		return nil;
 	
-    NSAssert([host length] > 0, @"No host given.");
-    NSAssert(sender != nil, @"No associated object provided.");
-    NSAssert(arrayController != nil, @"No array controller provided.");
+  NSAssert([host length] > 0, @"No host given.");
+  NSAssert(sender != nil, @"No associated object provided.");
 	
 	_associatedObjects = [[NSMutableArray arrayWithObject:sender] retain];
-	_arrayController = [arrayController retain];
 	_error = [NSError alloc];
 	_socket = [[AsyncSocket alloc] initWithDelegate:self];
 	
@@ -90,7 +87,6 @@
 - (void)dealloc;
 {
 	[_associatedObjects release];
-	[_arrayController release];
 	[_socket release];
 	[_error release];
 	
@@ -104,11 +100,6 @@
 - (NSError *)error;
 {
 	return _error;
-}
-
-- (BOOL)isServerConnection;
-{
-	return ([(AQConnectionArrayController *)_arrayController serverConnection] == self);
 }
 
 - (BOOL)isConnected;
@@ -288,8 +279,6 @@
 	id curObject;
 	while (curObject = [associatedObjectEnumerator nextObject])
 		[curObject disconnectedFromServer:YES];
-	
-	[(AQConnectionArrayController *)_arrayController connectionClosed:self];
 }
 
 - (void)onSocket:(AsyncSocket*)socket
@@ -299,8 +288,7 @@ didConnectToHost:(NSString*)host
 	if (socket != _socket)
 		return;
 	
-	if ([self isServerConnection])
-		[_socket readDataWithTimeout:-1 tag:0];
+	[_socket readDataWithTimeout:-1 tag:0];
 }
 
 - (void)onSocket:(AsyncSocket*)socket
@@ -621,8 +609,10 @@ didConnectToHost:(NSString*)host
     [_updatingGameList addObject:gameNumber];
   else if ([gameListString isMatchedByRegex:@"\"?# End of game list."])
   {
-  	if ([_objectRequestingGameListUpdate respondsToSelector:@selector(updatedGameList:)]) {
-  		[_objectRequestingGameListUpdate updatedGameList:_updatingGameList];
+    SEL updatedList = @selector(updatedGameList:);
+  	if ([_objectRequestingGameListUpdate respondsToSelector:updatedList]) {
+  		[_objectRequestingGameListUpdate performSelector:updatedList
+                                            withObject:_updatingGameList];
   	}
     [_updatingGameList release];
     _updatingGameList = nil;
@@ -666,11 +656,11 @@ didConnectToHost:(NSString*)host
 	if ([message length] < 26)
 		return;
 	
-	if ([[message substringToIndex:26] isEqualToString:@"\"E;Duplicate user Nickname"]) {
-		id associatedObject = [self _firstAssociatedObjectThatRespondsToSelector:@selector(displayNameAlreadyInUse)];
-		if (associatedObject != nil)
-			[associatedObject displayNameAlreadyInUse];
-		
+	if ([[message substringToIndex:26] isEqualToString:@"\"E;Duplicate user Nickname"])
+	{
+    SEL inUse = @selector(displayNameAlreadyInUse);
+		id associatedObject = [self _firstAssociatedObjectThatRespondsToSelector:inUse];
+    [associatedObject performSelector:inUse];
 		return;
 	}
 }
@@ -949,9 +939,10 @@ didConnectToHost:(NSString*)host
 
 - (void)_incomingLobbyMessage:(NSString *)lobbyMessage;
 {
-    NSAssert(lobbyMessage != nil, @"Passed in nil object.");
-    
-	id associatedObject = [self _firstAssociatedObjectThatRespondsToSelector:@selector(incomingLobbyMessage:)];
-	[associatedObject incomingLobbyMessage:lobbyMessage];
+  NSAssert(lobbyMessage != nil, @"Passed in nil object.");
+  
+  SEL incoming = @selector(incomingLobbyMessage:);
+	id associatedObject = [self _firstAssociatedObjectThatRespondsToSelector:incoming];
+  [associatedObject performSelector:incoming withObject:lobbyMessage];
 }
 @end

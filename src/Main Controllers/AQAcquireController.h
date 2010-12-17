@@ -3,19 +3,19 @@
 //
 // Created May 26, 2008 by nwaite
 
-#import "AQGameArrayController.h"
-#import "AQConnectionArrayController.h"
-#import "AQWelcomeWindowController.h"
-#import "AQLobbyWindowController.h"
-#import "AQPreferencesWindowController.h"
+@class AQConnectionController;
+@class AQGame;
+@class AQLobbyWindowController;
+@class AQPreferencesWindowController;
+@class AQWelcomeWindowController;
 
 @interface AQAcquireController : NSObject
 {
-	AQGameArrayController 			*_gameArrayController;
-	AQConnectionArrayController		*_connectionArrayController;
 	AQLobbyWindowController			*_lobbyWindowController;
 	AQPreferencesWindowController	*_preferencesWindowController;
 	AQWelcomeWindowController		*_welcomeWindowController;
+  AQConnectionController *_connection;
+  AQGame *_game;
 	
 	NSString *_localPlayerName;
 }

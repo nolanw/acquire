@@ -16,7 +16,6 @@
 #pragma mark Interface
 
 {
-	id _arrayController;
 	AQConnectionController *_associatedConnection;
 	
 	AQGameWindowController *_gameWindowController;
@@ -39,8 +38,7 @@
 #pragma mark 
 #pragma mark init/dealloc
 
-- (id)initWithArrayController:(id)arrayController
-         associatedConnection:(AQConnectionController*)connection;
+- (id)initWithConnection:(AQConnectionController*)connection;
 - (void)dealloc;
 
 

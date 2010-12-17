@@ -3,22 +3,28 @@
 // Created May 26, 2008 by nwaite
 
 #import "AQAcquireController.h"
+#import "AQConnectionController.h"
+#import "AQGame.h"
+#import "AQLobbyWindowController.h"
+#import "AQPreferencesWindowController.h"
+#import "AQWelcomeWindowController.h"
+
 
 @interface AQAcquireController (Private)
+
 - (void)_updateMenuItemTargetsAndActions;
+
 @end
 
 @implementation AQAcquireController
+
 - (id)init;
 {
 	if (![super init])
 		return nil;
 	
 	_localPlayerName = nil;
-	
-	_gameArrayController = [[AQGameArrayController alloc] init];
-	_connectionArrayController = [[AQConnectionArrayController alloc] init];
-	
+		
 	_preferencesWindowController = nil;
 	_welcomeWindowController = [[AQWelcomeWindowController alloc] initWithAcquireController:self];
 	_lobbyWindowController = nil;
@@ -28,12 +34,12 @@
 
 - (void)dealloc;
 {
-	[_gameArrayController release];
-	_gameArrayController = nil;
-	[_connectionArrayController release];
-	_connectionArrayController = nil;
+  [_localPlayerName release], _localPlayerName = nil;
+  [_game release], _game = nil;
+  [_connection release], _connection = nil;
 	[_welcomeWindowController release];
 	_welcomeWindowController = nil;
+	[_preferencesWindowController release], _preferencesWindowController = nil;
 	
 	[super dealloc];
 }
@@ -58,32 +64,43 @@
 - (BOOL)validateMenuItem:(NSMenuItem *)menuItem;
 {
 	if ([[menuItem title] isEqualToString:@"Show Lobby Window"])
-		return ([_connectionArrayController serverConnection] != nil && [[_connectionArrayController serverConnection] isConnected]);
+		return [_connection isConnected];
 	
 	if ([menuItem action] == @selector(disconnectFromServer))
-		return ([_connectionArrayController serverConnection] != nil && [[_connectionArrayController serverConnection] isConnected]);
+		return [_connection isConnected];
 	
-	if ([[menuItem title] isEqualToString:@"Leave Game"] || [[menuItem title] isEqualToString:@"End Game"])
-		return ([_gameArrayController activeGame] != nil);
+	if ([[menuItem title] isEqualToString:@"Leave Game"] || 
+	    [[menuItem title] isEqualToString:@"End Game"])
+		return (_game != nil);
 	
 	if ([menuItem action] == @selector(showPreferencesWindow:))
 		return YES;
 	
-	if ([menuItem action] == @selector(showActiveGameWindow) && [_gameArrayController activeGame] != nil)
+	if ([menuItem action] == @selector(showActiveGameWindow) && _game != nil)
 		return YES;
 	
 	if ([menuItem action] == @selector(startActiveGame))
-		return [[_gameArrayController activeGame] isReadyToStart];
+		return [_game isReadyToStart];
 	
 	return NO;
 }
 
 
 // Start games
-- (void)connectToServer:(NSString *)hostOrIPAddress port:(int)port withLocalDisplayName:(NSString *)localDisplayName sender:(id)sender;
+- (void)connectToServer:(NSString*)hostOrIPAddress
+                   port:(int)port
+   withLocalDisplayName:(NSString*)localDisplayName
+                 sender:(id)sender;
 {
-	[_connectionArrayController connectToServer:hostOrIPAddress port:port for:self];
-	[[_connectionArrayController serverConnection] registerAssociatedObject:self];
+  if (port < 1 || port > 65535)
+		return;
+	if ([hostOrIPAddress length] == 0)
+		return;
+  [_connection autorelease];
+  _connection = [[AQConnectionController alloc] initWithHost:hostOrIPAddress
+                                                        port:port
+                                                         for:sender];
+	[_connection registerAssociatedObject:self];
 	_localPlayerName = [localDisplayName copy];
 }
 
@@ -95,7 +112,7 @@
 	_welcomeWindowController = nil;
 	if (_lobbyWindowController == nil)
 		_lobbyWindowController = [[AQLobbyWindowController alloc] initWithAcquireController:self];
-	[[_connectionArrayController serverConnection] registerAssociatedObject:_lobbyWindowController];
+	[_connection registerAssociatedObject:_lobbyWindowController];
 	[_lobbyWindowController resetLobbyMessages];
 	[_lobbyWindowController updateWindowTitle];
 	[self updateGameListFor:_lobbyWindowController];
@@ -104,49 +121,49 @@
 
 - (void)cancelConnectingToServer;
 {
-	[_connectionArrayController closeConnection:[_connectionArrayController serverConnection]];
+  [_connection close];
+  [_connection release], _connection = nil;
 	[_welcomeWindowController stopConnectingToAServer];
 }
 
 - (void)joinGame:(int)gameNumber;
 {
-	[[_connectionArrayController serverConnection] joinGame:gameNumber];
+	[_connection joinGame:gameNumber];
 }
 
 - (void)joiningGame:(BOOL)createdGame;
 {
-	[_gameArrayController startNewGameAndMakeActiveWithAssociatedConnection:[_connectionArrayController serverConnection]];
-	id activeGame = [_gameArrayController activeGame];
-	[[_connectionArrayController serverConnection] registerAssociatedObjectAndPrioritize:activeGame];
-	[activeGame setLocalPlayerName:_localPlayerName];
+  _game = [[AQGame alloc] initWithConnection:_connection];
+	[_connection registerAssociatedObjectAndPrioritize:_game];
+	[_game setLocalPlayerName:_localPlayerName];
 	if (createdGame)
-		[activeGame setIsReadyToStart:YES];
-	[activeGame loadGameWindow];
-	[activeGame bringGameWindowToFront];
+		[_game setIsReadyToStart:YES];
+	[_game loadGameWindow];
+	[_game bringGameWindowToFront];
 }
 
 - (void)canStartActiveGame
 {
-  [[_gameArrayController activeGame] setIsReadyToStart:YES];
+  [_game setIsReadyToStart:YES];
   [[NSApp mainMenu] update];
 }
 
 - (void)createGame:(id)sender;
 {
-	[[_connectionArrayController serverConnection] createGame];
+	[_connection createGame];
 }
 
 - (void)startActiveGame;
 {
-	[[_connectionArrayController serverConnection] startActiveGame];
-	[[_gameArrayController activeGame] setIsReadyToStart:NO];
+	[_connection startActiveGame];
+	[_game setIsReadyToStart:NO];
 }
 
 - (void)leaveGame;
 {	
-	[[_gameArrayController activeGame] closeGameWindow];
-	[[_connectionArrayController serverConnection] deregisterAssociatedObject:[_gameArrayController activeGame]];
-	[[_connectionArrayController serverConnection] leaveGame];
+	[_game closeGameWindow];
+	[_connection deregisterAssociatedObject:_game];
+	[_connection leaveGame];
 	
 	if (_lobbyWindowController == nil)
 		_lobbyWindowController = [[AQLobbyWindowController alloc] initWithAcquireController:self];
@@ -158,15 +175,12 @@
 
 - (void)disconnectFromServer;
 {
-	[[_connectionArrayController serverConnection] disconnectFromServer];
+	[_connection disconnectFromServer];
 }
 
 - (void)disconnectedFromServer:(BOOL)connectionWasLost;
 {
-	if (_gameArrayController != nil) {
-		[[_gameArrayController activeGame] closeGameWindow];
-		[_gameArrayController removeGame:[_gameArrayController activeGame]];
-	}
+	[_game closeGameWindow];
 	
 	[_lobbyWindowController closeLobbyWindow];
 	[_lobbyWindowController release];
@@ -180,9 +194,10 @@
 		[_welcomeWindowController lostServerConnection];
 }
 
-- (void)connection:(AQConnectionController *)connection willDisconnectWithError:(NSError *)err;
+- (void)connection:(AQConnectionController *)connection 
+  willDisconnectWithError:(NSError *)err;
 {
-	if ([connection isServerConnection])
+  if ([_connection isEqual:connection])
 		[_welcomeWindowController gameConnectionFailed];
 }
 
@@ -190,7 +205,7 @@
 // Passthrus
 - (void)updateGameListFor:(id)anObject;
 {
-	[[_connectionArrayController serverConnection] updateGameListFor:anObject];
+	[_connection updateGameListFor:anObject];
 }
 
 - (void)showLobbyWindow;
@@ -200,7 +215,7 @@
 
 - (NSString *)connectedHostOrIPAddress;
 {
-	return [[_connectionArrayController serverConnection] connectedHostOrIPAddress];
+	return [_connection connectedHostOrIPAddress];
 }
 
 - (void)displayNameAlreadyInUse;
@@ -217,19 +232,18 @@
 
 - (void)showActiveGameWindow;
 {
-	if ([_gameArrayController activeGame] == nil)
-		return;
-	
-	[[_gameArrayController activeGame] bringGameWindowToFront];
+	[_game bringGameWindowToFront];
 }
 
 - (void)outgoingLobbyMessage:(NSString *)message;
 {
-	[[_connectionArrayController serverConnection] outgoingLobbyMessage:message];
+	[_connection outgoingLobbyMessage:message];
 }
+
 @end
 
 @implementation AQAcquireController (Private)
+
 - (void)_updateMenuItemTargetsAndActions;
 {
 	NSMenu *serverMenu = [[[NSApp mainMenu] itemWithTitle:@"Server"] submenu];

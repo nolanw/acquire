@@ -7,7 +7,6 @@
 #endif
 
 #import "AQGame.h"
-#import "AQGameArrayController.h"
 
 #pragma mark -
 
@@ -37,13 +36,11 @@
 #pragma mark 
 #pragma mark init/dealloc
 
-- (id)initWithArrayController:(id)arrayController
-         associatedConnection:(AQConnectionController*)connection;
+- (id)initWithConnection:(AQConnectionController*)connection;
 {
 	if (![super init])
 		return nil;
 	
-	_arrayController = [arrayController retain];
 	_gameWindowController = nil;
 	
 	_board = [[AQBoard alloc] init];
@@ -66,8 +63,6 @@
 
 - (void)dealloc;
 {
-	[_arrayController release];
-	_arrayController = nil;
 	[_gameWindowController release];
 	_gameWindowController = nil;
 	[_associatedConnection release];
