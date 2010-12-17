@@ -82,13 +82,17 @@
 	int newValue = [[_shareNumbersAndSteppersMatrix selectedCell] intValue];
 	int oldValue = [[_shareNumbersAndSteppersMatrix cellAtRow:row column:0] intValue];
 	
-	if (newValue > oldValue) {
-		if (_sharesBeingPurchased >= 3) {
+	if (newValue > oldValue)
+	{
+		if (_sharesBeingPurchased >= 3)
+		{
 			[[_shareNumbersAndSteppersMatrix selectedCell] setIntValue:oldValue];
 			return;
 		}
 		
-		if (([[_hotels objectAtIndex:row] sharePrice] + _cashSpent) > _availableCash) {
+    NSInteger sharePrice = [[_hotels objectAtIndex:row] sharePrice];
+		if ((sharePrice + _cashSpent) > _availableCash)
+		{
 			[[_shareNumbersAndSteppersMatrix selectedCell] setIntValue:oldValue];
 			return;
 		}
@@ -96,7 +100,9 @@
 		++_sharesBeingPurchased;
 		_cashSpent += [[_hotels objectAtIndex:row] sharePrice];
 		[[_shareNumbersAndSteppersMatrix cellAtRow:row column:0] setIntValue:newValue];
-	} else {
+	}
+	else
+	{
 		--_sharesBeingPurchased;
 		_cashSpent -= [[_hotels objectAtIndex:row] sharePrice];
 		[[_shareNumbersAndSteppersMatrix cellAtRow:row column:0] setIntValue:newValue];
@@ -152,7 +158,8 @@
 		[cell setIntValue:0];
 		
 		stepperCell = [[[NSStepperCell alloc] init] autorelease];
-		[stepperCell setMaxValue:(double)[[hotels objectAtIndex:i] sharesInBank]];
+    double purchaseable = MIN([[hotels objectAtIndex:i] sharesInBank], 3);
+		[stepperCell setMaxValue:purchaseable];
 		[stepperCell setMinValue:0.0];
 		[stepperCell setIntValue:0];
 		[stepperCell setIncrement:1.0];
@@ -207,7 +214,11 @@
 	
 	[_purchaseSharesSheet makeFirstResponder:_letMeSeeTheBoardButton];
 	
-	[NSApp beginSheet:_purchaseSharesSheet modalForWindow:window modalDelegate:self didEndSelector:@selector(didEndSheet:returnCode:contextInfo:) contextInfo:nil];
+	[NSApp beginSheet:_purchaseSharesSheet
+     modalForWindow:window
+      modalDelegate:self
+     didEndSelector:@selector(didEndSheet:returnCode:contextInfo:)
+        contextInfo:nil];
 }
 @end
 
@@ -215,8 +226,10 @@
 - (void)_updatePurchaseSharesButtonTitle;
 {
 	int i;
-	for (i = 0; i < [_shareNumbersAndSteppersMatrix numberOfRows]; ++i) {
-		if ([[_shareNumbersAndSteppersMatrix cellAtRow:i column:1] intValue] != 0) {
+	for (i = 0; i < [_shareNumbersAndSteppersMatrix numberOfRows]; ++i)
+	{
+		if ([[_shareNumbersAndSteppersMatrix cellAtRow:i column:1] intValue] != 0)
+		{
 			[_purchaseSharesButton setTitle:NSLocalizedStringFromTable(@"Purchase Shares", @"Acquire", @"A button that, when clicked, purchases shares in the amounts specified.")];
 			return;
 		}
