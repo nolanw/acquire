@@ -11,7 +11,6 @@
 		1C04B5C612B380CA00DDC7B0 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 1C04B5C512B380CA00DDC7B0 /* libicucore.dylib */; };
 		1C04B64412B38BB300DDC7B0 /* GameWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1C04B64212B38BB300DDC7B0 /* GameWindow.xib */; };
 		1C04B64812B38BD100DDC7B0 /* AllocateMergingHotelSharesSheet.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1C04B64612B38BD100DDC7B0 /* AllocateMergingHotelSharesSheet.xib */; };
-		1C04B64C12B38BE300DDC7B0 /* PreferencesWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1C04B64A12B38BE300DDC7B0 /* PreferencesWindow.xib */; };
 		1C04B65112B38BF000DDC7B0 /* PurchaseSharesSheet.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1C04B64F12B38BF000DDC7B0 /* PurchaseSharesSheet.xib */; };
 		1C04B65612B38BFF00DDC7B0 /* ChooseMergerSurvivorSheet.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1C04B65412B38BFF00DDC7B0 /* ChooseMergerSurvivorSheet.xib */; };
 		1C04B65B12B38C0F00DDC7B0 /* CreateNewHotelSheet.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1C04B65912B38C0F00DDC7B0 /* CreateNewHotelSheet.xib */; };
@@ -38,7 +37,6 @@
 		F2ABA5AD0DEE72F300F58E4B /* AQWelcomeWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = F2ABA5AC0DEE72F300F58E4B /* AQWelcomeWindowController.m */; };
 		F2ABA5B30DEE76F700F58E4B /* AQGameWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = F2ABA5B20DEE76F700F58E4B /* AQGameWindowController.m */; };
 		F2ABA5C10DEE7B9200F58E4B /* AQLobbyWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = F2ABA5C00DEE7B9200F58E4B /* AQLobbyWindowController.m */; };
-		F2C1358D0E50A26200638FD0 /* AQPreferencesWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = F2C1358C0E50A26200638FD0 /* AQPreferencesWindowController.m */; };
 		F2CF48C20E31B45A00A3AEFA /* CCDColoredButton.m in Sources */ = {isa = PBXBuildFile; fileRef = F2CF48BF0E31B45A00A3AEFA /* CCDColoredButton.m */; };
 		F2CF48C30E31B45A00A3AEFA /* CCDColoredButtonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F2CF48C10E31B45A00A3AEFA /* CCDColoredButtonCell.m */; };
 		F2D44CAB0E48274D003B1E91 /* AQAllocateMergingHotelSharesSheetController.m in Sources */ = {isa = PBXBuildFile; fileRef = F2D44CAA0E48274D003B1E91 /* AQAllocateMergingHotelSharesSheetController.m */; };
@@ -67,7 +65,6 @@
 		1C04B5C512B380CA00DDC7B0 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
 		1C04B64312B38BB300DDC7B0 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/GameWindow.xib; sourceTree = "<group>"; };
 		1C04B64712B38BD100DDC7B0 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/AllocateMergingHotelSharesSheet.xib; sourceTree = "<group>"; };
-		1C04B64B12B38BE300DDC7B0 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/PreferencesWindow.xib; sourceTree = "<group>"; };
 		1C04B65012B38BF000DDC7B0 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/PurchaseSharesSheet.xib; sourceTree = "<group>"; };
 		1C04B65512B38BFF00DDC7B0 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/ChooseMergerSurvivorSheet.xib; sourceTree = "<group>"; };
 		1C04B65A12B38C0F00DDC7B0 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/CreateNewHotelSheet.xib; sourceTree = "<group>"; };
@@ -110,8 +107,6 @@
 		F2ABA5B20DEE76F700F58E4B /* AQGameWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AQGameWindowController.m; sourceTree = "<group>"; };
 		F2ABA5BF0DEE7B9200F58E4B /* AQLobbyWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AQLobbyWindowController.h; sourceTree = "<group>"; };
 		F2ABA5C00DEE7B9200F58E4B /* AQLobbyWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AQLobbyWindowController.m; sourceTree = "<group>"; };
-		F2C1358B0E50A26200638FD0 /* AQPreferencesWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AQPreferencesWindowController.h; sourceTree = "<group>"; };
-		F2C1358C0E50A26200638FD0 /* AQPreferencesWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AQPreferencesWindowController.m; sourceTree = "<group>"; };
 		F2CF48BE0E31B45A00A3AEFA /* CCDColoredButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCDColoredButton.h; sourceTree = "<group>"; };
 		F2CF48BF0E31B45A00A3AEFA /* CCDColoredButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CCDColoredButton.m; sourceTree = "<group>"; };
 		F2CF48C00E31B45A00A3AEFA /* CCDColoredButtonCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCDColoredButtonCell.h; sourceTree = "<group>"; };
@@ -217,7 +212,6 @@
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
 				1C04B64212B38BB300DDC7B0 /* GameWindow.xib */,
 				1C04B64612B38BD100DDC7B0 /* AllocateMergingHotelSharesSheet.xib */,
-				1C04B64A12B38BE300DDC7B0 /* PreferencesWindow.xib */,
 				1C04B64F12B38BF000DDC7B0 /* PurchaseSharesSheet.xib */,
 				1C04B65412B38BFF00DDC7B0 /* ChooseMergerSurvivorSheet.xib */,
 				1C04B65912B38C0F00DDC7B0 /* CreateNewHotelSheet.xib */,
@@ -308,8 +302,6 @@
 				F2ABA5B20DEE76F700F58E4B /* AQGameWindowController.m */,
 				F2ABA5BF0DEE7B9200F58E4B /* AQLobbyWindowController.h */,
 				F2ABA5C00DEE7B9200F58E4B /* AQLobbyWindowController.m */,
-				F2C1358B0E50A26200638FD0 /* AQPreferencesWindowController.h */,
-				F2C1358C0E50A26200638FD0 /* AQPreferencesWindowController.m */,
 				F2ABA5AB0DEE72F300F58E4B /* AQWelcomeWindowController.h */,
 				F2ABA5AC0DEE72F300F58E4B /* AQWelcomeWindowController.m */,
 				F222AA670E3430700037443E /* Sheet Controllers */,
@@ -385,7 +377,6 @@
 				F28B09A00E14762900D100DF /* Acquire.icns in Resources */,
 				1C04B64412B38BB300DDC7B0 /* GameWindow.xib in Resources */,
 				1C04B64812B38BD100DDC7B0 /* AllocateMergingHotelSharesSheet.xib in Resources */,
-				1C04B64C12B38BE300DDC7B0 /* PreferencesWindow.xib in Resources */,
 				1C04B65112B38BF000DDC7B0 /* PurchaseSharesSheet.xib in Resources */,
 				1C04B65612B38BFF00DDC7B0 /* ChooseMergerSurvivorSheet.xib in Resources */,
 				1C04B65B12B38C0F00DDC7B0 /* CreateNewHotelSheet.xib in Resources */,
@@ -421,7 +412,6 @@
 				F20159A70E455DAE0044BFCB /* AQCreateNewHotelSheetController.m in Sources */,
 				F2D44CAB0E48274D003B1E91 /* AQAllocateMergingHotelSharesSheetController.m in Sources */,
 				F219592A0E4B6885009379CA /* AQChooseMergerSurvivorSheetController.m in Sources */,
-				F2C1358D0E50A26200638FD0 /* AQPreferencesWindowController.m in Sources */,
 				1C04B5C212B380AC00DDC7B0 /* RegexKitLite.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -451,14 +441,6 @@
 				1C04B64712B38BD100DDC7B0 /* English */,
 			);
 			name = AllocateMergingHotelSharesSheet.xib;
-			sourceTree = "<group>";
-		};
-		1C04B64A12B38BE300DDC7B0 /* PreferencesWindow.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				1C04B64B12B38BE300DDC7B0 /* English */,
-			);
-			name = PreferencesWindow.xib;
 			sourceTree = "<group>";
 		};
 		1C04B64F12B38BF000DDC7B0 /* PurchaseSharesSheet.xib */ = {

@@ -6,7 +6,6 @@
 #import "AQConnectionController.h"
 #import "AQGame.h"
 #import "AQLobbyWindowController.h"
-#import "AQPreferencesWindowController.h"
 #import "AQWelcomeWindowController.h"
 
 
@@ -23,11 +22,7 @@
 	if (![super init])
 		return nil;
 	
-	_localPlayerName = nil;
-		
-	_preferencesWindowController = nil;
 	_welcomeWindowController = [[AQWelcomeWindowController alloc] initWithAcquireController:self];
-	_lobbyWindowController = nil;
 
 	return self;
 }
@@ -39,7 +34,6 @@
   [_connection release], _connection = nil;
 	[_welcomeWindowController release];
 	_welcomeWindowController = nil;
-	[_preferencesWindowController release], _preferencesWindowController = nil;
 	
 	[super dealloc];
 }
@@ -221,13 +215,6 @@
 - (void)displayNameAlreadyInUse;
 {
 	[_welcomeWindowController displayNameAlreadyInUse];
-}
-
-- (IBAction)showPreferencesWindow:(id)sender;
-{
-	if (_preferencesWindowController == nil)
-		_preferencesWindowController = [[AQPreferencesWindowController alloc] init];
-	[_preferencesWindowController openPreferencesWindowAndBringToFront];
 }
 
 - (void)showActiveGameWindow;

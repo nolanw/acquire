@@ -6,13 +6,11 @@
 @class AQConnectionController;
 @class AQGame;
 @class AQLobbyWindowController;
-@class AQPreferencesWindowController;
 @class AQWelcomeWindowController;
 
 @interface AQAcquireController : NSObject
 {
 	AQLobbyWindowController			*_lobbyWindowController;
-	AQPreferencesWindowController	*_preferencesWindowController;
 	AQWelcomeWindowController		*_welcomeWindowController;
   AQConnectionController *_connection;
   AQGame *_game;
@@ -54,7 +52,6 @@
 - (void)updateGameListFor:(id)anObject;
 - (void)showLobbyWindow;
 - (NSString *)connectedHostOrIPAddress;
-- (IBAction)showPreferencesWindow:(id)sender;
 - (void)showActiveGameWindow;
 - (void)outgoingLobbyMessage:(NSString *)message;
 @end
