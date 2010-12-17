@@ -2,13 +2,11 @@ New features
 ------------
 - Detect whether server is acquire-server or NetAcquire and show hotel names as appropriate.
 - Store ~5 last connected servers and ports (instead of one) for the Welcome Window.
-- Local games with two players: implement board's hand in hotel mergers.
 - Color rack tiles with the hotels they'd be a part of, or a different color if they merge, or whatever.
-- Similar to previous item: note tiles that cannot currently be played (would create new hotel but no hotels off the board), and don't highlight them.
+- Disable rack tiles that cannot currently be played.
 - Change the Purchase Shares Sheet's submit button to say something else when it's possible to end the game.
-- Redo game list drawer.
-	- Make it look nicer!
-	- Differentiate games that can be joined as player, as observer, or not at all.
-	- Update on new game creation (instead of timed events).
+- Differentiate games that can be joined as player, as observer, or not at all.
+- Update games drawer on new game creation (instead of timed events).
 - Show value of shares being sold during merger.
 - Show unplayable tiles on the board.
+- Allow game creator to choose the maximum number of players.
