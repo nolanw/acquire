@@ -1,5 +1,6 @@
 For 1.0
 -------
+- Have mergemaker break any ties regarding multiple disappearing hotels of the same size.
 - Allow game creator to choose the maximum number of players.
 - Disable 'Create Game' button when in a game.
 
